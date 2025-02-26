@@ -1,0 +1,198 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage[spanish]{babel}
+\usepackage{xurl}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+
+\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\renewcommand\theparagraph{\thesubsubsubsection.\arabic{paragraph}} % optional; useful if paragraphs are to be numbered
+
+\titleformat{\subsubsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}%
+  {3.25ex \@plus1ex \@minus .2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+%\def\toclevel@paragraph{6}
+\def\toclevel@subparagraph{6}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{6}{14em}{6em}}
+\makeatother
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% Set up headers and footers
+\pagestyle{fancy}
+\fancyhf{}  % Clear previous settings
+
+\fancyhead[L]{Ludwig Alvarado}
+\fancyhead[C]{Sistemas Dinámicos}
+\fancyhead[R]{\today}
+
+\fancyfoot[C]{\thepage}
+\fancyfoot[C]{\footnotesize Este trabajo está bajo una licencia CC 4.0. Más info: \url{https://creativecommons.org/licenses/by/4.0/}}
+
+\renewcommand{\headrulewidth}{0.2pt}
+
+\begin{document}
+
+\tableofcontents
+
+
+\section{Notas de Clase: Capítulos I y IV}
+
+\subsection{Capítulo I}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Sistema Complejo}
+
+  Redes compuestas de diferentes componentes que interactúan entre ellos de una manera \textbf{no-lineal}. Aparecen por medio de la \textbf{autoorganización}, dando lugar a la aparición de \textbf{comportamientos emergentes.}
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Emergencia}
+
+  Una propiedad macroscópica emerge cuando sus propiedades no se encuentran en los sistemas microscópicos o en la individualidad de los elementos del sistema.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+
+  \textbf{\LARGE Auto-organización:}
+
+  Proceso en el que un sistema forma estructuras y/o comportamientos no tan evidentes a lo largo del tiempo.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+
+  \textbf{\LARGE Variables de Estado:}
+
+  Las características o propiedades cuantificables de un sistema que se usan para modelar o describir un sistema.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Espacio de fase:}
+
+  Conjunto de variables de estado. Un espacio teórico en el que cada posible estado está asociado a una posición.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Sistema Dinámico (Determinista):}
+
+  Es un sistema en el que su estado cambia de acuerdo a una regla de evolución definida. Determinista significa que existen reglas para determinar su estado futuro, esto no implica que no sea complejo o sencillo.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Tiempo:}
+
+  Lugar donde ocurre la evolución de los sistemas dinámicos, ocurre en pero no debido a. Las variables de estado pueden depender explícitamente del tiempo, pero el tiempo en sí mismo no es una variable de estado.
+\end{tcolorbox}
+
+
+\begin{tcolorbox}
+  \textbf{\LARGE Grados de libertad:}
+
+  Número de variables de estado necesarias para describir el estado de un sistema.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Estado de un Sistema:}
+
+  Conjunto de valores que tienen las variables que definen un sistema en un momento dado.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Sistema Dinámico de Tiempo Continuo:}
+
+  El tiempo es una variable continua. La razón de cambio de una variable continua se define por la derivada de la función. La representación matemática es un conjunto de ecuaciones diferenciales:
+
+  \begin{align*}
+    \frac{dx_1}{dt} &= f_1 (x_1, x_2, x_3) \\
+    \frac{dx_2}{dt} &= f_2 (x_1, x_2, x_3) \\
+    \frac{dx_3}{dt} &= f_3 (x_1, x_2, x_3)
+  \end{align*}
+
+  Forma vectorial:
+  \[
+  \vec{x} = \vec{f} (\vec{x})
+  \]
+
+  Dada una condición inicial \(\vec{x} = \vec{x}_0\), las funciones \(\vec{f}\) indican cuál será el estado posterior del sistema.
+\end{tcolorbox}
+\begin{tcolorbox}
+  \textbf{\LARGE Sistemas Dinámicos de Tiempo Discreto:}
+
+  Si el tiempo pasa a ser pasos fijos, el sistema dinámico se llama mapa o ecuación de diferencias, y se representa:
+
+  \begin{align*}
+    \vec{x}_{n+1} = \vec{M} (\vec{x}_n)
+  \end{align*}
+\end{tcolorbox}
+
+
+\begin{tcolorbox}
+  \textbf{\LARGE Mapa invertible:}
+
+  No entendí.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+  \textbf{\LARGE Óbita o trayectoria:}
+
+  Conjunto de puntos que corresponden a la evolución del estado de un sistema
+\end{tcolorbox}
+
+
+
+\subsubsection{Tareas}
+
+\subsubsubsection{¿Son sistemas complejos?}
+
+El enlace para los vídeos de \textit{The Galton Board} y \textit{10 Unbelievable Ant Buildings} no funcionan, por lo tanto, se asume que son \url{https://www.youtube.com/watch?v=UCmPmkHqHXk} y \url{https://www.youtube.com/watch?v=eH-b_cJ5rFU}, respectivamente. A continuación, se explica lo que se estudió y vio en cada uno de los vídeos.
+
+\begin{enumerate}
+\item \textbf{The Galton Board:} En el vídeo se utiliza la máquina de Galton, un aparato que tiene muchas bolitas y que al darse la vuelta, estas caen sobre unos pines redireccionando la bolita, haciendo que pueda ir para la izquierda o por la derecha. Esto se repite múltiples veces hasta que la bolita cae hasta el fondo de todo, a cada esfera le sucede lo mismo, es un \textbf{evento aleatorio}, sin embargo, no del todo aleatorio, esto se debe a que, ente más bolitas vayan cayendo, estas se van acumulando formando una distribución normal. Teniendo en cuenta la definición de un sistema complejo, las \textbf{bolitas interactúan entre ellas} (para amontonarse) y los pines (redirigen la dirección de la bolita), tiene un \textbf{comportamiento emergente} (la aparición de la distribución normal) y no es un sistema completamente regulado ni aleatorio, ya que, se sabe por el teorema central del límite, que una distribución binomial con las suficientes muestras se aproxima a una distribución normal. Por otro lado, el vídeo menciona también una relación con el tríangulo de Pascal, los números de Fibonacci y el teorema del binomio, temas muy interesantes pero que se alejan del objetivo de la tarea.
+\item \textbf{Bally Old Chicago Pinball Machine:} El vídeo es una demostración del funcionamiento de una máquina de \textit{pinball} vieja. Se encuentra una relación entre la Máquina de Galdon y las máquinas de \textit{pinball}, esto debido a que siguen el mismo procedimiento de un balín que se desplaza para abajo y pega con elementos que redireccionan su movimiento. Es un sistema complejo debido a que el balín interactúa con los elementos de la máquina y a su vez estos se pueden autoorganizar para crear una secuencia en la que el balín vaya sumando puntos y golpeando con varios objetos. No es totalmente aleatorio ya que el jugador le puede dar una dirección al objeto y llegando a tener combinaciones entre elementos que dan un comportamiento emergente.
+\item \textbf{Rio Replay: Men's Keirin Finals:} El vídeo son las \textit{replays} de varias carreras de Keirin. Una competición deportiva se podría clasificar como sistema complejo debido a todos los factores que se involucran, por ejemplo, en el caso de la carrera, los competidores están interactuando entre ellos de cierta manera, cada uno debe mantener su espacio con el otro para no chocar y también los que van por delante cortan el aire para los de atrás, etc. Cumplen con no ser totalmente regulares ni totalmente aleatorios, ya que, depende de diversos factores además de los físicos para predecir que un competidor gane. Pueden dar lugar a comportamientos emergentes, por ejemplo, un novato ganando a los favoritos de la competición.
+\item \textbf{10 Unbelievable Ant Buildings:} Quizá sea el mejor ejemplo de un sistema complejo, las múltiples hormigas entre ellas dan lugar a estructuras que podrían ser impensables a nivel individual de ellas, son autoorganizadas y así logran construir estructuras impresionantes, incluso llegando a conectar países enteros.
+\end{enumerate}
+
+\subsubsubsection{Pérdida de energía cinética}
+
+\subsubsubsection{Lista de Modelos que se conozca}
+
+\subsubsubsection{Enunciar las variables de estado}
+
+\subsection{Capítulo IV}
+
+\section{\textit{Non Linear Dynamics And Chaos}: Capítulo 1}
+
+\section{DS4DS}
+
+\subsection{\textit{Introduction I:}}
+
+\subsection{\textit{Introduction II:}}
+
+
+\end{document}

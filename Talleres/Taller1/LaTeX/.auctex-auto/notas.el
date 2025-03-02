@@ -21,6 +21,9 @@
     "xurl"
     "tcolorbox"
     "titlesec")
+   (LaTeX-add-labels
+    "fig:caja-canica"
+    "fig:caja-2")
    (LaTeX-add-counters
     "subsubsubsection"))
  :latex)

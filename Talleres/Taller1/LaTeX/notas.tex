@@ -65,8 +65,60 @@
 \subsection{Punto a}
 \subsubsection{Solución}
 
+Se considera una caja con tres canicas de colores rojo, verde y ayuzal como la de la figura \ref{fig:caja-canica}, nos dicen que en el experimento se toma una canica y despues se vuelve a poner en la caja, es decir, si definimos los eventos como:
+
+\begin{itemize}
+  \item \(A\) sacar canica verde.
+  \item \(B\) sacar canica azul.
+  \item \(C\) sacar canica roja.
+\end{itemize}
+
+Se afirma que los eventos \(A, B\) y \(C\) son independientes los unos de los otros, ya que, estos no dependen del otro.
+
+\begin{itemize}
+  \item \textbf{Espacio muestral (\(\Omega\)):} de acuerdo a la definición ``Es el conjunto de todos los posibles resultados de un experimento aleatorio.'' En este experimento solo se pueden tener diferentes pares de resultados Por lo tanto, la combinación de estos resultados da como resultado el siguiente conjunto:
+        \[
+        \Omega = \{ (A,A), (A, B), (A, C), (B, A), (B, B), (B, C), (C, A), (C, B), (C, C)  \}
+        \]
+  Al sacar \(|\Omega|\) este resultado es de \(9\) posibles resultados del experimento. 
+  \item \textbf{Probabilidad de cada canica:} el enunciado nos dice que cada canica tiene el mismo chance de ser seleccionada, es decir, una entre tres canicas, por lo tanto, las probabilidades de cada evento se definen como:
+        \[
+        P(A) = \frac{1}{3} = 0.33\overline{333} \qquad P(B) = \frac{1}{3} = 0.33\overline{333} \qquad P(C) = \frac{1}{3} = 0.33\overline{333}
+        \]
+        Las dos sacadas son independientes, por lo tanto, se puede aplicar que para cada par \((X, Y)\) se cumpla:
+        \[
+        P(X) \times P(Y) = \frac{1}{3} \times \frac{1}{3} = \frac{1}{9} = 0.11\overline{111}
+        \]
+        Por lo tanto, cada punto en el espacio muestral es de \(\frac{1}{9}\).
+\end{itemize}
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\textwidth]{img/Caja.png}
+  \caption{\label{fig:caja-canica} Caja con 3 canicas de colores rojo, verde y azul. Ilustración de los autores elaborada en el software GIMP.}
+\end{figure}
+
+
 \subsection{Punto b}
 \subsubsection{Solución}
+
+En este punto nos plantean la misma situación anterior pero los eventos son \textbf{dependientes}, ya que, se saca la primera canica y no se vuelve a meter, es decir, si saco la canica azul como se ve en la figura \ref{fig:caja-2} para la segunda sacada de canica la probabilidad no va a ser la misma, puesto que, hay únicamente dos canicas a sacar. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=.3\textwidth]{img/Caja2.png}
+  \caption{\label{fig:caja-2} Caja con canicas verde y roja. Ilustración de los autores elaborada en el software GIMP.}
+\end{figure}
+
+
+Entonces, el conjunto del espacio muestral \(\Omega\) queda como:
+
+\[
+  \Omega = \{ \}
+\]
+
 
 \section{\textit{Congruential generators}}
 \subsection{Solución}

@@ -6,7 +6,7 @@
    (TeX-add-to-alist 'LaTeX-provided-class-options
                      '(("article" "12pt")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("graphicx" "") ("amsmath" "") ("geometry" "margin=1in") ("fancyhdr" "") ("enumerate" "") ("enumitem" "shortlabels") ("babel" "spanish") ("xurl" "") ("tcolorbox" "") ("titlesec" "")))
+                     '(("graphicx" "") ("amsmath" "") ("geometry" "margin=1in") ("fancyhdr" "") ("enumerate" "") ("enumitem" "shortlabels") ("babel" "spanish") ("xurl" "") ("tcolorbox" "") ("titlesec" "") ("listings" "") ("xcolor" "")))
    (TeX-run-style-hooks
     "latex2e"
     "article"
@@ -20,7 +20,9 @@
     "babel"
     "xurl"
     "tcolorbox"
-    "titlesec")
+    "titlesec"
+    "listings"
+    "xcolor")
    (LaTeX-add-labels
     "fig:caja-canica"
     "fig:caja-2")

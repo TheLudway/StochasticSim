@@ -10,6 +10,8 @@
 \usepackage{xurl}
 \usepackage{tcolorbox}
 \usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
 
 \titleclass{\subsubsubsection}{straight}[\subsection]
 
@@ -55,6 +57,21 @@
 \fancyfoot[C]{\footnotesize Este trabajo está bajo una licencia CC 4.0. Más info: \url{https://creativecommons.org/licenses/by/4.0/}}
 
 \renewcommand{\headrulewidth}{0.2pt}
+
+\lstdefinestyle{python}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    stepnumber=1,
+    frame=single,
+    breaklines=true,
+    tabsize=4,
+    showstringspaces=false
+}
 
 \begin{document}
 
@@ -121,11 +138,39 @@ Entonces, el conjunto del espacio muestral \(\Omega\) queda como:
 
 La cardinalidad entonces del conjunto \(\Omega\) es de 6.
 
+Teniendo en cuenta la probabilidad para dos eventos dependientes:
 
+\[
+P(X \cap Y) = P(X|Y) P(Y)
+\]
 
+Si sacamos una canica de color rojo (\(P(C)\)) su probabilidad se mantiene como la del mundo anterior \(\frac{1}{3}\). Podemos deducir que en el espacio muestral quedan las canicas azul y verde, si deseamos sacar la azul \((P(B)\), esta está condicionada por el evento anterior de sacar la roja. Teniendo en cuenta, lo anterior, la probabilidad de sacar una canica azul será \(P(B|C) = \frac{1}{2}\). Por lo tanto, al realizar la operación:
+
+\[
+ P(B|C)P(C) = \frac{1}{2} \times \frac{1}{3} = \frac{1}{6} = 0.166\overline{666}
+\]
+
+Generalizando con \((X, Y)\) siendo un par del espacio muestral \(\Omega\):
+
+\[
+P(X \cap Y) = P(X|Y)P(Y) = \frac{1}{2} \times \frac{1}{3} = \frac{1}{6} =  0.166\overline{666}
+\]
+
+En conclusión, la probabilidad para cada canica dado que se saque una antes y no se vuelva a introducir es de \(0.166\overline{666}\). 
 
 \section{\textit{Congruential generators}}
 \subsection{Solución}
+
+Teniendo en cuenta:
+
+\[
+X_{n} = (9X_{n-1} + 3) \mod 11
+\]
+
+
+
+
+
 
 \section{\textit{Uniformity and independence of the unif}}
 \subsection{Solución}

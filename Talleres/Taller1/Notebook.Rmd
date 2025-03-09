@@ -1,0 +1,36 @@
+---
+title: "Taller 1: Probabilidad, Variables aleatorias, Generadores aleatorios,
+Simulación de Monte Carlo"
+author: "Alvarado Ludwig | Vera Julián"
+date: "2025-03-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 2: Congruential generators
+
+Find all of the cycles of the following congruential ge-
+nerator. For each cycle identify which seeds X0 lead to
+that cycle:
+
+```{r cars}
+generator <- function(x_n1, n){
+  for (i in 1:n){
+    print(x_n1)
+    x_n1 <- (9 * x_n1 + 3) %% 11
+  }
+}
+```
+
+## Inclusión de Gráficos
+
+También puede incrustar gráficos, por ejemplo:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Tenga en cuenta que el parámetro `echo = FALSE` se agregó al fragmento de código para evitar la impresión del código R que generó el gráfico.

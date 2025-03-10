@@ -34,7 +34,120 @@ generator <- function(x_n1, n){
 
 La función se llama con un valor para la *seed* inicial y la cantidad $n$ de números pseudoaleatorios que se van a imprimir.
 
+Para buscar todos los posibles ciclos, se va a intentar con diferentes valores del *seed* $X_{n-1}$, empezando por $X_{n-1} = 1$ y un $n = 8$ 
+
 ```{r}
-generator(2, 10)
+generator(1, 8)
 ```
+
+Podemos escribir las secuencias como $S = G(x)$ donde $G$ es la función `generator` y $x$ es el seed, y, $S$ es el conjunto de números generados por la función. Esto ayuda a simplificar la notación y ayuda a mejorar la lectura de las diferentes secuencias. Ya se tiene el de $G(1)$, ahora:
+
+$G(2)$
+
+```{r}
+generator(2, 8)
+```
+
+$G(3)$
+
+```{r}
+generator(3, 8)
+```
+
+$G(4)$
+
+```{r}
+generator(4, 8)
+```
+
+$G(5)$
+
+```{r}
+generator(5, 8)
+```
+
+
+$G(6)$
+
+```{r}
+generator(6, 8)
+```
+
+$G(7)$
+
+```{r}
+generator(7, 8)
+```
+
+
+$G(8)$
+
+```{r}
+generator(8, 8)
+```
+
+
+$G(9)$
+
+```{r}
+generator(9, 8)
+```
+
+
+$G(10)$
+
+```{r}
+generator(10, 8)
+```
+
+
+$G(11)$
+
+```{r}
+generator(11, 8)
+```
+
+
+$G(12)$
+
+```{r}
+generator(12, 8)
+```
+
+
+$G(13)$
+
+```{r}
+generator(13, 8)
+```
+
+Los ciclos que se han obtenido son:
+
+- $G(1): S = \{1, 1, 1, 1, 1, 1, 1, 1 \}$
+- $G(2): S = \{2, 10, 5, 4, 6, 2, 10, 5\}$
+- $G(3): S = \{3, 8, 9, 7, 0, 3, 8, 9\}$
+- $G(4): S = \{4, 6, 2, 10, 5, 4, 6, 2\}$
+- $G(5): S = \{5, 4, 6, 2, 10, 5, 4, 6, 2\}$
+- $G(6): S = \{6, 2, 10, 5, 4, 6, 2, 10\}$
+- $G(7): S = \{7, 0, 3, 8, 9, 7, 0, 3\}$
+- $G(8): S = \{8, 9, 7, 0, 3, 8, 9, 7\}$
+- $G(9): S = \{9, 7, 0, 3, 8, 9, 7 ,0\}$
+- $G(10): S = \{10, 5, 4, 6, 2, 10, 5, 4\}$
+- $G(11): S = \{11, 3, 8, 9, 7, 0, 3, 8\}$
+- $G(12): S = \{12, 1, 1, 1, 1, 1, 1, 1\}$
+- $G(13): S = \{13, 10, 5, 4, 6, 2,10, 5\}$
+
+
+Las secuencias que se han identificado para los diferentes *seed* son:
+
+- $X_{n-1} = 1:$ secuencia de solo unos.
+- $X_{n-1} = 2:$ secuencia $\{10, 5, 4, 6, 2 \}$
+- $X_{n-1} = 3:$ secuencia $\{3, 8, 9, 7, 0\}$
+
+Estos *seeds* ($1, 2, 3$) son los que permiten generar secuencias diferentes.
+
+Si nos damos cuenta, es normal que después del *seed* $3$ se empiecen a repetir los ciclos, esto se debe a que ya están todos los números menores a 11 en los conjuntos, por lo tanto, si cae otro *seed* se vuelve al ciclo.
+
+
+
 

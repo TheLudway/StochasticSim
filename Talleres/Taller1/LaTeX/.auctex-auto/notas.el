@@ -6,7 +6,10 @@
    (TeX-add-to-alist 'LaTeX-provided-class-options
                      '(("article" "12pt")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("graphicx" "") ("amsmath" "") ("geometry" "margin=1in") ("fancyhdr" "") ("enumerate" "") ("enumitem" "shortlabels") ("babel" "spanish") ("xurl" "") ("tcolorbox" "") ("titlesec" "") ("listings" "") ("xcolor" "")))
+                     '(("graphicx" "") ("amsmath" "") ("geometry" "margin=1in") ("fancyhdr" "") ("enumerate" "") ("enumitem" "shortlabels") ("babel" "spanish") ("xurl" "") ("tcolorbox" "") ("titlesec" "") ("listings" "") ("xcolor" "") ("pgfplots" "") ("tikz" "")))
+   (add-to-list 'LaTeX-verbatim-environments-local "lstlisting")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "lstinline")
+   (add-to-list 'LaTeX-verbatim-macros-with-delims-local "lstinline")
    (TeX-run-style-hooks
     "latex2e"
     "article"
@@ -22,11 +25,15 @@
     "tcolorbox"
     "titlesec"
     "listings"
-    "xcolor")
+    "xcolor"
+    "pgfplots"
+    "tikz")
    (LaTeX-add-labels
     "fig:caja-canica"
     "fig:caja-2")
    (LaTeX-add-counters
-    "subsubsubsection"))
+    "subsubsubsection")
+   (LaTeX-add-listings-lstdefinestyles
+    "RStyle"))
  :latex)
 

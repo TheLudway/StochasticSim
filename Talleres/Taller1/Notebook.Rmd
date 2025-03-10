@@ -16,6 +16,13 @@ Find all of the cycles of the following congruential ge-
 nerator. For each cycle identify which seeds X0 lead to
 that cycle:
 
+$$
+X_n = (9 X_{n-1} + 3) \mod 11
+$$
+
+Para eso, se va a crear la siguiente función `generator`.
+
+
 ```{r cars}
 generator <- function(x_n1, n){
   for (i in 1:n){
@@ -25,12 +32,9 @@ generator <- function(x_n1, n){
 }
 ```
 
-## Inclusión de Gráficos
+La función se llama con un valor para la *seed* inicial y la cantidad $n$ de números pseudoaleatorios que se van a imprimir.
 
-También puede incrustar gráficos, por ejemplo:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+generator(2, 10)
 ```
 
-Tenga en cuenta que el parámetro `echo = FALSE` se agregó al fragmento de código para evitar la impresión del código R que generó el gráfico.

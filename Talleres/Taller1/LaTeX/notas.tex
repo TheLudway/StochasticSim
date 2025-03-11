@@ -14,6 +14,7 @@
 \usepackage{xcolor}
 \usepackage{pgfplots}
 \usepackage{tikz}
+\usepackage{cancel}
 
 \titleclass{\subsubsubsection}{straight}[\subsection]
 
@@ -86,7 +87,7 @@
 
 \begin{document}
 
-\tableofcontents
+
 
 
 \section{\textit{Events and probability}}
@@ -170,7 +171,7 @@ Generalizando con \((X, Y)\) siendo un par del espacio muestral \(\Omega\):
 En conclusión, la probabilidad para cada canica dado que se saque una antes y no se vuelva a introducir es de \(0.166\overline{666}\). 
 
 \section{\textit{Congruential generators}}
-\subsection{Solución}
+\subsubsection{Solución}
 
 La solución a este ejercicio se puede ver a más profundidad en el archivo \textsf{R} \textit{markdown} adjunto.  
 
@@ -243,10 +244,240 @@ generator(3, 8)
 Al prestar atención, se puede ver que están todos los números naturales (adoptando el criterio de que el 0 es natural) menores a 11. Ya después, cualquier semilla que se tome hace volver a alguna de esas tres secuencias.
 
 
-\section{\textit{Uniformity and independence of the unif}}
-\subsection{Solución}
 
-\section{\textit{Inverse method for a discrete r.v}}
+\section{\textit{Uniformity and independence of the unif}}
+
+\subsubsection{Solución}
+
+
+El siguiente código genera números pseudoaleatorios y se representan gráficamente por medio de un histograma, gráfico de dispersión y un gráfico de autocorrelación para los números pseudoaleatorios generados.
+
+\begin{lstlisting}
+    > Nsim = 10^4 # Cantidad de numeros pseudoaleatorios a generar (10,000)
+    
+    > x=runif(Nsim) # Se almacenan los 10,000 numeros pseudoaleatorios en la variable x 
+    
+    > x1=x[-Nsim] # Se remueve el ultimo elemento de x (ultimo numero pseudoaleatorio)
+                  # y se almacena el restante en la variable x1
+                  
+    > x2=x[-1] # Se remueve el primer elemento de x (primer numero pseudoaleatorio)
+               # y se almacena el restante en la variable x2
+               
+    > par(mfrow=c(1,3)) # Se ajusta para que las tres graficas queden una 
+                        # al lado de la otra en una sola fila
+
+    > hist(x) # Se genera un histograma a partir de x
+
+    > plot(x1, x2) # Se genera un grafico de dispersion entre las variables x1 y x2
+
+    > acf(x) # Se genera un grafico de dispersion para evaluar la autocorrelacion 
+             # entre los valores
+\end{lstlisting}
+
+
+Para el diagrama de dispersión, se utilizaron dos variables \textit{x1} que contenía los mismos números pseudoaleatorios generados anteriormente pero sin el último elemento, y lo mismo para la variable \textit{x2}, pero en este caso se removió el primer elemento.
+
+\textbf{¿Por qué se eliminaron algunos elementos para estas variables?}
+
+La razón por la que se hizo esto fue para que en el momento de graficar el gráfico de dispersión estos números pseudoaleatorios estuvieran ordenados de a parejas diferentes, ya que si se dejan los mismos valores para las dos variables, en el gráfico de dispersión estarían sobrepuestos una sobre la otra y se mostraría una línea diagonal, lo cual no es ideal para un gráfico de estos.
+
+
+\section{\textit{Inverse method for a discrete r.v.}}
+
+Consider the discrete random variable (r.v.) $X$ with probability mass function (\textit{pmf}) given by:
+
+\[
+P (X = -1) = 0.2, \quad P (X = 0) = 0.5, \quad P (X = 1) = 0.3
+\]
+
+
+
+
+
+\subsection{Punto a}
+
+Calculate and plot the Cumulative Distribution Function (\textit{CDF}) $F_{X} (x)$ of $X$.
+\subsubsection{Solución}
+
+Teniendo en cuenta que la variable aleatoria discreta \textbf{X} toma diferentes valores, para calcular la función de distribución acumulada debemos acumular las probabilidades.
+\\
+\\
+Se tiene:
+
+\begin{align*} 
+X &= -1\ \text{ con }\ P(X=-1)=0.2 \\ 
+X &= 0\ \text{ con }\ P(X=0)=0.5 \\
+X &= 1\ \text{ con }\ P(X=1)=0.3 \\
+\end{align*}
+
+
+Ahora la función de distribución acumulada se construye acumulando las probabilidades:
+
+\begin{itemize}
+    \item Para $x < -1: F_X(x) = 0$
+    \item Para $-1 \leq x \leq 0: F_X(x) = 0.2$
+    \item Para $0 \leq x \leq 1: F_X(x) = 0.2 + 0.5 = 0.7$
+    \item Para $x \geq 1: F_X(x) = 0.2 + 0.5 + 0.3 = 1$
+\end{itemize}
+
+
+
+\begin{lstlisting}
+> x <- c(-1, 0, 1) # Valores de la variable aleatoria X
+> p <- c(0.2, 0.5, 0.3) # Probabilidad para cada valor de X
+
+> cdf <- cumsum(p) # Se calcula las probabilidades acumuladas con la funcion 'cumsum()'
+
+> f_x <- stepfun(x, c(0, cdf)) # Se inicializa la funcion de distribucion acumulada con la funcion 'stepfun()'
+
+> plot(f_x, xlin=c(-2, 2), main="CDF", xlab="x", ylab=expression(F[X](x)), do.points=TRUE, verticals=TRUE) # Se grafica la funcion de distribucion acumulada
+\end{lstlisting}
+
+
+\textbf{Output}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{img/cdf.png}
+\end{figure}
+
+
+
+\subsection{Punto b}
+
+Calculate the expectation $E[X]$ and variance $Var(X)$ of $X$.
+
+\subsubsection{Solución}
+
+
+Para calcular la esperanza $E[X]$ se multiplica cada valor por su probabilidad y sumando los resultados:
+\[E[X] = (-1)(0.2)+(0)(0.5)+(1)(0.3) = 0.1\]
+
+Para calcular la varianza, se necesita primero $E[X^2]$, entonces:
+\[E[X^2] = (-1)^2(0.2)+(0)^2(0.5)+(1)^2(0.3) = 0.5\]
+
+Teniendo $E[X^2]$, se puede calcular la varianza:
+\[Var(X) = E[X^2] - (E[X])^2 = 0.5-(0.1)^2=0.49\]
+La esperanza $E[X]$ es de $0.1$ y la varianza $Var[X]$ es de $0.49$.\newline 
+
+
+
+
+\subsection{Punto c}
+
+Write a program to generate n values of this random variable using the inverse method i.e. by generating random numbers uniformly distributed in (0, 1).
+
+\subsubsection{Solución}
+
+
+\begin{lstlisting}
+n <- 1000 # Tamano de la muestra
+u <- runif(n) # Se generan 'n' numeros aleatorios
+x <- ifelse(u < 0.2, -1, ifelse(u < 0.7, 0, 1)) # Se establecen las condiciones de la funcion de distribucion acumulada, con respecto a los valores y sus probabilidades
+
+prob <- table(x)/n # Se calculan las probabilidades para cada valor simulado de x
+
+print(prob_empiricas)
+\end{lstlisting}
+
+
+\textbf{Output}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{img/table_x.png}
+\end{figure}
+
+En este caso, el $20\%$ de las simulaciones dieron como resultado $-1$, el $47.5\%$ dieron como resultado 0 y el $32.5\%$ dieron como resultado 1.
+
+
+
+\subsection{Punto d}
+
+Let $n = 100$, run the program, and determine: (i) the aritmetic mean $\bar{X}$ of the simulated values and (ii) the sample standard deviation $S$ of these values. Compare these statistics with the quantities:
+
+\subsubsection{Solución}
+
+Para $n=100$
+
+
+\begin{lstlisting}
+n <- 100 
+u <- runif(n)
+x <- ifelse(u < 0.2, -1, ifelse(u < 0.7, 0, 1)) 
+x_barra <- mean(x) # Se calcula la media muestral
+s <- sd(x) # Se calcula la Desviacion estandar muestral
+
+# Resultados
+cat("Media muestral =",x_barra, "\n")
+cat("Desviacion estandar muestral (s) =",s, "\n")
+
+E_X <- 0.1 # Valor del E[X]
+APE1 <- abs(E_X - x_barra)/E_X * 100
+cat("Error porcentual absoluto para E[X] =", APE1, "%\n")
+
+SD_X <- 0.7
+APE2 <- abs(SD_X - s)/SD_X * 100
+cat("Error porcentual absoluto para sqrt(Var(X)) =", APE2, "%\n")
+\end{lstlisting}
+
+\textbf{Output}
+
+\begin{lstlisting}
+Media muestral = 0.07
+Desviacion estandar muestral (s) = 0.7282884
+Error porcentual absoluto para E[X] = 30 %
+Error porcentual absoluto para sqrt(Var(X)) = 4.041205 %
+\end{lstlisting}
+
+
+
+\subsection{Punto e}
+Repeat d ) with n = 1000.
+
+\subsubsection{Solución}
+
+Para $n=1000$
+
+
+\textbf{Output}
+
+
+\begin{lstlisting}
+Media muestral = 0.044
+Desviacion estandar muestral (s) = 0.6975318
+Error porcentual absoluto para E[X] = 56 %
+Error porcentual absoluto para sqrt(Var(X)) = 0.3526063 %
+\end{lstlisting}
+
+
+
+
+\subsection{Punto f}
+Repeat d ) with n = 10000.
+
+\subsubsection{Solución}
+
+Para $n=10000$
+
+
+\textbf{Output}
+
+
+\begin{lstlisting}
+Media muestral = 0.0845
+Desviacion estandar muestral (s) = 0.7064062
+Error porcentual absoluto para E[X] = 15.5 %
+Error porcentual absoluto para sqrt(Var(X)) = 0.9151645 %
+\end{lstlisting}
+
+Podemos concluir que al aumentar el tamaño de la muestra $n$, las estimaciones se aproximan cada vez más a los valores teóricos esperados.
+
+
+
+
+\section{\textit{Inverse method for a continuos r.v}}
 
 Consider the continuos random variable $X$ with probability density function (\textit{pdf}) given by:
 
@@ -263,7 +494,7 @@ f_{X} (x) =
 
 Find the following probabilities: (i) $P(X \leq 1)$, (ii) $P(1 < X \leq 1.5)$, (iii) $P(X \geq 1.5)$
 
-\subsection{Solución}
+\subsubsection{Solución}
 
 Se debe hacer uso de la integral para poder hacer dichas probabilidades, se puede obtener la función $f_{X}(x)$ y graficarla tal como:
 
@@ -344,7 +575,7 @@ Ahora, se obtienen las probabilidades:
 
 
 \subsection{Punto b}
-\subsection{Solución}
+\subsubsection{Solución}
 
 Recordando que para calcular el valor esperado $E$ de $X$ se debe realizar la integral:
 
@@ -426,79 +657,462 @@ Entonces, la varianza $\mathrm{Var}(X)$:
 
 En conclusión, el valor esperado es de $E[X] = 1.75$ y la varianza de $\mathrm{Var}(X) = 0.0375$, los datos varían muy poco de la media.
 
-
-
-
-
 \subsection{Punto c}
-\subsection{Solución}
+
+Find the CDF $F_{X}(x)$ of $X$. Plot this function
+
+\subsubsection{Solución}
+
+Se sabe por definición que la \textit{cdf} (\textit{Continuos Random Variable}) es encontrada integrando la \textit{pdf}:
+
+\[
+F(X) = \int_{-\infty}^{x} f(t) dt
+\]
+
+Se va a encontrar $F(x)$ integrando $f(x)$ sobre los diferentes intervalos:
+
+\begin{align*}
+  \text{para } 1 < x \leq 2 : \quad F(x) &= \int_{1}^{x} 3(t-1)^{2} dt \\ 
+                                         &= \int_{1}^{x} (3t^{2} - 6t + 3) dt \\ 
+                                        I&= [t^{3} - 3t^{2} + 3t]_{1}^{x} \\ 
+                                         &= (x^{3} - 3x^{2} + 3x) - (1^{3} - 3(1^{2}) + 3(1)) \\ 
+                                         &= x^{3} - 3x^{2} + 3x - 1 \\
+  \text{para otro caso: } \quad F(x) &= \int_{-\infty}^{x} 0 dt = 0 
+\end{align*}
+
+Al poner ambos juntos, se escribe $F$ como:
+
+
+\[
+F (x) =
+\begin{cases}
+  x^{3} - 3x^{2} + 3x - 1, \quad \text{para} \quad 1 < x \leq 2 \\
+  0, \qquad \text{de otra manera}
+\end{cases}
+\]
+
+Ahora, para su gráfica usando el paquete \texttt{pgfplots} de \LaTeX:
+
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        axis lines = middle,
+        xlabel = {$x$},
+        ylabel = {$F(x)$},
+        samples = 100,
+        domain = 0:3,
+        ymin = -2, ymax = 2,
+        xmin = 0, xmax = 3,
+        xtick = {1,2},
+        ytick = {-1,0,1},
+        clip=false
+    ]
+        % Define the piecewise function
+        \addplot[domain=1:2, thick, blue] {x^3 - 3*x^2 + 3*x - 1};
+        \addplot[domain=0:1, thick, red] {0};
+        \addplot[domain=2:3, thick, red] {0};
+
+        % Open circle at (1,0) to indicate discontinuity
+        \draw[fill=white, thick] (axis cs:1,0) circle[radius=2pt];
+        % Closed circle at (1,F(1))
+        \draw[fill=blue, thick] (axis cs:1,-1) circle[radius=2pt];
+        % Closed circle at (2,F(2))
+        \draw[fill=blue, thick] (axis cs:2,0) circle[radius=2pt];
+    \end{axis}
+\end{tikzpicture}
+\end{center}
 
 \subsection{Punto d}
-\subsection{Solución}
 
-\subsection{Punto e}
-\subsection{Solución}
+Show how to simulate $X$ with this $CDF$ using the inversion method.
 
-\subsection{Punto f}
-\subsection{Solución}
+\subsubsection{Solución}
 
+Ya se tiene la \textit{cdf} $F(x) = x^{3} - 3x^{2} + 3x - 1, 1 < x \leq 2$, se puede invertir resolviendo para $x$ en la ecuación $F(x) = u$, por lo tanto, al factorizar $F(x)$, se obtiene:
 
-\section{\textit{Inverse method for continuos r.v}}
+\begin{align*}
+  F(x) &= x^{3} - 3x^{2} + 3x - 1 = u\\
+     u &= (x-1)^{3} \\
+  \sqrt[3]{u} &= \sqrt[\cancel{3}]{(x-1)^{\cancel{3}}} \\
+  \sqrt[3]{u} + 1 &= x
+\end{align*}
 
-\subsection{Punto a}
-\subsection{Solución}
+Por lo tanto, la inversa del \textit{cdf} es:
 
-\subsection{Punto b}
-\subsection{Solución}
+\[
+  x = \sqrt[3]{u} + 1
+\]
 
-\subsection{Punto c}
-\subsection{Solución}
+Sea $U \sim U(0, 1)$. Entonces, para simular $X$ con la \textit{cdf} será:
+
+\[
+X = \sqrt[3]{U} + 1
+\]
+
 
 \subsection{Punto d}
-\subsection{Solución}
 
-\subsection{Punto e}
-\subsection{Solución}
+Write a program in \textsf{R} that draws 1000 samples of $X$. Plot a normalized histogram of the sample along with the \textit{pdf} of $X$.
+
+\subsubsection{Solución}
+
+Debido a que $U$ se distribuye uniformemente sobre 0 y 1, la función \lstinline|runif()| permite hacer esta distribución y computa una simulación 1000 veces y almacena el resultado el resultado en el vector $U$. La variable $X$ es un vector resultado de sacar la raíz cúbica más uno al vector $U$. Por último, se presenta el histograma en la figura \ref{fig:fig1} muestra una mayor frecuencia de $X$ en valores más cercanos a $2.0$, se puede ver un comportamiento exponencial.
+
+\begin{lstlisting}
+U = runif(1000)
+X = U ^ (1 / 3) + 1
+hist(X)
+\end{lstlisting}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/histograma.png}
+  \caption{\label{fig:fig1} Histograma de la v.a $X$}
+\end{figure}
+
+
+
+
 
 
 \section{\textit{Monte Carlo Integration}}
-\subsection{Solución}
+
+With respect to the following integrals: (i) Find their exact value analytically or with software (e.g., \texttt{WolframAlpha}), (ii) with Monte Carlo integration approximate the integrals and compare with the exact answer.
+
+\subsubsection{Solución}
+
+\subsubsection{$\int_{0}^{1} \exp{e^{x}} dx$}
+
+De acuerdo a \textit{WolframAlpha}, la solución se realiza con la función elemental $\mathrm{Ei(x)}$, según el programa imprime la siguiente solución:
+
+\[
+\int_{0}^{1} e^{e^{x}}dx = \mathrm{Ei}(e) - \mathrm{Ei}(1) \approx 6.31656
+\]
+
+En el presente trabajo no se busca profundizar acerca de la función elemental utilizada, por lo tanto, se procede a realizar la integración por Monte Carlo para realizar la comparación con el valor arrojado por \textit{WolframAlpha}.
+
+Se toma entonces que el valor esperado $E[g(X)]$ se define como el valor arrojado por WolframAlpha:
+
+\[
+E[g(X)] = \frac{\int_{a}^{b}g(x) dx}{b - a} = \frac{6.31656}{1 - 0} = 6.31656 
+\]
+
+Según la guía del taller, debemos tomar:
+
+\[
+\sum_{i = 1}^{n} \frac{g(X_{i})}{n}
+\]
+
+Para así obtener un valor apróximado al valor esperado, el siguiente código en \textsf{R} (para visualizar mejor el resultado visite el \textit{notebook} adjunto a la entrega) muestra el valor estimado del valor de $E[g(x)]$
+
+\begin{lstlisting}
+a <- 0
+b <- 1
+N <- 100000
+X <- runif(N, a, b)
+g <- function(x) exp(exp(x))
+gX <- g(X)
+plot(X, gX)
+H <- mean(gX)
+\end{lstlisting}
+
+Al imprimir el valor de $H$ para esta simulación da un valor de $6.309694$, similar al arrojado por \textit{WolframAlpha}, la diferencia entre ambos resultados es de $0.006866$. Si incrementamos $N$ en la simulación la diferencia va a disminuir y si tiende a infinito, este va a llegar a ser exacto.
+
+
+\subsubsection{$\int_{-2}^{2} e^{x + x^{2}} dx$}
+
+Se toma el mismo proceso que en el punto anterior. Valor arrojado por \textit{WolframAlpha}:
+
+\[
+\int_{-2}^{2} e^{x + x^{2}} dx = \frac{\sqrt{\pi} \left(\mathrm{erfi} \left(\frac{3}{2} \right) + \mathrm{erfi} \left(\frac{5}{2} \right) \right)  }{2 \sqrt[4]{e}} \approx 93.1628
+\]
+
+Donde $\mathrm{erfi}$ es la función error.
+
+Para obtener el valor esperado $E[g(x)]$:
+
+\begin{align*}
+  E[g(x)] &= \frac{\int_{-2}^{2} e^{x + x^{2}} dx}{b - a}  \\
+  &= \frac{93.1628}{2 - (-2)} \approx 23.2907
+\end{align*}
+
+Ahora, el código en \textsf{R} para realizar la simulación
+
+\begin{lstlisting}
+a <- -2
+b <- 2
+N <- 10000
+X <- runif(N, a, b)
+g <- function(x) exp(x + x^2)
+gX <- g(X)
+plot(X, gX)
+(H <- mean(gX))
+\end{lstlisting}
+
+Se puede ver en el \textit{notebook} que el valor de $H$ es de $23.16239$, haciendo $E[g(x)] - H$ da una diferencia de $0.12831$, la integración de Monte Carlo muestra valores cercanos.
+
+\subsubsection{$\int_{0}^{\infty} x(1 + x^{2})^{-2} dx$}
+
+Solución \textit{WolframAlpha}:
+
+\[
+\int_{0}^{\infty} \frac{1}{(x (1 + x^{2}))^{2}} dx = \text{ Integral no converge}
+\]
+
+Para este caso no existiría un valor esperado al cual se desee aproximar la integral debido a que no converge a ningún número, por lo tanto, se espera que en la simulación se obtengan números que \textit{llevan a ninguna parte}. Considere el siguiente código en \textsf{R}
+
+\begin{lstlisting}
+a <- 0
+b <- 1e20
+N <- 100000 
+X <- runif(N, a, b)
+g <- function(x) x*(1+x^2)^-2
+gX <- g(X)
+plot(X, gX)
+(H <- mean(gX))
+\end{lstlisting}
+
+Si lo corre múltiples veces, verá que el valor de $H$ nunca converge a ningún número y se va a mantener oscilando independientemente de cuántas veces se haga la simulación. El valor de $b$ como $1 \times 10^{20}$ se hace con el fin de representar el infinito ($\infty$) de la integral, debido a que cuando se intentó la simulación con la manera en la que \textsf{R} representa los valores infinitos, esta falló y arrojaba valores \texttt{NaN}.
+
+
+\subsubsection{$\int_{0}^{1} \int_{0}^{2} e^{(x + y)^{2}} dydx$}
+
+Solución de \textit{WolframAlpha}:
+
+\[ 
+\int_{0}^{1} \int_{0}^{2} e^{(x + y)^{2}} dydx = \frac{1}{2} (e^{4}(1 - 4F(2)) + e^{9} (6 F(3) - 1) - \sqrt{\pi} \ \mathrm{erfi}(1) - 1 + e  ) \approx 275.884
+\]
+
+Donde $\mathrm{erfi}$ es la función error y $F(z)$ es la función de Dawson.
+
+El valor esperado $E[g(X, Y)]$ será:
+
+\[
+E[g(X, Y)] = \frac{\int_{0}^{1} \int_{0}^{2} e^{(x + y)^{2}} dydx}{(b_{x} - a_{x}) (b_{y} - a_{y})}
+\]
+
+Debido a que estamos ante una integral doble, se utilizan dos v.a $(X, Y)$ y el divisor es la multiplicación de la resta de cada intervalo de integración. Por lo tanto, el valor esperado es:
+
+\[
+E[g(X, Y)] = \frac{275.884}{(1 - 0) (2 - 0)} = 137.942
+\]
+
+Ahora, el siguiente programa en \textsf{R} permite realizar la aproximación a la integral, sigue la misma dinámica que con los anteriores puntos, pero utilizando dos intervalos de integración y añadiendo otro parámetro para la función $g$
+
+\begin{lstlisting}
+ax <- 0
+bx <- 1
+ay <- 0
+by <- 2
+N <- 1e5
+runifX <- runif(N, ax, bx)
+runifY <- runif(N, ay, by)
+g <- function(x, y) exp((x + y)^2)
+gXY <- g(runifX, runifY)
+(H <- mean(gXY))
+\end{lstlisting}
+
+Al ejecutarse (mirar el \textit{notebook}), muestra un valor de $136.6747$, una diferencia de 1.2674 con respecto al valor esperado $E[g(X, Y)]$.
+
+En este sexto punto se comprobó que el método de Monte Carlo sirve muy bien para aproximar integrales definidas y al comparar los resultados con el valor exacto, este método se acerca mucho más a medida que $N$ se incrementa, tal como se explicaba en clase y también en la ley de los grandes números.
+
+
+
+
 
 \section{\textit{Estimating} \(\pi\)}
 
 \subsection{Punto a}
-\subsection{Solución}
+\subsubsection{Solución}
+
+Se tiene en cuenta que las variables \textit{\textbf{X}} y \textit{\textbf{Y}} son independientemente e idénticamente distribuidas, y su distribución uniforme esta en el intervalo $[-0.5, 0.5]$. Con respecto a lo anterior, las probabilidades de que ambas variables estén dentro de los intervalos $[a,b]\ \times\ [c,d]$ es el producto de las probabilidades individuales:
+
+
+\[P((X,Y) \in [a,b]\times[c,d]) = P(a\leq X \leq b)\ \cdot P(c\leq Y \leq d)\]
+
+Para calcular la probabilidad en un subintervalo donde su distribución es uniforme, se tiene que la probabilidad de que \textit{\textbf{X}} esté en el intervalo $[a,b]$ y \textit{\textbf{Y}} en el intervalo $[c,d]$ seran proporcionales a la longitud del intervalo:
+
+Para \textit{\textbf{X}}:
+
+\[P(a \leq X \leq b) = \frac{longitud\ del\ intervalo}{longitud\ del\ intervalo\  total} = \frac{b-a}{0.5-(-0.5)} = \frac{b-a}{1} = b-a\]
+
+Para \textit{\textbf{Y}}:
+
+\[P(c \leq Y \leq d) = \frac{longitud\ del\ intervalo}{longitud\ del\ intervalo\  total} = \frac{d-c}{0.5-(-0.5)} = \frac{d-c}{1} = d-c\]
+
+
+Así pues, tendremos que la probabilidad de que \textit{\textbf{X}} y \textit{\textbf{Y}} esté en el intervalo $[a,b] \times [c,d]$ es:
+
+\[P((X,Y) \in [a,b] \times [c,d]) = (b-a) \times (d-c)\]
+
+
 
 \subsection{Punto b}
-\subsection{Solución}
+
+
+\subsubsection{Solución}
+
+Como \textit{\textbf{X}} y \textit{\textbf{Y}} son variables aleatorias uniformemente distribuidas e independientes, la probabilidad de que un punto \textit{$(X,Y)$} esté dentro de una región \textbf{$A$} dentro del intervalo $[-0.5,0.5] \times [-0.5,0.5]$ dependerá del área que ocupa \textbf{$A$} dentro de este intervalo total.
+
+\[P((X,Y) \in A) = \frac{Area\ de\ A}{Area\ total\ del\ dominio}\]
+
+Dado que el dominio original es $[-0.5, 0.5] \times [-0.5,0.5]$ tiene un área total de:
+
+\[(0.5-(-0.5)) \times (0.5-(-0.5))=1\times1=1\]
+
+Por consiguiente, la probabilidad de que \textit{$(X,Y)$} esté en un subconjunto \textbf{$A$} dentro de este dominio simplemente se reduce a:
+
+\[P((X,Y) \in A) = Area\ de\ A\]
+
 
 \subsection{Punto c}
-\subsection{Solución}
+\subsubsection{Solución}
+
+Se identifica que la ecuación $x^2+y^2=r^2$ representa un círculo centrado en el origen con un radio \textbf{r}, para este ejercicio en específico $r=0.5$, por lo que la ecuación del círculo queda de la siguiente manera:
+
+\[x^2+y^2=0.5^2=0.25\]
+
+Se debe tener en cuenta que, como se esta trabajando en un cuadrado $[-0.5,0.5] \times [-0.5,0.5]$, el circulo queda totalmente contenido dentro del mismo.
+
+
+Ahora para calcular el área de $A$, se tiene que:
+
+\[\pi r^2=\pi(0.5)^2=\pi\times0.25=0.25\pi\]
+
+Sin embargo, como el círculo esta completamente contenido dentro del cuadrado el área de $A$ es simplemente el área del círculo completo:
+
+\[Area\ de\ A\ =0.25\pi\]
+
+\[Area\ de\ A\ \approx0.25(3.1416)\approx0.7854\]
+
+Se concluye que la región $A$ es el círculo de radio $0.5$ dentro del cuadrado de lado 1, y su área es de aproximadamente $0.7854$. Esta será la probabilidad de que un punto \textit{$(X,Y)$} generado aleatoriamente dentro del cuadrado pertenezca a $A$.
+
 
 \subsection{Punto d}
-\subsection{Solución}
+\subsubsection{Solución}
+
+Según la definición de la variable aleatoria $Z$, está tomara el valor de \textbf{1} si el punto $(X,Y)$ está dentro del círculo de radio 0.5 centrado en el origen, y tomará el valor de \textbf{0} si el punto está fuera de ese círculo. 
+
+
+Para el valor esperado $E[Z]$, como $Z=1$ solo cuando el punto $(X,Y)$ cae dentro del círculo, la probabilidad de que eso ocurra es la proporción del área del círculo respecto al área total del dominio $[-0.5,0.5]\times[-0.5,0.5]$, entonces:
+
+\[E[Z] = \frac{Area\ del\ circulo}{Area\ del\ cuadrado} = \frac{\pi r^2}{(0.5-(-0.5))^2}=\frac{\pi(0.5)^2}{1}=\frac{\pi}{4}\]
+
+
+Por ende, el valor esperado $E[Z]$ es:
+
+\[E[Z]=\frac{\pi}{4}\]
+
+
 
 \subsection{Punto e}
-\subsection{Solución}
+\subsubsection{Solución}
+
+\begin{lstlisting}
+> n <- 10000 # Tamano de la muestra
+> X <- runif(n, -0.5, 0.5) # Se generan 'n' numeros aleatorios en el intervalo [-0.5,0.5] y se almacenan en la variable X
+> Y <- runif(n, -0.5, 0.5) # Se generan 'n' numeros aleatorios en el intervalo [-0.5,0.5] y se almacenan en la variable Y
+> Z <- ifelse(X^2+Y^2<=0.5^2,1,0) # Verificar si los puntos caen o no dentro del circulo
+> pi_estimado <- 4 * mean(Z) # Se estima pi
+> print(paste("Estimacion de pi con", n, "muestras:",pi_estimado)
+\end{lstlisting}
+
+\textbf{Output}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{img/output-7.png}
+\end{figure}
+\end{document}
 
 
+\section{\textit{Estimating expected values with Monte Carlo}}
 
-\section{\textit{Estimating expected values with Monte Carlo} \(\pi\)}
+For uniform (0, 1) random variables $U_{1}, U_{2}, \dots$ define:
+
+\[
+N = \min \left\{n : \sum_{i = 1}^{n} U_{i} > 1 \right\}
+\]
+
+That is, $N$ is equal to the number of random numbers that must be summed to exceed 1.
+
+
+Las simulaciones se realizan creando dos funciones \texttt{N()} y \texttt{En()} que se van a utilizar para las simulaciones de los puntos, el código que se presenta en el \textit{notebook} es
+
+\begin{lstlisting}
+N <- function(){
+  total <- 0
+  count <- 0 
+  while (total <= 1){
+    total <- total + runif(1, 0, 1)
+    count <- count + 1
+  }
+  return (count)
+}
+
+En <- function(N) { 
+  samples <- replicate(N, N())
+  return (mean(samples))
+}
+\end{lstlisting}
+
 
 \subsection{Punto a}
+
+Estimate $E[N]$ by generating 100 values of $N$.
+
 \subsection{Solución}
+
+Llamando la función \texttt{En(100)}, se obtiene un valor estimado de:
+
+
+\[
+ E[100] = 2.72
+\]
+
 
 \subsection{Punto b}
+
+Estimate $E[N]$ by generating 1000 values of $N$.
+
 \subsection{Solución}
+
+Llamando la función \texttt{En(1000)}, se obtiene un valor estimado de:
+
+
+\[
+ E[100] = 2.729
+\]
+
+
+
+
 
 \subsection{Punto c}
+
+Estimate $E[N]$ by generating 10000 values of $N$.
+
 \subsection{Solución}
+
+Llamando la función \texttt{En(10000)}, se obtiene un valor estimado de:
+
+
+\[
+ E[100] = 2.71952
+\]
+
+
 
 \subsection{Punto d}
+
+What do you think is the value of $E[N]$?
+
 \subsection{Solución}
 
-\subsection{Punto e}
-\subsection{Solución}
+
+A medida que el $N$ de la función \texttt{En(N)} va incrementando, este parece acercarse cada vez más al valor de la constante $e$, lo cual, para uno de los autores de este documento, lo hace muy bonito, ya que, este número aparece por todo lado, y descubrir otra manera más de encontrarlo es algo emocionante! 
+
 
 
 \end{document}

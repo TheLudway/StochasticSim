@@ -857,23 +857,43 @@ Se puede ver en el \textit{notebook} que el valor de $H$ es de $23.16239$, hacie
 Solución \textit{WolframAlpha}:
 
 \[
-\int_{0}^{\infty} \frac{1}{(x (1 + x^{2}))^{2}} dx = \text{ Integral no converge}
+\int_{0}^{\infty} \frac{x}{(1 + x^{2})^{2}} dx = \frac{1}{2} 
 \]
 
-Para este caso no existiría un valor esperado al cual se desee aproximar la integral debido a que no converge a ningún número, por lo tanto, se espera que en la simulación se obtengan números que \textit{llevan a ninguna parte}. Considere el siguiente código en \textsf{R}
+Se puede realizar el siguiente cambio de variable:
+
+\[    
+y = \frac{1}{x+1} , dy = - \frac{dx}{(x+1)^{2}} = -y^{2} dx
+\]
+
+Entonces, con $h(y) = \frac{g \left( \frac{1}{y} - 1\right) }{y^{2}}$:
+
+\[
+\theta = \int_{0}^{1} h(y) dy
+\]
+
+Puesto de esta manera, la integral queda como:
+
+\[ 
+\int_{0}^{1} \frac{\frac{ \frac{1}{y} - 1 }{ (1 + (\frac{1}{y} - 1)^{2} )^{2}}}{y^{2}} dy
+\]
+
+La implementación en \textsf{R} es la siguiente: 
+
 
 \begin{lstlisting}
 a <- 0
-b <- 1e20
+b <- 1
 N <- 100000 
 X <- runif(N, a, b)
-g <- function(x) x*(1+x^2)^-2
+g <- function(y) ((1/y - 1)/(1 + (1/y - 1)^2)^2)/y^2
 gX <- g(X)
 plot(X, gX)
 (H <- mean(gX))
 \end{lstlisting}
 
-Si lo corre múltiples veces, verá que el valor de $H$ nunca converge a ningún número y se va a mantener oscilando independientemente de cuántas veces se haga la simulación. El valor de $b$ como $1 \times 10^{20}$ se hace con el fin de representar el infinito ($\infty$) de la integral, debido a que cuando se intentó la simulación con la manera en la que \textsf{R} representa los valores infinitos, esta falló y arrojaba valores \texttt{NaN}.
+Al imprimir $H$, da un valor de $0.4986839$ (vea el \textit{notebook} adjunto). Siendo un valor muy preciso para el valor real de la integral.
+
 
 
 \subsubsection{$\int_{0}^{1} \int_{0}^{2} e^{(x + y)^{2}} dydx$}

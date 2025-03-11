@@ -267,12 +267,18 @@ plot(X, gX)
 
 ### $\int_{0}^{\infty} x(1 + x^{2})^{-2} dx$
 
+Se transformó la integral para que quede en un intervalo de 0 a 1 con la siguiente manera:
+
+$$
+\int_{0}^{1} \frac{\frac{ \frac{1}{y} - 1 }{ (1 + (\frac{1}{y} - 1)^{2} )^{2}}}{y^{2}} dy
+$$
+
 ```{r}
 a <- 0
-b <- 1e20
-N <- 100000
+b <- 1
+N <- 100000 
 X <- runif(N, a, b)
-g <- function(x) x*(1+x^2)^-2
+g <- function(y) ((1/y - 1)/(1 + (1/y - 1)^2)^2)/y^2
 gX <- g(X)
 plot(X, gX)
 (H <- mean(gX))

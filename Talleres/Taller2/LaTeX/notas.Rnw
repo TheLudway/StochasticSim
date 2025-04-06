@@ -1,0 +1,225 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage[spanish]{babel}
+\usepackage{xurl}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{cancel}
+\usepackage[hidelinks]{hyperref}
+
+\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\renewcommand\theparagraph{\thesubsubsubsection.\arabic{paragraph}} % optional; useful if paragraphs are to be numbered
+
+\titleformat{\subsubsubsection}
+{\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}%
+  {3.25ex \@plus1ex \@minus .2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+% \def\toclevel@paragraph{6}
+\def\toclevel@subparagraph{6}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{6}{14em}{6em}}
+\makeatother
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% Set up headers and footers
+\pagestyle{fancy}
+\fancyhf{}  % Clear previous settings
+
+\fancyhead[L]{Julián - Ludwig}
+\fancyhead[C]{Taller 2 - Sim Estocástica}
+\fancyhead[R]{\today}
+
+\fancyfoot[C]{\thepage}
+\fancyfoot[C]{\footnotesize Este trabajo está bajo una licencia CC 4.0. Más info: \url{https://creativecommons.org/licenses/by/4.0/}}
+
+\renewcommand{\headrulewidth}{0.2pt}
+
+
+% Define R Style for listings
+\lstdefinestyle{RStyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!40!black}\itshape,
+  stringstyle=\color{red!70!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{gray!10},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{black},
+  captionpos=b,
+  morekeywords={generator}
+}
+
+% Set RStyle as default
+\lstset{style=RStyle}
+
+\begin{document}
+
+
+\section{Stopping generating new simulation data}
+
+Write a program to generate standard normal random variables until you have generated n of them, where $n \geq 100$ is such that $S/\sqrt{n} < 0.01$, where S is the sample standard deviation of the n data values. Note that this is the ``Method for Determining When to Stop Generating New Data''. Also, answer the following questions:
+
+
+
+Debido a que se va a generar variables aleatorias \textbf{normales estándar} $X_{i}$, es decir, $X_{i} \sim \mathcal{N}(0, 1)$ y se debe parar de generar cuando $\frac{S}{\sqrt{n}} < 0.01$.
+
+<<>>==
+x <- numeric()
+s <- 1
+n <- 0
+
+while(n < 100 || s / sqrt(n) >= 0.01) {
+  x <- c(x, rnorm(1))
+  n <- length(x)
+  s <- sd(x)
+}
+
+cat("Cantidad de Xi generados", n, "\n")
+cat("Desviación estándar", round(s, 5), "\n")
+cat("Error estándar S/sqrt(n)", round(s/sqrt(n), 5), "\n")
+@
+
+
+En el código se declara una variable $s$ inicializada en 1 para que luego sea nuevamente computada a la desviación estándar de $x$ que es un vector que va a almacenar todas las variables normales aleatorias generadas. Según el enunciado tenemos una condición de que al menos deben haber 100 variables aleatorias generadas ($n \geq 100$) y que el error estándar sea menor a 0.01 ($S / \sqrt{n} < 0.01$). En el ciclo \lstinline|while|, por lo tanto, tiene sentido que el ciclo continue si alguna de las afirmaciones anteriores son falsas, por eso queda la condición de esa manera. Se hace uso de la función \lstinline|rnorm(1)| para que genere una variable aleatoria normal con los valores por defecto (promedio 0 y desviación 1). 
+
+
+
+
+
+
+\subsection{How many normals do you think will be generated? Give an analytic estimate.}
+\label{subsec:p1-a}
+
+\subsubsection{Respuesta}
+
+Aunque ya se tengan los resultados de la simulación, se puede hacer un estimado analítico con la condición $S / \sqrt{n} < 0.01$ donde se puede despejar $n$ para saber cuántas variables se necesitan para parar el criterio.
+
+Se tiene en primer lugar la inecuación:
+
+\[
+\frac{S}{\sqrt{n}} < 0.01
+\]
+
+Se eleva ambas partes con menos 1:
+
+\begin{align*}
+  \left(\frac{S}{\sqrt{n}}  \right)^{-1} &> 0.01^{-1} \\
+  \frac{\sqrt{n}}{S}  &> 100
+\end{align*}
+
+Multiplicando ambas partes por $S$:
+
+\begin{align*}
+  \cancel{S} \times \frac{\sqrt{n}}{\cancel{S}}  &> 100 \times S \\
+  \sqrt{n} &> 100 \times S 
+\end{align*}
+
+Ahora se cancela la raíz elevando ambas partes al cuadrado:
+
+\begin{align*}
+  (\cancel{\sqrt{n}})^{\cancel{2}} &> (100 \times S)^{2} 
+\end{align*}
+
+Quedando entonces:
+
+\[
+n > 10000\times S^{2}
+\]
+
+Para hacer el ejercicio se utilizó en \textsf{R} la función \texttt{rnorm(1, mean = 0, sd = 1)}, de esta manera genera únicamente 1 valor con media 0 y desviación 1, por lo tanto, podemos hacer $S = 1$ para estimar cuántos $n$ necesitamos para que se cumpla condición y deje de generar variables aleatorias, por lo tanto:
+
+\begin{align*}
+  n &> 10000 \times (1)^{2} \\
+  n &> 10000 
+\end{align*}
+
+Este valor se acerca bastante al que se imprime en la simulación. 
+
+
+
+
+
+
+
+
+
+
+
+\subsection{How many normals did you generate?}
+\label{subsec:p1-b}
+
+\subsubsection{Respuesta}
+
+Se han generado \lstinline|n=| $\Sexpr{n}$ normales.
+
+
+\subsection{What is the sample mean of all the normals generated?}
+\label{subsec:p1-c}
+
+
+
+
+\subsubsection{Respuesta}
+
+Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $\Sexpr{mean(x)}$. 
+
+\subsection{What is the sample variance?}
+\label{subsec:p1-d}
+
+
+\subsubsection{Respuesta}
+
+La varianza muestral se calcula como:
+
+\[
+S^{2} = \frac{\sum_{i=1}^{n} (X_{i} - \bar{X})^{2}}{n-1}
+\]
+
+Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $\Sexpr{var(x)}$.
+
+
+
+\subsection{Comment on the results of (\ref{subsec:p1-c}) and (\ref{subsec:p1-d}). Were they surprising?}
+\label{subsec:p1-e}
+
+\subsubsection{Respuesta}
+
+El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\Sexpr{mean(x)}$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $\Sexpr{var(x)}$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
+
+
+
+\end{document}

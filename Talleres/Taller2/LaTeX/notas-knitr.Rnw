@@ -58,7 +58,7 @@
 \fancyhead[R]{\today}
 
 \fancyfoot[C]{\thepage}
-\fancyfoot[C]{\footnotesize Este trabajo está bajo una licencia CC 4.0. Más info: \url{https://creativecommons.org/licenses/by/4.0/}}
+\fancyfoot[C]{\footnotesize Este trabajo está bajo una licencia CC BY-SA 4.0. Más info: \url{https://creativecommons.org/licenses/by/4.0/}}
 
 \renewcommand{\headrulewidth}{0.2pt}
 
@@ -218,8 +218,78 @@ Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tant
 
 \subsubsection{Respuesta}
 
-El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\Sexpr{mean(x)}$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $\Sexpr{var(x)}$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la varianza $\Sexpr{sd(x)**2}$ 
+El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\Sexpr{mean(x)}$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $\Sexpr{var(x)}$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
 
+
+\newpage
+
+\section{Gaining confidence with confidence intervals}
+
+We know that the $\mathcal{U}(-1, 1)$ r.v. has mean 0. Use a sample of size $1000$ to estimate the mean and give a $95\%$ confidence interval (CI). Does the CI contain 0? Repeat the above a large number of times ($\geq  100$). What percentage of time does the CI contain 0? Write your code so that it produces output similar to the following:
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{img/Punto2.png}
+\end{figure}
+
+\subsection{Respuesta}
+
+Se sabe que para tener un intervalo de confianza de 95\%, el límite inferior y superior serán, respectivamente:
+
+\[
+\left( \bar{X} - 1.96 \frac{S}{\sqrt{n}}, \bar{X} + 1.96 \frac{S}{\sqrt{n}} \right)
+\]
+
+El siguiente código permite sacar el intervalo de confianza del 95\% y también el estimado de la media.
+
+<<>>==
+n <- 1000
+x <- runif(n, -1, 1)
+xmean <- mean(x)
+S <- sd(x)
+L <- xmean - 1.96 * S/sqrt(n)
+U <- xmean + 1.96 * S/sqrt(n)
+cat("El estimado es", xmean, "\n")
+cat("95% está entre (", L, ", ", U, ") \n", sep="")
+@
+
+Aquí se estimó la media de la distribución uniforme, dando un resultado de $\Sexpr{xmean}$, muy cercano a 0. El intervalo de confianza está entre $\Sexpr{L}$ y $\Sexpr{U}$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
+
+<<>>==
+trials <- 200
+n <- 1000
+true_mean <- 0
+
+results <- data.frame(
+  sample_mean = numeric(trials),
+  lower_bound = numeric(trials),
+  upper_bound = numeric(trials),
+  contains_mean = integer(trials)
+)  
+
+for (i in 1:trials){
+  x <- runif(n, -1, 1)
+  xmean <- mean(x)
+  S <- sd(x)
+  L <- xmean - 1.96 * S/sqrt(n)
+  U <- xmean + 1.96 * S/sqrt(n)
+  contains <- as.integer(L <= true_mean & true_mean <= U)
+
+  results[i, ] <- c(xmean, L, U, contains)
+}
+
+cat("Número de intentos:", trials, "\n")
+
+print(results, digits= 4)
+
+porcentaje <- mean(results$contains_mean) * 100
+
+cat("\n", porcentaje, "% de los intervalos de", 
+"confianza contienen la media real\n")
+@
+
+
+En conclusión, el $\Sexpr{porcentaje}$ \% de los intervalos generados incluyen al 0.
 
 
 \end{document}

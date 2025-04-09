@@ -292,4 +292,91 @@ cat("\n", porcentaje, "% de los intervalos de",
 En conclusión, el $\Sexpr{porcentaje}$ \% de los intervalos generados incluyen al 0.
 
 
+\section{Standard deviation of a proportion}
+
+Assume a manager is using the sample proportion $\hat{p}$ to estimate the proportion p of a new shipment of computer chips that are defective. He doesn’t know $p$ for this shipment, but in previous shipments it has been close to $0.01$, that is $1 \% $ of chips have been defective.
+
+\subsection{If the manager wants the standard deviation of $\hat{p}$ to be about $0.02$, how large a sample should she take based on the assumption that the rate of defectives has not changed dramatically?}
+
+En clase se vieron los estimadores de probabilidad, donde se quiere estimar
+
+\[
+  p = (P X \in A)
+\]
+
+Donde \(A\) es el subconjunto del espacio de estados de \(\Omega \) de \(X\). Es decir, para nuestro problema, este subconjunto de espacios en la muestra que tomó la administradora del cargamento de chips defectuosos. Se puede definir la variable indicadora \(Z\) como:
+
+\[
+  Z = 
+  \begin{cases}
+    1, & \quad X \in A \\
+    0, & \quad X \notin A
+  \end{cases}
+\]
+
+1 significa que sí está defectuoso y 0 que no lo está. Se puede escribir el estimador como:
+
+\[
+p = E[Z]
+\]
+
+En clase se realizó una demostración de como el valor esperado de \(Z\) se le puede asignar a \(p\). Se define la varianza de \(Z\) como:
+
+\begin{align*}
+\mathrm{Var}(Z) &= E[Z^{2}] - E[Z]^{2} \\
+  &= (1^{2} \times P(X \in A) + 0^{2} \times P (X \notin A)) - (P(X \in A))^{²} \\
+  &= p - p^{2}
+\end{align*}
+
+Aplicando factorización:
+
+\[
+\mathrm{Var}(Z) = p (1 - p)
+\]
+
+Estimar $p$ se puede realizar mediante el promedio muestral de $Z$, es decir, se puede estimar la proporción $\hat{p}$ con el promedio de los chips que son defectuosos:
+
+\[
+\hat{p} = \frac{1}{n} \sum_{i =1}^{n} Z_{i}
+\]
+
+Se puede calcular entonces, la varianza del estimador:
+
+\[
+\mathrm{Var}(\hat{p}) = \frac{1}{n} \mathrm{Var} \left(\sum_{i=1}^{n} Z_{i} \right)
+\]
+
+Por independencia de los valores del cargamento de chips $Z_{i}$ se puede meter la varianza de estos en la suma:
+
+\begin{align*}
+  \mathrm{Var}(\hat{p}) &= \frac{1}{n^{2}} \sum_{i=1}^{n} \mathrm{Var}(Z_{i}) \\
+  &= \frac{1}{n^{2}} \sum_{i=1}^{n} p(1 - p) = \frac{1}{n} p (1 -p) 
+\end{align*}
+
+Por lo tanto, una aproximación es:
+
+\[
+\mathrm{Var}(\hat{p}) \approx \frac{1}{n} \hat{p} (1 - \hat{p}) 
+\]
+
+Teniendo en cuenta que la desviación estándar es el cuadrado de la varianza, se puede despejar:
+
+\[
+\sigma_{\hat{p}} \approx \sqrt{\frac{\hat{p} (1 - \hat{p})}{n}}
+\]
+
+El problema nos dice que la desviación estándar de $\hat{p}$ ($\sigma_{\hat{p}}$) debe ser sobre 0.02 y nos piden hallar cuántas muestras debe tomar la administradora, por lo tanto, en la parte izquierda de la ecuación reemplazamos por $0.02$, se despeja para $n$ y la proporción de defectuosos se toma como $0.01$ debido a que en el problema se nos dice que no ha cambiado tanto.
+
+\begin{align*}
+  \sigma_{\hat{p}} &\approx \sqrt{\frac{\hat{p} (1 - \hat{p})}{n}} \\
+  0.02 &\approx \sqrt{\frac{0.1 (1 - 0.1)}{n}  } \\
+  0.02 &\approx \sqrt{\frac{0.0099}{n}  } \\
+  (0.02)^{2} &\approx \left(\cancel{\sqrt{\frac{0.0099}{n}  }} \right)^{\cancel{2}}\\
+  0.0004 &\approx \frac{0.0099}{n} \\
+  n &\approx \frac{0.0099}{0.0004} = 24.75
+\end{align*}
+
+Por lo tanto, la administradora debe tomar un muestra de por lo menos 25 chips para tener una desviación estándar de al menos $0.02$
+
+
 \end{document}

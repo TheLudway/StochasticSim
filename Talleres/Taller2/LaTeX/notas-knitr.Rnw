@@ -376,7 +376,19 @@ El problema nos dice que la desviación estándar de $\hat{p}$ ($\sigma_{\hat{p}
   n &\approx \frac{0.0099}{0.0004} = 24.75
 \end{align*}
 
-Por lo tanto, la administradora debe tomar un muestra de por lo menos 25 chips para tener una desviación estándar de al menos $0.02$
+Por lo tanto, la administradora debe tomar un muestra de por lo menos 25 chips para tener una desviación estándar de al menos $0.02$.
+
+\subsection{Now suppose something went wrong with the production run and the actual proportion of defectives in the shipment is 0.3, that is 30 \% are defective. Now what would be the actual standard deviation of $\hat{p}$ for the sample size you choose in a)?}
+
+Teniendo 25 chips y cambiando el valor de la proporción de defectuosos, se obtiene:
+
+\begin{align*}
+  \sigma_{\hat{p}} &\approx \sqrt{\frac{\hat{p}(1 - \hat{p}) }{n}} \\
+                   &\approx   \sqrt{\frac{0.3(1 - 0.3) }{25}} \\
+  &\approx 0.091
+\end{align*}
+
+Es decir, si la proporción de detección es del 30\%, la desviación estándar de $\hat{p}$ con una cantidad de chips de 25, será aproximadamente $0.091$,
 
 
 \end{document}

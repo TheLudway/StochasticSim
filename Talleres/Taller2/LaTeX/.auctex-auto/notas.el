@@ -42,7 +42,8 @@
     "subsec:p1-b"
     "subsec:p1-c"
     "subsec:p1-d"
-    "subsec:p1-e")
+    "subsec:p1-e"
+    "tab:p3")
    (LaTeX-add-counters
     "subsubsubsection")
    (LaTeX-add-listings-lstdefinestyles

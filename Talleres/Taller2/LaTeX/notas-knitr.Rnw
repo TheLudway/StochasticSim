@@ -400,13 +400,12 @@ Dado que $X$ es la variable aleatoria de la ganancia, podemos listar los posible
 
 \begin{table}[ht]
   \centering
-  \begin{tabular}[h]{|c|c|}
+  \begin{tabular}[h]{|c|c|c|c|}
     \hline
-    \textbf{Salida moneda} & \textbf{Ganancia} \\ \hline
-    HH & $15.000$ \\ \hline
-    HT & $5.000$ \\ \hline
-    TH & $5.000$ \\ \hline
-    TT & $0$ \\ \hline 
+    \textbf{Salida moneda} & \textbf{Ganancia} & \textbf{Ganancia} $X$ & \textbf{Probabilidad} \\ \hline
+    HH & $15.000$ & $+5.000$ & 0.25 \\ \hline
+    HT-TH & $5.000$ & $-5.000$ & 0.5 \\ \hline
+    TT & $0$ & $-10.000$ & 0.25 \\ \hline 
   \end{tabular}
   \caption{Posibles salidas y ganancias al tirar dos monedas, (H) cara y (T) sello.}
   \label{tab:p3}
@@ -415,54 +414,253 @@ Dado que $X$ es la variable aleatoria de la ganancia, podemos listar los posible
 Del cuadro \ref{tab:p3} se toma que los posibles valores para las ganancias son:
 
 \[
-X \in \{0, 5000, 15000 \} 
+X \in \{-5000, -10000, 5000  \} 
 \]
 
-Debido a que se pueden lanzar dos monedas ($n = 2$), los lanzamientos son independientes entre ellos y la probabilidad de éxito es constante ($p = 0.5$), es decir, que salga cara en el lanzamiento. Debido a todo esto, se afirma que es una distribución binomial de la siguiente forma:
+La función de probabilida de masa: 
 
 \[
 p_{X} (x)  =
-\begin{pmatrix}
-  n \\ x
-\end{pmatrix} p^{x} (1 - p)^{n-x}
+\begin{cases}
+  0.25,& \quad x = 5000 \\
+  0.5,&  \quad x = -5000 \\
+  0.25,& \quad x = -10000 \\
+  0,& \quad \text{En otro caso}
+\end{cases}
 \]
 
-Reemplazando:
+Para sacar el valor esperado se multiplica la probabilidad por cada valor de $X$:
+
+\begin{gather*}
+  E[X] = \sum_{I=1}^{3} x \dot p_{X}(x) = 5000(0.25) + (-5000)(0.5) + (-10000)(0.25) \\
+  E[X] = 1250 - 2500 - 2500 = -3750
+\end{gather*}
+
+Es decir, en promedio se pierde $3.750$ pesos por jugada.
+
+Para calcular la varianza se puede utilizar la fórmula:
 
 \[
-p_{X} (x)  =
-\begin{pmatrix}
-  2 \\ x
-\end{pmatrix} (0.5)^{x} (1 - 0.5)^{2-x}
+\mathrm{Var}(X) = E[X^{2}] - (E[X])^{2}
 \]
 
-Para calcular el valor esperado de $X$:
-
-\[
-E[X] = \frac{1}{n} \sum_{i = 1}^{n} X_{i}
-\]
-
-Reemplazando: 
-
-\[
-E[X] = \frac{1}{3} \sum_{i = 1}^{3} X_{i} 
-\]
-
-Resolviendo:
-
-\[
-\frac{1}{3} \sum_{i = 1}^{3} X_{i} = \frac{0 + 5000 + 15000}{3}  = \frac{20000}{3} \approx 6666.67
-\]
-
-Ahora, para calcular la varianza se toma el valor esperado:
+Se computa $E[X^{2}]$:
 
 \begin{align*}
-  \mathrm{Var}(X) &= E[X^{2}] - E[X]^{2} \\
-  &= E[(0^{2}, 5000^{2}, 15000^{2})] - (6666.67)^{2}
+  E[X^{2}] &= 5000^{2}(0.25) + (-5000)^{2}(0.5) + (-10000)^{2}(0.25) \\
+           &= 25000000 (0.25) + 25000000 (0.5) + 100000000 (0.25) \\
+  &= 6250000 + 12500000 + 25000000 = 43750000
 \end{align*}
 
+Ahora se le resta el cuadrado de la media:
+
+\[
+\mathrm{Var}(X) = 43750000 - (-3750)^{2} = 43750000 - 14062500 = 29687500
+\]
 
 
+
+
+
+
+\subsection{Write a code that simulates the r.v. \textbf{X} using the command sample. Generate an \textit{iid} \lstinline|sample| $\{X_{i}\}$ of size $n = 10^{5}$.}
+
+
+<<>>==
+
+outcomes <- c(-10000, -5000, 5000)
+probabilities <- c(0.25, 0.5, 0.25)
+
+n <- 10^5 
+
+X <- sample(outcomes, size = n , replace = TRUE, prob = probabilities)
+
+length(X)
+
+summary(X)
+@
+
+En este fragmento de código se realiza la creación del vector \lstinline|X| de tamaño $10^{5}$ creado con la función \lstinline|sample| que toma las salidas que se explicaron anteriormente, el tamaño, que se reemplace y la probabilidad.
+
+
+\subsection{Modify your code to calculate: (i) the estimated mean profit $\bar{X}_{j}$ for each sample subsequence: $\{X_{1}, X_{2}, . . . , X_{j} \}$, $j = 2, 3, \dots, n$, (ii) the $95 \%$ CI’s of each estimated mean profit $\bar{X}_{j}$ .}
+
+
+<<cache=TRUE>>==
+mean_estimates <- numeric(n)
+lower_CI <- numeric(n)
+upper_CI <- numeric(n)
+ie <- 1.96 
+
+for (j in 2:n) {
+  x_sub <- X[1:j]
+  mean_j <- mean(x_sub)
+  sd_j <- sd(x_sub)
+  se_j <- sd_j / sqrt(j)
+  
+  mean_estimates[j] <- mean_j
+  lower_CI[j] <- mean_j - ie * se_j
+  upper_CI[j] <- mean_j + ie * se_j
+}
+@
+
+En esta parte del código se crean tres vectores \lstinline|mean_estimates|, \lstinline|lower_CI|, \lstinline|upper_CI| de tamaño $10^{5}$ y también una variable \lstinline|ie|. El bucle en cada iteración calcula la media muestral de los valores $\bar{X}_{j}$, la desviación estándar \lstinline|sd_j| y el error estándar, estos son necesarios para luego calcular el intervalo de confianza junto con la media.
+
+
+\subsection{Plot $\bar{X}_{j}$ and their $95 \%$ CI’s in terms of $j = 2, \dots , 10^{5}$. Add an horizontal line corresponding to the actual value $E[X]$.}
+
+<<grafico-pdf, dev='pdf', fig.width=6, fig.height=4>>=
+# Your plotting code remains the same
+plot(2:n, mean_estimates[2:n], type = "l", col = "blue", lwd = 1,
+     xlab = "j (tamaño de la submuestra)",
+     ylab = "Ganancia esperada estimada",
+     main = "Evolución de la media muestral y su IC del 95%")
+lines(2:n, lower_CI[2:n], col = "red", lty = 2)
+lines(2:n, upper_CI[2:n], col = "red", lty = 2)
+abline(h = -3750, col = "darkgreen", lty = 3, lwd = 2)
+legend("topright", legend = c("Media estimada", "IC 95%", "Valor real E[X]"),
+       col = c("blue", "red", "darkgreen"), lty = c(1, 2, 3), bty = "n")
+@
+
+Se puede ver que a medida que se aumenta la submuestra $j$, la media estimada $\bar{X}$ se acerca más al valor esperado $E[X]$ y también, el intervalo de confianza se va acortando más.
+
+
+
+
+\subsection{Repeat \textit{c)} and \textit{d)} to estimate the probabilities $p_{X} (x)$, their $95 \%$ CI’s, and their plots for each $j = 2, \dots , 10^{5}$, adding the actual values.}
+
+
+
+<<probability-estimation, cache=TRUE>>=
+# Posibles valores de X
+outcomes <- c(-10000, -5000, 5000)
+probs_true <- c(0.25, 0.5, 0.25)
+
+# Inicializar matrices para almacenar las estimaciones y CIs
+p_estimates <- matrix(0, nrow = n, ncol = 3)
+p_lower <- matrix(0, nrow = n, ncol = 3)
+p_upper <- matrix(0, nrow = n, ncol = 3)
+
+z <- 1.96  # Nivel de confianza del 95%
+
+for (j in 2:n) {
+  x_sub <- X[1:j]
+  for (i in 1:3) {
+    val <- outcomes[i]
+    p_hat <- mean(x_sub == val)
+    se <- sqrt(p_hat * (1 - p_hat) / j)
+    
+    p_estimates[j, i] <- p_hat
+    p_lower[j, i] <- max(0, p_hat - z * se)
+    p_upper[j, i] <- min(1, p_hat + z * se)
+  }
+}
+@
+
+\textbf{Gráfico de las probabilidades estimadas con sus ICs para cada posible valor de $X$:}
+
+<<plot-probabilities, dev='pdf', fig.width=6, fig.height=4>>=
+colors <- c("blue", "orange", "purple")
+labels <- c("p_X(-10000)", "p_X(-5000)", "p_X(5000)")
+true_values <- c(0.25, 0.5, 0.25)
+
+plot(2:n, p_estimates[2:n,1], type = "l", col = colors[1], ylim = c(0,1),
+     xlab = "j (tamaño de la submuestra)", ylab = "Probabilidad estimada",
+     main = "Estimación de $p_X(x)$ con ICs del 95%")
+
+for (i in 1:3) {
+  lines(2:n, p_estimates[2:n,i], col = colors[i], lwd = 1)
+  lines(2:n, p_lower[2:n,i], col = colors[i], lty = 2)
+  lines(2:n, p_upper[2:n,i], col = colors[i], lty = 2)
+  abline(h = true_values[i], col = colors[i], lty = 3, lwd = 1.5)
+}
+
+legend("topright", legend = labels, col = colors, lty = 1:1, bty = "n")
+@
+
+Se observa cómo las probabilidades estimadas convergen a los valores reales a medida que aumenta el tamaño de muestra $j$, y cómo los intervalos de confianza se vuelven más estrechos.
+
+
+\section{Bootstrap}
+
+This exercise is based on the article Introduction to Bootstrapping in Statistics with an Example and the dataset body fat.csv that contains the body fat percentages of 92 adolescent girls. Generate a program that gives:
+
+\subsection{An histogram of the sample data.}
+
+
+<<histograma-fat, echo=TRUE, results='hide', dev='pdf', fig.width=6, fig.height=4>>=
+# Leer el archivo
+fat_data <- read.csv("body_fat.csv", stringsAsFactors = FALSE)
+
+# Verifica el nombre exacto de la columna
+colnames(fat_data) <- trimws(colnames(fat_data))  # Eliminar espacios en el nombre
+columna_objetivo <- colnames(fat_data)[1]         # Obtener el nombre real
+
+# Convertir a numérico por si acaso
+fat_data[[columna_objetivo]] <- as.numeric(trimws(fat_data[[columna_objetivo]]))
+
+# Histograma
+hist(fat_data[[columna_objetivo]],
+     main = "Histograma del porcentaje de grasa corporal",
+     xlab = "Body Fat (%)",
+     col = "skyblue",
+     border = "white")
+@
+
+
+\subsection{The 95 \% confidence interval of the mean of the data from the traditional method (i.e., via the Central Limit Theorem).}
+
+
+<<ic-clt, echo=TRUE>>=
+# Estadísticas necesarias
+media <- mean(fat_data[[columna_objetivo]], na.rm = TRUE)
+sd <- sd(fat_data[[columna_objetivo]], na.rm = TRUE)
+n <- sum(!is.na(fat_data[[columna_objetivo]]))  # número de datos no NA
+
+# Cálculo del error estándar
+se <- sd / sqrt(n)
+
+# Intervalo de confianza del 95%
+alpha <- 0.05
+z <- qnorm(1 - alpha/2)  # valor crítico Z para 95%
+li <- media - z * se
+ls <- media + z * se
+
+# Mostrar resultado
+cat(sprintf("The 95%% confidence interval for the mean is: [%.2f, %.2f]", li, ls))
+@
+
+Como se puede apreciar en el programa, hay un 95\% de confianza para que la media esté en el intervalo $[27.14, 29.99]$.
+
+\subsection{A number of 500 bootstrapped samples from the original dataset, with 92 observations each.}
+
+
+<<bootstrap-samples, echo=TRUE>>=
+# Vector original limpio
+original_data <- na.omit(fat_data[[columna_objetivo]])
+n <- length(original_data)
+
+# Generar 500 muestras bootstrap
+bootstrap_samples <- replicate(500, sample(original_data, size = n,
+                    replace = TRUE), simplify = FALSE)
+@
+
+Este código utiliza la función \lstinline|replicate()| para repetir la operación 500 veces, la función \lstinline|sample()| toma una muestra con reemplazo del tamaño de 92.
+
+\subsection{An histogram of the means of each bootstrapped sample.}
+
+
+<<bootstrap-histogram, echo=TRUE, dev='pdf', fig.width=6, fig.height=4>>=
+# Calcular la media de cada muestra bootstrap
+bootstrap_means <- sapply(bootstrap_samples, mean)
+
+# Histograma de las medias
+hist(bootstrap_means,
+     main = "Histograma de medias de muestras bootstrap",
+     xlab = "Media del % de grasa corporal",
+     col = "lightgreen",
+     border = "white")
+@
 
 
 

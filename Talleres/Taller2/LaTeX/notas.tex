@@ -163,13 +163,13 @@ Debido a que se va a generar variables aleatorias \textbf{normales estándar} $X
 \hlkwd{cat}\hldef{(}\hlsng{"Cantidad de Xi generados"}\hldef{, n,} \hlsng{"\textbackslash{}n"}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## Cantidad de Xi generados 10208
+## Cantidad de Xi generados 10193
 \end{verbatim}
 \begin{alltt}
 \hlkwd{cat}\hldef{(}\hlsng{"Desviación estándar"}\hldef{,} \hlkwd{round}\hldef{(s,} \hlnum{5}\hldef{),} \hlsng{"\textbackslash{}n"}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## Desviación estándar 1.01027
+## Desviación estándar 1.0096
 \end{verbatim}
 \begin{alltt}
 \hlkwd{cat}\hldef{(}\hlsng{"Error estándar S/sqrt(n)"}\hldef{,} \hlkwd{round}\hldef{(s}\hlopt{/}\hlkwd{sqrt}\hldef{(n),} \hlnum{5}\hldef{),} \hlsng{"\textbackslash{}n"}\hldef{)}
@@ -251,7 +251,7 @@ Este valor se acerca bastante al que se imprime en la simulación.
 
 \subsubsection{Respuesta}
 
-Se han generado \lstinline|n=| $10208$ normales.
+Se han generado \lstinline|n=| $10193$ normales.
 
 
 \subsection{What is the sample mean of all the normals generated?}
@@ -262,7 +262,7 @@ Se han generado \lstinline|n=| $10208$ normales.
 
 \subsubsection{Respuesta}
 
-Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $0.0182439$. 
+Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $\ensuremath{6.0338234\times 10^{-4}}$. 
 
 \subsection{What is the sample variance?}
 \label{subsec:p1-d}
@@ -276,7 +276,7 @@ La varianza muestral se calcula como:
 S^{2} = \frac{\sum_{i=1}^{n} (X_{i} - \bar{X})^{2}}{n-1}
 \]
 
-Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $1.0206531$.
+Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $1.0192875$.
 
 
 
@@ -285,7 +285,7 @@ Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tant
 
 \subsubsection{Respuesta}
 
-El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $0.0182439$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $1.0206531$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
+El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\ensuremath{6.0338234\times 10^{-4}}$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $1.0192875$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
 
 
 \newpage
@@ -321,18 +321,18 @@ El siguiente código permite sacar el intervalo de confianza del 95\% y también
 \hlkwd{cat}\hldef{(}\hlsng{"El estimado es"}\hldef{, xmean,} \hlsng{"\textbackslash{}n"}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## El estimado es 0.01303919
+## El estimado es -0.01342494
 \end{verbatim}
 \begin{alltt}
 \hlkwd{cat}\hldef{(}\hlsng{"95% está entre ("}\hldef{, L,} \hlsng{", "}\hldef{, U,} \hlsng{") \textbackslash{}n"}\hldef{,} \hlkwc{sep}\hldef{=}\hlsng{""}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## 95% está entre (-0.02297891, 0.04905728)
+## 95% está entre (-0.04908598, 0.0222361)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-Aquí se estimó la media de la distribución uniforme, dando un resultado de $0.0130392$, muy cercano a 0. El intervalo de confianza está entre $-0.0229789$ y $0.0490573$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
+Aquí se estimó la media de la distribución uniforme, dando un resultado de $-0.0134249$, muy cercano a 0. El intervalo de confianza está entre $-0.049086$ y $0.0222361$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -369,206 +369,206 @@ Aquí se estimó la media de la distribución uniforme, dando un resultado de $0
 \end{alltt}
 \begin{verbatim}
 ##     sample_mean lower_bound upper_bound contains_mean
-## 1     3.378e-02   -0.001630   0.0691830             1
-## 2     9.178e-04   -0.035414   0.0372494             1
-## 3     2.345e-02   -0.012044   0.0589491             1
-## 4    -1.357e-02   -0.048499   0.0213639             1
-## 5    -1.131e-02   -0.047382   0.0247666             1
-## 6    -2.371e-03   -0.038327   0.0335849             1
-## 7     9.427e-03   -0.025923   0.0447769             1
-## 8    -1.780e-02   -0.054556   0.0189601             1
-## 9    -4.779e-03   -0.040663   0.0311050             1
-## 10   -2.338e-02   -0.059004   0.0122487             1
-## 11    1.148e-02   -0.023961   0.0469112             1
-## 12    1.426e-02   -0.021412   0.0499352             1
-## 13   -4.693e-03   -0.040345   0.0309590             1
-## 14   -1.974e-02   -0.054846   0.0153653             1
-## 15   -3.806e-03   -0.040645   0.0330335             1
-## 16   -1.082e-02   -0.047269   0.0256361             1
-## 17   -1.095e-02   -0.046611   0.0247089             1
-## 18    9.152e-03   -0.026641   0.0449438             1
-## 19   -1.239e-02   -0.049192   0.0244096             1
-## 20   -2.108e-02   -0.056647   0.0144887             1
-## 21    5.638e-03   -0.029012   0.0402877             1
-## 22   -5.897e-04   -0.035707   0.0345273             1
-## 23    3.454e-02   -0.002033   0.0711073             1
-## 24    1.767e-02   -0.018224   0.0535583             1
-## 25   -2.015e-02   -0.055702   0.0154090             1
-## 26   -5.802e-03   -0.042489   0.0308854             1
-## 27    1.704e-02   -0.019178   0.0532538             1
-## 28    2.482e-02   -0.010642   0.0602866             1
-## 29   -2.107e-02   -0.056199   0.0140652             1
-## 30   -7.713e-03   -0.043599   0.0281724             1
-## 31    7.656e-03   -0.028280   0.0435911             1
-## 32   -1.644e-02   -0.052929   0.0200456             1
-## 33   -2.096e-02   -0.056851   0.0149407             1
-## 34    1.518e-03   -0.033969   0.0370046             1
-## 35   -5.520e-03   -0.042274   0.0312330             1
-## 36    8.276e-04   -0.034227   0.0358823             1
-## 37   -4.319e-03   -0.040025   0.0313882             1
-## 38   -2.104e-02   -0.057075   0.0149929             1
-## 39   -1.788e-02   -0.053330   0.0175771             1
-## 40   -7.543e-03   -0.044055   0.0289679             1
-## 41   -1.703e-02   -0.052368   0.0183139             1
-## 42    8.622e-03   -0.027189   0.0444338             1
-## 43   -1.685e-02   -0.052794   0.0191019             1
-## 44   -7.096e-03   -0.043023   0.0288314             1
-## 45    2.171e-02   -0.013053   0.0564647             1
-## 46   -3.123e-03   -0.038889   0.0326424             1
-## 47    2.749e-02   -0.007962   0.0629453             1
-## 48   -4.653e-02   -0.082445  -0.0106099             0
-## 49    1.818e-02   -0.018534   0.0548907             1
-## 50   -6.221e-03   -0.041903   0.0294610             1
-## 51   -2.845e-03   -0.038588   0.0328980             1
-## 52    3.051e-02   -0.005573   0.0665942             1
-## 53    4.716e-03   -0.030224   0.0396559             1
-## 54   -6.076e-03   -0.041786   0.0296350             1
-## 55    1.774e-02   -0.018529   0.0540104             1
-## 56    2.685e-02   -0.008827   0.0625314             1
-## 57   -6.283e-03   -0.041663   0.0290984             1
-## 58    9.015e-03   -0.026952   0.0449824             1
-## 59   -8.256e-03   -0.045192   0.0286807             1
-## 60    2.477e-02   -0.011053   0.0605844             1
-## 61    1.150e-02   -0.023628   0.0466177             1
-## 62    4.241e-04   -0.035479   0.0363273             1
-## 63    2.393e-02   -0.011192   0.0590573             1
-## 64   -1.115e-02   -0.047221   0.0249268             1
-## 65   -3.101e-03   -0.039142   0.0329410             1
-## 66    4.537e-04   -0.035291   0.0361983             1
-## 67   -2.326e-02   -0.059570   0.0130562             1
-## 68    2.528e-02   -0.010550   0.0611110             1
-## 69    1.670e-02   -0.019090   0.0524927             1
-## 70    8.319e-03   -0.027667   0.0443048             1
-## 71    1.026e-02   -0.025330   0.0458501             1
-## 72   -1.613e-02   -0.051458   0.0192038             1
-## 73   -2.262e-02   -0.058705   0.0134699             1
-## 74    2.704e-02   -0.009048   0.0631372             1
-## 75    1.904e-03   -0.033824   0.0376332             1
-## 76    1.480e-02   -0.021314   0.0509080             1
-## 77    2.233e-02   -0.012640   0.0572964             1
-## 78   -6.468e-03   -0.041472   0.0285374             1
-## 79    5.591e-03   -0.030334   0.0415171             1
-## 80   -2.116e-02   -0.056187   0.0138622             1
-## 81   -1.413e-02   -0.050389   0.0221219             1
-## 82    8.555e-04   -0.034889   0.0366001             1
-## 83    1.575e-02   -0.019633   0.0511420             1
-## 84    1.799e-02   -0.018217   0.0541920             1
-## 85   -1.496e-02   -0.050997   0.0210768             1
-## 86    2.502e-02   -0.009870   0.0599033             1
-## 87   -2.121e-02   -0.057042   0.0146317             1
-## 88    2.445e-02   -0.010986   0.0598783             1
-## 89   -2.232e-02   -0.058452   0.0138146             1
-## 90   -2.259e-02   -0.058238   0.0130533             1
-## 91    5.809e-03   -0.029720   0.0413385             1
-## 92    3.881e-02    0.002783   0.0748374             0
-## 93    1.780e-02   -0.018387   0.0539788             1
-## 94   -8.479e-03   -0.044257   0.0273000             1
-## 95   -1.803e-02   -0.054252   0.0181902             1
-## 96    1.230e-02   -0.024076   0.0486767             1
-## 97    1.782e-02   -0.017761   0.0533987             1
-## 98   -3.568e-02   -0.070996  -0.0003581             0
-## 99   -8.930e-03   -0.044411   0.0265499             1
-## 100   1.900e-03   -0.034136   0.0379353             1
-## 101   2.461e-03   -0.032674   0.0375954             1
-## 102   7.301e-03   -0.029178   0.0437797             1
-## 103  -9.189e-03   -0.044737   0.0263592             1
-## 104  -1.883e-02   -0.054280   0.0166215             1
-## 105  -2.680e-02   -0.062038   0.0084407             1
-## 106  -3.301e-02   -0.069286   0.0032695             1
-## 107   3.671e-03   -0.031615   0.0389564             1
-## 108   1.875e-02   -0.016278   0.0537746             1
-## 109  -7.507e-05   -0.035642   0.0354922             1
-## 110  -1.046e-02   -0.045581   0.0246662             1
-## 111  -1.094e-03   -0.036799   0.0346112             1
-## 112  -9.853e-03   -0.045395   0.0256888             1
-## 113  -1.480e-02   -0.050434   0.0208298             1
-## 114   6.108e-03   -0.029465   0.0416817             1
-## 115  -3.480e-02   -0.070152   0.0005448             1
-## 116  -9.451e-03   -0.045223   0.0263197             1
-## 117  -2.458e-03   -0.037744   0.0328266             1
-## 118   9.135e-03   -0.026644   0.0449149             1
-## 119  -2.983e-02   -0.065344   0.0056823             1
-## 120  -1.469e-02   -0.050640   0.0212638             1
-## 121  -2.785e-03   -0.039086   0.0335153             1
-## 122   1.301e-02   -0.022285   0.0483091             1
-## 123  -9.777e-03   -0.044909   0.0253540             1
-## 124  -2.357e-03   -0.039227   0.0345133             1
-## 125   3.363e-02   -0.001789   0.0690406             1
-## 126  -5.599e-03   -0.042403   0.0312048             1
-## 127  -2.839e-02   -0.063637   0.0068661             1
-## 128   1.056e-03   -0.034809   0.0369205             1
-## 129  -2.042e-02   -0.055848   0.0150008             1
-## 130  -6.412e-03   -0.042154   0.0293292             1
-## 131  -4.844e-03   -0.039839   0.0301505             1
-## 132   2.840e-02   -0.007113   0.0639168             1
-## 133   6.406e-03   -0.029491   0.0423032             1
-## 134   7.890e-03   -0.028157   0.0439371             1
-## 135   1.198e-02   -0.023848   0.0478099             1
-## 136   1.138e-03   -0.034188   0.0364635             1
-## 137  -3.476e-02   -0.070516   0.0009978             1
-## 138   1.549e-02   -0.020932   0.0519112             1
-## 139   1.912e-02   -0.016841   0.0550766             1
-## 140   2.690e-02   -0.008607   0.0624084             1
-## 141   1.137e-02   -0.024148   0.0468914             1
-## 142  -8.682e-04   -0.036271   0.0345344             1
-## 143  -5.232e-03   -0.041316   0.0308524             1
-## 144   3.758e-03   -0.032049   0.0395659             1
-## 145  -8.456e-04   -0.036941   0.0352495             1
-## 146   2.805e-02   -0.007718   0.0638224             1
-## 147   3.354e-03   -0.032598   0.0393054             1
-## 148  -2.727e-04   -0.036326   0.0357805             1
-## 149  -7.633e-03   -0.043634   0.0283684             1
-## 150   1.122e-02   -0.024868   0.0473100             1
-## 151   2.223e-02   -0.013597   0.0580554             1
-## 152  -1.899e-02   -0.054792   0.0168206             1
-## 153   3.092e-02   -0.004596   0.0664317             1
-## 154   1.738e-02   -0.018796   0.0535550             1
-## 155   4.692e-03   -0.031542   0.0409262             1
-## 156   2.120e-02   -0.014697   0.0571010             1
-## 157  -3.059e-03   -0.039476   0.0333569             1
-## 158  -1.843e-02   -0.053817   0.0169592             1
-## 159  -4.151e-03   -0.039230   0.0309289             1
-## 160  -3.964e-03   -0.040009   0.0320811             1
-## 161  -9.906e-03   -0.045264   0.0254525             1
-## 162   3.659e-03   -0.031261   0.0385792             1
-## 163   2.086e-04   -0.036409   0.0368261             1
-## 164  -1.340e-02   -0.048616   0.0218167             1
-## 165   5.692e-03   -0.030156   0.0415389             1
-## 166  -1.259e-02   -0.047858   0.0226780             1
-## 167  -3.910e-02   -0.074962  -0.0032302             0
-## 168  -5.450e-03   -0.040671   0.0297706             1
-## 169   2.695e-02   -0.008597   0.0624956             1
-## 170   1.636e-02   -0.019342   0.0520595             1
-## 171   1.996e-02   -0.016390   0.0563033             1
-## 172   1.341e-02   -0.022756   0.0495852             1
-## 173   1.855e-02   -0.018300   0.0553925             1
-## 174  -6.428e-03   -0.041580   0.0287244             1
-## 175  -9.256e-03   -0.045294   0.0267827             1
-## 176   2.562e-03   -0.033000   0.0381240             1
-## 177   4.379e-03   -0.030872   0.0396304             1
-## 178   1.104e-02   -0.024801   0.0468852             1
-## 179   3.453e-02   -0.001522   0.0705810             1
-## 180   8.340e-03   -0.027146   0.0438266             1
-## 181   8.340e-03   -0.026826   0.0435053             1
-## 182   7.457e-03   -0.027708   0.0426225             1
-## 183   1.743e-02   -0.017730   0.0525942             1
-## 184   2.914e-03   -0.032717   0.0385443             1
-## 185  -2.106e-02   -0.056455   0.0143288             1
-## 186  -1.104e-02   -0.047217   0.0251437             1
-## 187   4.729e-02    0.011347   0.0832317             0
-## 188   1.452e-02   -0.020351   0.0493815             1
-## 189  -1.616e-02   -0.051671   0.0193448             1
-## 190   1.005e-03   -0.034422   0.0364314             1
-## 191  -4.864e-03   -0.040587   0.0308594             1
-## 192   2.007e-03   -0.033653   0.0376666             1
-## 193  -1.860e-02   -0.054793   0.0175856             1
-## 194   3.650e-02    0.001538   0.0714539             0
-## 195   2.032e-02   -0.014762   0.0554067             1
-## 196   9.487e-03   -0.026812   0.0457852             1
-## 197   3.638e-04   -0.034637   0.0353643             1
-## 198  -1.848e-02   -0.054438   0.0174714             1
-## 199  -5.285e-03   -0.041242   0.0306718             1
-## 200   3.038e-03   -0.032733   0.0388098             1
+## 1    -1.985e-03   -0.037512   0.0335423             1
+## 2     1.365e-02   -0.021017   0.0483215             1
+## 3    -2.448e-03   -0.038018   0.0331216             1
+## 4    -3.330e-02   -0.069442   0.0028334             1
+## 5     1.970e-02   -0.015963   0.0553564             1
+## 6    -9.186e-03   -0.045128   0.0267559             1
+## 7    -1.068e-02   -0.046579   0.0252163             1
+## 8     1.885e-04   -0.035480   0.0358575             1
+## 9     6.076e-04   -0.033979   0.0351945             1
+## 10    3.005e-02   -0.006450   0.0665501             1
+## 11    1.361e-02   -0.022889   0.0501048             1
+## 12   -1.751e-02   -0.053519   0.0184999             1
+## 13   -1.091e-02   -0.046676   0.0248537             1
+## 14    9.310e-03   -0.026271   0.0448898             1
+## 15   -1.529e-02   -0.050931   0.0203431             1
+## 16    3.968e-04   -0.034752   0.0355452             1
+## 17   -6.167e-03   -0.041497   0.0291638             1
+## 18   -2.625e-02   -0.061598   0.0091047             1
+## 19    2.566e-02   -0.009728   0.0610581             1
+## 20    1.530e-03   -0.032578   0.0356373             1
+## 21   -6.948e-03   -0.042491   0.0285945             1
+## 22    3.058e-03   -0.033229   0.0393441             1
+## 23   -1.138e-02   -0.048329   0.0255716             1
+## 24    2.282e-02   -0.011422   0.0570595             1
+## 25   -1.114e-02   -0.046434   0.0241525             1
+## 26   -2.348e-04   -0.036418   0.0359487             1
+## 27    1.253e-02   -0.023374   0.0484430             1
+## 28   -2.700e-02   -0.063069   0.0090705             1
+## 29    5.519e-03   -0.030566   0.0416049             1
+## 30   -3.466e-02   -0.070234   0.0009090             1
+## 31   -3.064e-02   -0.066774   0.0054858             1
+## 32   -1.703e-02   -0.053715   0.0196580             1
+## 33   -3.392e-02   -0.070799   0.0029625             1
+## 34    1.052e-02   -0.024567   0.0456093             1
+## 35    9.200e-03   -0.027030   0.0454290             1
+## 36    1.124e-02   -0.024207   0.0466888             1
+## 37   -2.229e-02   -0.058399   0.0138225             1
+## 38    2.198e-02   -0.013975   0.0579348             1
+## 39   -7.682e-03   -0.042974   0.0276094             1
+## 40   -3.676e-03   -0.039644   0.0322914             1
+## 41   -8.066e-04   -0.037064   0.0354509             1
+## 42    6.021e-03   -0.029869   0.0419114             1
+## 43   -4.162e-03   -0.040450   0.0321275             1
+## 44   -1.327e-02   -0.049119   0.0225890             1
+## 45   -2.248e-02   -0.058635   0.0136666             1
+## 46    2.629e-02   -0.008860   0.0614455             1
+## 47    1.730e-03   -0.033502   0.0369628             1
+## 48   -4.850e-03   -0.040003   0.0303021             1
+## 49    1.786e-02   -0.017979   0.0537009             1
+## 50    3.288e-02   -0.003493   0.0692474             1
+## 51    9.923e-03   -0.026450   0.0462958             1
+## 52    3.095e-03   -0.032832   0.0390232             1
+## 53    1.474e-02   -0.020624   0.0501025             1
+## 54   -3.420e-02   -0.070290   0.0018845             1
+## 55   -5.365e-02   -0.089185  -0.0181153             0
+## 56    3.252e-02   -0.003767   0.0688008             1
+## 57   -2.401e-02   -0.059865   0.0118368             1
+## 58   -1.274e-02   -0.048301   0.0228266             1
+## 59   -3.401e-02   -0.069754   0.0017415             1
+## 60    6.835e-03   -0.029354   0.0430234             1
+## 61    2.123e-02   -0.014494   0.0569592             1
+## 62    1.045e-02   -0.024438   0.0453294             1
+## 63    4.857e-02    0.013386   0.0837568             0
+## 64    1.404e-02   -0.022057   0.0501283             1
+## 65    1.290e-02   -0.022932   0.0487286             1
+## 66   -6.873e-03   -0.043428   0.0296829             1
+## 67   -2.593e-02   -0.062114   0.0102557             1
+## 68    7.951e-03   -0.028046   0.0439485             1
+## 69   -1.444e-03   -0.037023   0.0341354             1
+## 70    2.916e-02   -0.007384   0.0657084             1
+## 71    1.261e-02   -0.023464   0.0486810             1
+## 72   -3.352e-03   -0.039293   0.0325895             1
+## 73    1.787e-02   -0.018324   0.0540537             1
+## 74    2.495e-03   -0.033723   0.0387122             1
+## 75    2.222e-03   -0.033887   0.0383307             1
+## 76    2.123e-02   -0.014976   0.0574437             1
+## 77   -1.826e-03   -0.036753   0.0331016             1
+## 78    3.769e-02    0.002030   0.0733592             0
+## 79   -1.555e-02   -0.051246   0.0201446             1
+## 80    1.249e-02   -0.023048   0.0480378             1
+## 81    5.937e-03   -0.029835   0.0417091             1
+## 82   -7.996e-03   -0.043688   0.0276958             1
+## 83   -2.713e-03   -0.038536   0.0331091             1
+## 84   -1.343e-02   -0.048804   0.0219516             1
+## 85   -7.346e-03   -0.042909   0.0282166             1
+## 86   -1.551e-02   -0.051146   0.0201181             1
+## 87   -2.773e-03   -0.037996   0.0324488             1
+## 88   -1.492e-02   -0.050687   0.0208509             1
+## 89    3.662e-03   -0.031690   0.0390140             1
+## 90   -2.070e-02   -0.056869   0.0154704             1
+## 91   -1.264e-02   -0.048860   0.0235702             1
+## 92    7.436e-03   -0.028627   0.0434999             1
+## 93   -1.221e-02   -0.047644   0.0232233             1
+## 94   -5.682e-03   -0.042531   0.0311672             1
+## 95   -2.748e-03   -0.038487   0.0329908             1
+## 96    2.089e-02   -0.014753   0.0565417             1
+## 97   -9.353e-03   -0.046227   0.0275214             1
+## 98    6.608e-03   -0.030617   0.0438330             1
+## 99   -1.443e-02   -0.050335   0.0214687             1
+## 100  -2.812e-02   -0.063580   0.0073435             1
+## 101   4.919e-02    0.013877   0.0845009             0
+## 102  -1.992e-02   -0.055192   0.0153569             1
+## 103  -3.283e-02   -0.067305   0.0016365             1
+## 104  -5.362e-05   -0.036043   0.0359359             1
+## 105  -6.268e-03   -0.041842   0.0293065             1
+## 106  -2.381e-02   -0.059788   0.0121660             1
+## 107   1.696e-02   -0.018260   0.0521752             1
+## 108   1.836e-03   -0.033251   0.0369225             1
+## 109  -1.052e-02   -0.046251   0.0252079             1
+## 110  -1.221e-02   -0.048855   0.0244369             1
+## 111   5.437e-03   -0.030962   0.0418371             1
+## 112   9.785e-03   -0.025558   0.0451278             1
+## 113  -1.208e-02   -0.048420   0.0242685             1
+## 114   1.483e-02   -0.021456   0.0511150             1
+## 115  -2.863e-02   -0.064448   0.0071917             1
+## 116   1.442e-02   -0.022021   0.0508639             1
+## 117  -8.382e-05   -0.036062   0.0358941             1
+## 118  -1.333e-02   -0.049267   0.0226077             1
+## 119   6.330e-03   -0.029396   0.0420567             1
+## 120  -6.240e-04   -0.036785   0.0355372             1
+## 121   3.312e-02   -0.001205   0.0674359             1
+## 122   1.083e-02   -0.024291   0.0459503             1
+## 123   1.382e-02   -0.021905   0.0495415             1
+## 124  -9.549e-03   -0.044428   0.0253303             1
+## 125  -2.036e-02   -0.056750   0.0160301             1
+## 126  -2.753e-02   -0.063828   0.0087606             1
+## 127   4.014e-02    0.004661   0.0756150             0
+## 128   1.574e-02   -0.019963   0.0514470             1
+## 129  -1.414e-02   -0.050377   0.0220897             1
+## 130   5.342e-03   -0.030007   0.0406909             1
+## 131  -2.593e-04   -0.035766   0.0352472             1
+## 132  -4.338e-03   -0.040986   0.0323111             1
+## 133  -6.000e-04   -0.036790   0.0355896             1
+## 134   7.595e-03   -0.029166   0.0443559             1
+## 135  -4.643e-03   -0.040464   0.0311770             1
+## 136  -9.764e-03   -0.045158   0.0256301             1
+## 137   2.752e-02   -0.008242   0.0632790             1
+## 138   2.168e-02   -0.014203   0.0575564             1
+## 139  -2.893e-02   -0.064702   0.0068390             1
+## 140  -1.994e-02   -0.055252   0.0153724             1
+## 141  -4.237e-03   -0.040395   0.0319216             1
+## 142   3.325e-03   -0.032412   0.0390625             1
+## 143  -1.907e-02   -0.055971   0.0178306             1
+## 144  -2.825e-03   -0.039169   0.0335202             1
+## 145  -1.403e-02   -0.049542   0.0214790             1
+## 146  -6.187e-03   -0.041262   0.0288885             1
+## 147  -2.320e-02   -0.058008   0.0116036             1
+## 148  -2.075e-02   -0.056523   0.0150255             1
+## 149   8.371e-03   -0.027176   0.0439177             1
+## 150   1.168e-02   -0.023652   0.0470023             1
+## 151   3.141e-03   -0.033557   0.0398401             1
+## 152  -3.648e-02   -0.072078  -0.0008912             0
+## 153   8.096e-03   -0.027369   0.0435611             1
+## 154   1.245e-02   -0.024088   0.0489942             1
+## 155  -1.712e-02   -0.053869   0.0196347             1
+## 156  -2.392e-02   -0.059154   0.0113066             1
+## 157  -2.327e-03   -0.038115   0.0334620             1
+## 158  -3.019e-02   -0.065550   0.0051724             1
+## 159   1.999e-02   -0.015648   0.0556280             1
+## 160   1.025e-02   -0.025510   0.0460195             1
+## 161   1.547e-02   -0.020499   0.0514306             1
+## 162   3.022e-02   -0.006127   0.0665697             1
+## 163   1.120e-02   -0.024098   0.0464890             1
+## 164  -4.329e-04   -0.036336   0.0354698             1
+## 165   2.039e-02   -0.014676   0.0554582             1
+## 166   2.138e-02   -0.014722   0.0574750             1
+## 167   1.898e-02   -0.016435   0.0544021             1
+## 168   6.437e-03   -0.029099   0.0419719             1
+## 169   3.106e-02   -0.004805   0.0669261             1
+## 170  -1.680e-02   -0.052837   0.0192450             1
+## 171   3.410e-03   -0.032970   0.0397899             1
+## 172  -3.164e-02   -0.067978   0.0047003             1
+## 173  -1.069e-02   -0.045104   0.0237173             1
+## 174   4.775e-03   -0.031558   0.0411072             1
+## 175  -4.980e-03   -0.040746   0.0307865             1
+## 176   3.909e-02    0.003383   0.0748052             0
+## 177  -7.578e-03   -0.043820   0.0286640             1
+## 178   6.389e-03   -0.029922   0.0427007             1
+## 179  -1.198e-02   -0.047783   0.0238165             1
+## 180   3.330e-02   -0.001864   0.0684592             1
+## 181   1.210e-02   -0.024091   0.0482820             1
+## 182  -1.976e-02   -0.055389   0.0158772             1
+## 183  -1.058e-02   -0.046091   0.0249338             1
+## 184   1.071e-02   -0.024995   0.0464175             1
+## 185   1.779e-02   -0.018011   0.0536012             1
+## 186  -1.191e-02   -0.047275   0.0234599             1
+## 187  -1.219e-02   -0.047987   0.0236100             1
+## 188  -5.787e-04   -0.035431   0.0342738             1
+## 189  -7.165e-03   -0.042356   0.0280253             1
+## 190   2.625e-02   -0.009375   0.0618780             1
+## 191   2.691e-03   -0.033738   0.0391214             1
+## 192  -1.721e-02   -0.052907   0.0184776             1
+## 193   1.026e-02   -0.025244   0.0457559             1
+## 194  -1.226e-02   -0.047698   0.0231770             1
+## 195  -2.120e-02   -0.057245   0.0148416             1
+## 196   1.889e-02   -0.015408   0.0531858             1
+## 197  -5.056e-03   -0.040653   0.0305415             1
+## 198   1.311e-02   -0.023031   0.0492478             1
+## 199   6.383e-03   -0.028482   0.0412480             1
+## 200   1.974e-02   -0.015644   0.0551267             1
 \end{verbatim}
 \begin{alltt}
 \hldef{porcentaje} \hlkwb{<-} \hlkwd{mean}\hldef{(results}\hlopt{$}\hldef{contains_mean)} \hlopt{*} \hlnum{100}
@@ -578,13 +578,13 @@ Aquí se estimó la media de la distribución uniforme, dando un resultado de $0
 \end{alltt}
 \begin{verbatim}
 ## 
-##  97 % de los intervalos de confianza contienen la media real
+##  96.5 % de los intervalos de confianza contienen la media real
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-En conclusión, el $97$ \% de los intervalos generados incluyen al 0.
+En conclusión, el $96.5$ \% de los intervalos generados incluyen al 0.
 
 
 \section{Standard deviation of a proportion}
@@ -695,13 +695,12 @@ Dado que $X$ es la variable aleatoria de la ganancia, podemos listar los posible
 
 \begin{table}[ht]
   \centering
-  \begin{tabular}[h]{|c|c|}
+  \begin{tabular}[h]{|c|c|c|c|}
     \hline
-    \textbf{Salida moneda} & \textbf{Ganancia} \\ \hline
-    HH & $15.000$ \\ \hline
-    HT & $5.000$ \\ \hline
-    TH & $5.000$ \\ \hline
-    TT & $0$ \\ \hline 
+    \textbf{Salida moneda} & \textbf{Ganancia} & \textbf{Ganancia} $X$ & \textbf{Probabilidad} \\ \hline
+    HH & $15.000$ & $+5.000$ & 0.25 \\ \hline
+    HT-TH & $5.000$ & $-5.000$ & 0.5 \\ \hline
+    TT & $0$ & $-10.000$ & 0.25 \\ \hline 
   \end{tabular}
   \caption{Posibles salidas y ganancias al tirar dos monedas, (H) cara y (T) sello.}
   \label{tab:p3}
@@ -710,55 +709,351 @@ Dado que $X$ es la variable aleatoria de la ganancia, podemos listar los posible
 Del cuadro \ref{tab:p3} se toma que los posibles valores para las ganancias son:
 
 \[
-X \in \{0, 5000, 15000 \} 
+X \in \{-5000, -10000, 5000  \} 
 \]
 
-Debido a que se pueden lanzar dos monedas ($n = 2$), los lanzamientos son independientes entre ellos y la probabilidad de éxito es constante ($p = 0.5$), es decir, que salga cara en el lanzamiento. Debido a todo esto, se afirma que es una distribución binomial de la siguiente forma:
+La función de probabilida de masa: 
 
 \[
 p_{X} (x)  =
-\begin{pmatrix}
-  n \\ x
-\end{pmatrix} p^{x} (1 - p)^{n-x}
+\begin{cases}
+  0.25,& \quad x = 5000 \\
+  0.5,&  \quad x = -5000 \\
+  0.25,& \quad x = -10000 \\
+  0,& \quad \text{En otro caso}
+\end{cases}
 \]
 
-Reemplazando:
+Para sacar el valor esperado se multiplica la probabilidad por cada valor de $X$:
+
+\begin{gather*}
+  E[X] = \sum_{I=1}^{3} x \dot p_{X}(x) = 5000(0.25) + (-5000)(0.5) + (-10000)(0.25) \\
+  E[X] = 1250 - 2500 - 2500 = -3750
+\end{gather*}
+
+Es decir, en promedio se pierde $3.750$ pesos por jugada.
+
+Para calcular la varianza se puede utilizar la fórmula:
 
 \[
-p_{X} (x)  =
-\begin{pmatrix}
-  2 \\ x
-\end{pmatrix} (0.5)^{x} (1 - 0.5)^{2-x}
+\mathrm{Var}(X) = E[X^{2}] - (E[X])^{2}
 \]
 
-Para calcular el valor esperado de $X$:
-
-\[
-E[X] = \frac{1}{n} \sum_{i = 1}^{n} X_{i}
-\]
-
-Reemplazando: 
-
-\[
-E[X] = \frac{1}{3} \sum_{i = 1}^{3} X_{i} 
-\]
-
-Resolviendo:
-
-\[
-\frac{1}{3} \sum_{i = 1}^{3} X_{i} = \frac{0 + 5000 + 15000}{3}  = \frac{20000}{3} \approx 6666.67
-\]
-
-Ahora, para calcular la varianza se toma el valor esperado:
+Se computa $E[X^{2}]$:
 
 \begin{align*}
-  \mathrm{Var}(X) &= E[X^{2}] - E[X]^{2} \\
-  &= E[(0^{2}, 5000^{2}, 15000^{2})] - (6666.67)^{2}
+  E[X^{2}] &= 5000^{2}(0.25) + (-5000)^{2}(0.5) + (-10000)^{2}(0.25) \\
+           &= 25000000 (0.25) + 25000000 (0.5) + 100000000 (0.25) \\
+  &= 6250000 + 12500000 + 25000000 = 43750000
 \end{align*}
 
+Ahora se le resta el cuadrado de la media:
+
+\[
+\mathrm{Var}(X) = 43750000 - (-3750)^{2} = 43750000 - 14062500 = 29687500
+\]
 
 
 
+
+
+
+\subsection{Write a code that simulates the r.v. \textbf{X} using the command sample. Generate an \textit{iid} \lstinline|sample| $\{X_{i}\}$ of size $n = 10^{5}$.}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{outcomes} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlopt{-}\hlnum{10000}\hldef{,} \hlopt{-}\hlnum{5000}\hldef{,} \hlnum{5000}\hldef{)}
+\hldef{probabilities} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.25}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.25}\hldef{)}
+
+\hldef{n} \hlkwb{<-} \hlnum{10}\hlopt{^}\hlnum{5}
+
+\hldef{X} \hlkwb{<-} \hlkwd{sample}\hldef{(outcomes,} \hlkwc{size} \hldef{= n ,} \hlkwc{replace} \hldef{=} \hlnum{TRUE}\hldef{,} \hlkwc{prob} \hldef{= probabilities)}
+
+\hlkwd{length}\hldef{(X)}
+\end{alltt}
+\begin{verbatim}
+## [1] 100000
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hldef{(X)}
+\end{alltt}
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  -10000   -5000   -5000   -3728    5000    5000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+En este fragmento de código se realiza la creación del vector \lstinline|X| de tamaño $10^{5}$ creado con la función \lstinline|sample| que toma las salidas que se explicaron anteriormente, el tamaño, que se reemplace y la probabilidad.
+
+
+\subsection{Modify your code to calculate: (i) the estimated mean profit $\bar{X}_{j}$ for each sample subsequence: $\{X_{1}, X_{2}, . . . , X_{j} \}$, $j = 2, 3, \dots, n$, (ii) the $95 \%$ CI’s of each estimated mean profit $\bar{X}_{j}$ .}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{mean_estimates} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
+\hldef{lower_CI} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
+\hldef{upper_CI} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
+\hldef{ie} \hlkwb{<-} \hlnum{1.96}
+
+\hlkwa{for} \hldef{(j} \hlkwa{in} \hlnum{2}\hlopt{:}\hldef{n) \{}
+  \hldef{x_sub} \hlkwb{<-} \hldef{X[}\hlnum{1}\hlopt{:}\hldef{j]}
+  \hldef{mean_j} \hlkwb{<-} \hlkwd{mean}\hldef{(x_sub)}
+  \hldef{sd_j} \hlkwb{<-} \hlkwd{sd}\hldef{(x_sub)}
+  \hldef{se_j} \hlkwb{<-} \hldef{sd_j} \hlopt{/} \hlkwd{sqrt}\hldef{(j)}
+
+  \hldef{mean_estimates[j]} \hlkwb{<-} \hldef{mean_j}
+  \hldef{lower_CI[j]} \hlkwb{<-} \hldef{mean_j} \hlopt{-} \hldef{ie} \hlopt{*} \hldef{se_j}
+  \hldef{upper_CI[j]} \hlkwb{<-} \hldef{mean_j} \hlopt{+} \hldef{ie} \hlopt{*} \hldef{se_j}
+\hldef{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+En esta parte del código se crean tres vectores \lstinline|mean_estimates|, \lstinline|lower_CI|, \lstinline|upper_CI| de tamaño $10^{5}$ y también una variable \lstinline|ie|. El bucle en cada iteración calcula la media muestral de los valores $\bar{X}_{j}$, la desviación estándar \lstinline|sd_j| y el error estándar, estos son necesarios para luego calcular el intervalo de confianza junto con la media.
+
+
+\subsection{Plot $\bar{X}_{j}$ and their $95 \%$ CI’s in terms of $j = 2, \dots , 10^{5}$. Add an horizontal line corresponding to the actual value $E[X]$.}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Your plotting code remains the same}
+\hlkwd{plot}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, mean_estimates[}\hlnum{2}\hlopt{:}\hldef{n],} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"blue"}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{1}\hldef{,}
+     \hlkwc{xlab} \hldef{=} \hlsng{"j (tamaño de la submuestra)"}\hldef{,}
+     \hlkwc{ylab} \hldef{=} \hlsng{"Ganancia esperada estimada"}\hldef{,}
+     \hlkwc{main} \hldef{=} \hlsng{"Evolución de la media muestral y su IC del 95%"}\hldef{)}
+\hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, lower_CI[}\hlnum{2}\hlopt{:}\hldef{n],} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{,} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
+\hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, upper_CI[}\hlnum{2}\hlopt{:}\hldef{n],} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{,} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
+\hlkwd{abline}\hldef{(}\hlkwc{h} \hldef{=} \hlopt{-}\hlnum{3750}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"darkgreen"}\hldef{,} \hlkwc{lty} \hldef{=} \hlnum{3}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{2}\hldef{)}
+\hlkwd{legend}\hldef{(}\hlsng{"topright"}\hldef{,} \hlkwc{legend} \hldef{=} \hlkwd{c}\hldef{(}\hlsng{"Media estimada"}\hldef{,} \hlsng{"IC 95%"}\hldef{,} \hlsng{"Valor real E[X]"}\hldef{),}
+       \hlkwc{col} \hldef{=} \hlkwd{c}\hldef{(}\hlsng{"blue"}\hldef{,} \hlsng{"red"}\hldef{,} \hlsng{"darkgreen"}\hldef{),} \hlkwc{lty} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{1}\hldef{,} \hlnum{2}\hldef{,} \hlnum{3}\hldef{),} \hlkwc{bty} \hldef{=} \hlsng{"n"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/grafico-pdf-1} 
+\end{knitrout}
+
+Se puede ver que a medida que se aumenta la submuestra $j$, la media estimada $\bar{X}$ se acerca más al valor esperado $E[X]$ y también, el intervalo de confianza se va acortando más.
+
+
+
+
+\subsection{Repeat \textit{c)} and \textit{d)} to estimate the probabilities $p_{X} (x)$, their $95 \%$ CI’s, and their plots for each $j = 2, \dots , 10^{5}$, adding the actual values.}
+
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Posibles valores de X}
+\hldef{outcomes} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlopt{-}\hlnum{10000}\hldef{,} \hlopt{-}\hlnum{5000}\hldef{,} \hlnum{5000}\hldef{)}
+\hldef{probs_true} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.25}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.25}\hldef{)}
+
+\hlcom{# Inicializar matrices para almacenar las estimaciones y CIs}
+\hldef{p_estimates} \hlkwb{<-} \hlkwd{matrix}\hldef{(}\hlnum{0}\hldef{,} \hlkwc{nrow} \hldef{= n,} \hlkwc{ncol} \hldef{=} \hlnum{3}\hldef{)}
+\hldef{p_lower} \hlkwb{<-} \hlkwd{matrix}\hldef{(}\hlnum{0}\hldef{,} \hlkwc{nrow} \hldef{= n,} \hlkwc{ncol} \hldef{=} \hlnum{3}\hldef{)}
+\hldef{p_upper} \hlkwb{<-} \hlkwd{matrix}\hldef{(}\hlnum{0}\hldef{,} \hlkwc{nrow} \hldef{= n,} \hlkwc{ncol} \hldef{=} \hlnum{3}\hldef{)}
+
+\hldef{z} \hlkwb{<-} \hlnum{1.96}  \hlcom{# Nivel de confianza del 95%}
+
+\hlkwa{for} \hldef{(j} \hlkwa{in} \hlnum{2}\hlopt{:}\hldef{n) \{}
+  \hldef{x_sub} \hlkwb{<-} \hldef{X[}\hlnum{1}\hlopt{:}\hldef{j]}
+  \hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{3}\hldef{) \{}
+    \hldef{val} \hlkwb{<-} \hldef{outcomes[i]}
+    \hldef{p_hat} \hlkwb{<-} \hlkwd{mean}\hldef{(x_sub} \hlopt{==} \hldef{val)}
+    \hldef{se} \hlkwb{<-} \hlkwd{sqrt}\hldef{(p_hat} \hlopt{*} \hldef{(}\hlnum{1} \hlopt{-} \hldef{p_hat)} \hlopt{/} \hldef{j)}
+
+    \hldef{p_estimates[j, i]} \hlkwb{<-} \hldef{p_hat}
+    \hldef{p_lower[j, i]} \hlkwb{<-} \hlkwd{max}\hldef{(}\hlnum{0}\hldef{, p_hat} \hlopt{-} \hldef{z} \hlopt{*} \hldef{se)}
+    \hldef{p_upper[j, i]} \hlkwb{<-} \hlkwd{min}\hldef{(}\hlnum{1}\hldef{, p_hat} \hlopt{+} \hldef{z} \hlopt{*} \hldef{se)}
+  \hldef{\}}
+\hldef{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\textbf{Gráfico de las probabilidades estimadas con sus ICs para cada posible valor de $X$:}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{colors} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"blue"}\hldef{,} \hlsng{"orange"}\hldef{,} \hlsng{"purple"}\hldef{)}
+\hldef{labels} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"p_X(-10000)"}\hldef{,} \hlsng{"p_X(-5000)"}\hldef{,} \hlsng{"p_X(5000)"}\hldef{)}
+\hldef{true_values} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.25}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.25}\hldef{)}
+
+\hlkwd{plot}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_estimates[}\hlnum{2}\hlopt{:}\hldef{n,}\hlnum{1}\hldef{],} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{col} \hldef{= colors[}\hlnum{1}\hldef{],} \hlkwc{ylim} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{0}\hldef{,}\hlnum{1}\hldef{),}
+     \hlkwc{xlab} \hldef{=} \hlsng{"j (tamaño de la submuestra)"}\hldef{,} \hlkwc{ylab} \hldef{=} \hlsng{"Probabilidad estimada"}\hldef{,}
+     \hlkwc{main} \hldef{=} \hlsng{"Estimación de $p_X(x)$ con ICs del 95%"}\hldef{)}
+
+\hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{3}\hldef{) \{}
+  \hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_estimates[}\hlnum{2}\hlopt{:}\hldef{n,i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lwd} \hldef{=} \hlnum{1}\hldef{)}
+  \hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_lower[}\hlnum{2}\hlopt{:}\hldef{n,i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
+  \hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_upper[}\hlnum{2}\hlopt{:}\hldef{n,i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
+  \hlkwd{abline}\hldef{(}\hlkwc{h} \hldef{= true_values[i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lty} \hldef{=} \hlnum{3}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{1.5}\hldef{)}
+\hldef{\}}
+
+\hlkwd{legend}\hldef{(}\hlsng{"topright"}\hldef{,} \hlkwc{legend} \hldef{= labels,} \hlkwc{col} \hldef{= colors,} \hlkwc{lty} \hldef{=} \hlnum{1}\hlopt{:}\hlnum{1}\hldef{,} \hlkwc{bty} \hldef{=} \hlsng{"n"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/plot-probabilities-1} 
+\end{knitrout}
+
+Se observa cómo las probabilidades estimadas convergen a los valores reales a medida que aumenta el tamaño de muestra $j$, y cómo los intervalos de confianza se vuelven más estrechos.
+
+
+\section{Bootstrap}
+
+This exercise is based on the article Introduction to Bootstrapping in Statistics with an Example and the dataset body fat.csv that contains the body fat percentages of 92 adolescent girls. Generate a program that gives:
+
+\subsection{An histogram of the sample data.}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Leer el archivo}
+\hldef{fat_data} \hlkwb{<-} \hlkwd{read.csv}\hldef{(}\hlsng{"body_fat.csv"}\hldef{,} \hlkwc{stringsAsFactors} \hldef{=} \hlnum{FALSE}\hldef{)}
+
+\hlcom{# Verifica el nombre exacto de la columna}
+\hlkwd{colnames}\hldef{(fat_data)} \hlkwb{<-} \hlkwd{trimws}\hldef{(}\hlkwd{colnames}\hldef{(fat_data))}  \hlcom{# Eliminar espacios en el nombre}
+\hldef{columna_objetivo} \hlkwb{<-} \hlkwd{colnames}\hldef{(fat_data)[}\hlnum{1}\hldef{]}         \hlcom{# Obtener el nombre real}
+
+\hlcom{# Convertir a numérico por si acaso}
+\hldef{fat_data[[columna_objetivo]]} \hlkwb{<-} \hlkwd{as.numeric}\hldef{(}\hlkwd{trimws}\hldef{(fat_data[[columna_objetivo]]))}
+
+\hlcom{# Histograma}
+\hlkwd{hist}\hldef{(fat_data[[columna_objetivo]],}
+     \hlkwc{main} \hldef{=} \hlsng{"Histograma del porcentaje de grasa corporal"}\hldef{,}
+     \hlkwc{xlab} \hldef{=} \hlsng{"Body Fat (%)"}\hldef{,}
+     \hlkwc{col} \hldef{=} \hlsng{"skyblue"}\hldef{,}
+     \hlkwc{border} \hldef{=} \hlsng{"white"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/histograma-fat-1} 
+\end{knitrout}
+
+
+\subsection{The 95 \% confidence interval of the mean of the data from the traditional method (i.e., via the Central Limit Theorem).}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Estadísticas necesarias}
+\hldef{media} \hlkwb{<-} \hlkwd{mean}\hldef{(fat_data[[columna_objetivo]],} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
+\hldef{sd} \hlkwb{<-} \hlkwd{sd}\hldef{(fat_data[[columna_objetivo]],} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
+\hldef{n} \hlkwb{<-} \hlkwd{sum}\hldef{(}\hlopt{!}\hlkwd{is.na}\hldef{(fat_data[[columna_objetivo]]))}  \hlcom{# número de datos no NA}
+
+\hlcom{# Cálculo del error estándar}
+\hldef{se} \hlkwb{<-} \hldef{sd} \hlopt{/} \hlkwd{sqrt}\hldef{(n)}
+
+\hlcom{# Intervalo de confianza del 95%}
+\hldef{alpha} \hlkwb{<-} \hlnum{0.05}
+\hldef{z} \hlkwb{<-} \hlkwd{qnorm}\hldef{(}\hlnum{1} \hlopt{-} \hldef{alpha}\hlopt{/}\hlnum{2}\hldef{)}  \hlcom{# valor crítico Z para 95%}
+\hldef{li} \hlkwb{<-} \hldef{media} \hlopt{-} \hldef{z} \hlopt{*} \hldef{se}
+\hldef{ls} \hlkwb{<-} \hldef{media} \hlopt{+} \hldef{z} \hlopt{*} \hldef{se}
+
+\hlcom{# Mostrar resultado}
+\hlkwd{cat}\hldef{(}\hlkwd{sprintf}\hldef{(}\hlsng{"The 95%% confidence interval for the mean is: [%.2f, %.2f]"}\hldef{, li, ls))}
+\end{alltt}
+\begin{verbatim}
+## The 95% confidence interval for the mean is: [27.14, 29.99]
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Como se puede apreciar en el programa, hay un 95\% de confianza para que la media esté en el intervalo $[27.1370357, 29.9933991]$.
+
+\subsection{A number of 500 bootstrapped samples from the original dataset, with 92 observations each.}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Vector original limpio}
+\hldef{original_data} \hlkwb{<-} \hlkwd{na.omit}\hldef{(fat_data[[columna_objetivo]])}
+\hldef{n} \hlkwb{<-} \hlkwd{length}\hldef{(original_data)}
+
+\hlcom{# Generar 500 muestras bootstrap}
+\hldef{bootstrap_samples} \hlkwb{<-} \hlkwd{replicate}\hldef{(}\hlnum{500}\hldef{,} \hlkwd{sample}\hldef{(original_data,} \hlkwc{size} \hldef{= n,}
+                    \hlkwc{replace} \hldef{=} \hlnum{TRUE}\hldef{),} \hlkwc{simplify} \hldef{=} \hlnum{FALSE}\hldef{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Este código utiliza la función \lstinline|replicate()| para repetir la operación 500 veces, la función \lstinline|sample()| toma una muestra con reemplazo del tamaño de 92.
+
+\subsection{An histogram of the means of each bootstrapped sample.}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Calcular la media de cada muestra bootstrap}
+\hldef{bootstrap_means} \hlkwb{<-} \hlkwd{sapply}\hldef{(bootstrap_samples, mean)}
+
+\hlcom{# Histograma de las medias}
+\hlkwd{hist}\hldef{(bootstrap_means,}
+     \hlkwc{main} \hldef{=} \hlsng{"Histograma de medias de muestras bootstrap"}\hldef{,}
+     \hlkwc{xlab} \hldef{=} \hlsng{"Media del % de grasa corporal"}\hldef{,}
+     \hlkwc{col} \hldef{=} \hlsng{"lightgreen"}\hldef{,}
+     \hlkwc{border} \hldef{=} \hlsng{"white"}\hldef{,}
+     \hlkwc{probability} \hldef{=} \hlnum{TRUE}\hldef{)}  \hlcom{# Importante: escala el eje y para densidades}
+
+\hlcom{# Parámetros de la normal}
+\hldef{mean_boot} \hlkwb{<-} \hlkwd{mean}\hldef{(bootstrap_means)}
+\hldef{sd_boot} \hlkwb{<-} \hlkwd{sd}\hldef{(bootstrap_means)}
+
+\hlcom{# Añadir curva de distribución normal}
+\hlkwd{curve}\hldef{(}\hlkwd{dnorm}\hldef{(x,} \hlkwc{mean} \hldef{= mean_boot,} \hlkwc{sd} \hldef{= sd_boot),}
+      \hlkwc{col} \hldef{=} \hlsng{"blue"}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{2}\hldef{,} \hlkwc{add} \hldef{=} \hlnum{TRUE}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/bootstrap-histogram-1} 
+\end{knitrout}
+
+Se puede ver como mas medias de muestras del bootstrap se asemejan a una distribución normal.
+
+\subsection{A 95 \% bootstrapped confidence interval of the mean.}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Calcular intervalo de confianza bootstrap del 95%}
+\hldef{bootstrap_ci} \hlkwb{<-} \hlkwd{quantile}\hldef{(bootstrap_means,} \hlkwc{probs} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{0.025}\hldef{,} \hlnum{0.975}\hldef{))}
+
+\hldef{bootstrap_ci}
+\end{alltt}
+\begin{verbatim}
+##     2.5%    97.5% 
+## 27.20592 29.90144
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+Entoncs, el 95\% del intervalo de confianza para la media es:
+
+\[
+\left[ 27.21,\; 29.9 \right]
+\]
+
+
+Con el método tradicional del teórema central del límite:
+
+\[
+  \left[ 27.14,\; 29.99 \right]
+\]
+
+Con el método \textit{bootstrap}
+
+\[
+  \left[ 27.21,\; 29.9 \right]
+\]
 
 
 

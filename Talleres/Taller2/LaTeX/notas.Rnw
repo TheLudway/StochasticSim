@@ -712,6 +712,35 @@ Suppose a 3-out-of-4 system where each component is functioning with probabiliti
 
 \subsection{Write the structure function of the system $\phi(x)$.}
 
+La estructura funciona si al menos 3 de los 4 componentes están estructurados. Dado que hay dos estados; funciona ($\phi = 1$) o lo contrario ($\phi = 0$). Se puede tener un estado de los componentes $x = (x_{1}, x_{2}, x_{3}, x_{4})$, donde cada $x_{i} \in \{0, 1 \}$ representa si el componente $i$ está funcionando.
+
+La estructura entonces es:
+
+\[
+\phi (x_{1}, x_{2}, x_{3}, x_{4}) =
+\begin{cases}
+  1 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} \geq 3 \\
+  0 & \quad \text{en otro caso}
+\end{cases}
+\]
+
+\subsection{Deduce analytically the reliability function $R(\mathbf{p})$. Evaluate it when $\{p_{i} \} = \{0.9, 0.5, 0.2, 0.1\} $}
+
+
+\[
+R(\mathbf{p}) = \sum_{\substack{S \subseteq \{1,2,3,4\} \\ |S| = 3}} \left( \prod_{i \in S} p_i \prod_{j \notin S} (1 - p_j) \right) + \prod_{i=1}^{4} p_i
+\]
+
+For $\mathbf{p} = \{0.9, 0.5, 0.2, 0.1\}$, we obtain:
+
+\[
+\begin{aligned}
+R(\mathbf{p}) &= 0.9 \cdot 0.5 \cdot 0.2 \cdot 0.9 + 0.9 \cdot 0.5 \cdot 0.1 \cdot 0.8 + 0.9 \cdot 0.2 \cdot 0.1 \cdot 0.5 \\
+&\quad + 0.5 \cdot 0.2 \cdot 0.1 \cdot 0.1 + 0.9 \cdot 0.5 \cdot 0.2 \cdot 0.1 \\
+&= 0.081 + 0.036 + 0.009 + 0.001 + 0.009 = \boxed{0.136}
+\end{aligned}
+\]
+
 
 
 

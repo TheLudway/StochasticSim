@@ -16,6 +16,11 @@
 \usepackage{tikz}
 \usepackage{cancel}
 \usepackage[hidelinks]{hyperref}
+\usepackage[backend=biber]{biblatex}
+
+\bibliography{referencias}
+
+
 
 \titleclass{\subsubsubsection}{straight}[\subsection]
 
@@ -417,7 +422,7 @@ Del cuadro \ref{tab:p3} se toma que los posibles valores para las ganancias son:
 X \in \{-5000, -10000, 5000  \} 
 \]
 
-La función de probabilida de masa: 
+Teniendo en cuenta los valores que puede tomar $X$, la función probabilidad de masa debe retornar la probabilidad (valga la redundancia) de obtener alguno de los valores de $X$, en el cuadro \ref{tab:p3} se pueden ver dichas probabilidades, estas fueron calculadas de acuerdo a contar cuántas veces pueden salir los diferentes valores para la ganancia de $X$.
 
 \[
 p_{X} (x)  =
@@ -429,7 +434,7 @@ p_{X} (x)  =
 \end{cases}
 \]
 
-Para sacar el valor esperado se multiplica la probabilidad por cada valor de $X$:
+Debido a que estamos con un conjunto continuo para $X$, el valor esperado se multiplica la probabilidad por cada valor de este:
 
 \begin{gather*}
   E[X] = \sum_{I=1}^{3} x \dot p_{X}(x) = 5000(0.25) + (-5000)(0.5) + (-10000)(0.25) \\
@@ -480,7 +485,7 @@ length(X)
 summary(X)
 @
 
-En este fragmento de código se realiza la creación del vector \lstinline|X| de tamaño $10^{5}$ creado con la función \lstinline|sample| que toma las salidas que se explicaron anteriormente, el tamaño, que se reemplace y la probabilidad.
+En este fragmento de código se realiza la creación del vector \lstinline|X| de tamaño $10^{5}$ creado con la función \lstinline|sample| que toma las salidas que se explicaron anteriormente, el tamaño de $10^{5}$, que se reemplace y la probabilidad.
 
 
 \subsection{Modify your code to calculate: (i) the estimated mean profit $\bar{X}_{j}$ for each sample subsequence: $\{X_{1}, X_{2}, . . . , X_{j} \}$, $j = 2, 3, \dots, n$, (ii) the $95 \%$ CI’s of each estimated mean profit $\bar{X}_{j}$ .}
@@ -590,22 +595,19 @@ This exercise is based on the article Introduction to Bootstrapping in Statistic
 
 <<histograma-fat, echo=TRUE, results='hide', dev='pdf', fig.width=6, fig.height=4>>=
 # Leer el archivo
-fat_data <- read.csv("body_fat.csv", stringsAsFactors = FALSE)
-
-# Verifica el nombre exacto de la columna
-colnames(fat_data) <- trimws(colnames(fat_data))  # Eliminar espacios en el nombre
-columna_objetivo <- colnames(fat_data)[1]         # Obtener el nombre real
-
-# Convertir a numérico por si acaso
-fat_data[[columna_objetivo]] <- as.numeric(trimws(fat_data[[columna_objetivo]]))
+fat_data <- read.csv("body_fat.csv" )
 
 # Histograma
-hist(fat_data[[columna_objetivo]],
+hist(fat_data[[colnames(fat_data)[1]]],
      main = "Histograma del porcentaje de grasa corporal",
      xlab = "Body Fat (%)",
      col = "skyblue",
      border = "white")
 @
+
+Realizar el histograma en \textsf{R} es bastante sencillo, únicamente tener el archivo \texttt{.csv} en la misma ruta local que donde se está trabajando, utilizar la función \lstinline|read.csv()| para leer este archivo y luego con la función \lstinline|hist()| se colocan los datos de la primera columna y otras opciones para el estilo del gráfico.
+
+Se muestra que la mayor frecuencia de grasa corporal se encuentra entre 20-30\%. 
 
 
 \subsection{The 95 \% confidence interval of the mean of the data from the traditional method (i.e., via the Central Limit Theorem).}
@@ -613,31 +615,30 @@ hist(fat_data[[columna_objetivo]],
 
 <<ic-clt, echo=TRUE>>=
 # Estadísticas necesarias
-media <- mean(fat_data[[columna_objetivo]], na.rm = TRUE)
-sd <- sd(fat_data[[columna_objetivo]], na.rm = TRUE)
-n <- sum(!is.na(fat_data[[columna_objetivo]]))  # número de datos no NA
+media <- mean(fat_data[[colnames(fat_data)[1]]])
+std <- sd(fat_data[[colnames(fat_data)[1]]])
+n <- length(fat_data[[colnames(fat_data)[1]]])  
 
 # Cálculo del error estándar
-se <- sd / sqrt(n)
+se <- std / sqrt(n)
 
 # Intervalo de confianza del 95%
-alpha <- 0.05
-z <- qnorm(1 - alpha/2)  # valor crítico Z para 95%
-li <- media - z * se
-ls <- media + z * se
+c <- 1.96
+li <- media - c*se
+ls <- media + c*se
 
 # Mostrar resultado
-cat(sprintf("The 95%% confidence interval for the mean is: [%.2f, %.2f]", li, ls))
+cat(sprintf("The 95%% confidence interval for the mean is: [%.2f, %.2f]",
+                                                                li, ls))
 @
 
-Como se puede apreciar en el programa, hay un 95\% de confianza para que la media esté en el intervalo $[27.14, 29.99]$.
+Como se puede apreciar en el programa, hay un 95\% de confianza para que la media esté en el intervalo $[\Sexpr{li}, \Sexpr{ls}]$. Las funciones de \textsf{R} ayudan mucho a hacer los cálculos del promedio, la desviación estándar y el valor de $n$ se sacaron con la ayuda de estas funciones. Los intervalos de confianza se sacaron como ya se viene haciendo, utilizando un $c = 1.96$.
 
 \subsection{A number of 500 bootstrapped samples from the original dataset, with 92 observations each.}
 
 
 <<bootstrap-samples, echo=TRUE>>=
-# Vector original limpio
-original_data <- na.omit(fat_data[[columna_objetivo]])
+original_data <- fat_data[[colnames(fat_data)[1]]]
 n <- length(original_data)
 
 # Generar 500 muestras bootstrap
@@ -645,10 +646,9 @@ bootstrap_samples <- replicate(500, sample(original_data, size = n,
                     replace = TRUE), simplify = FALSE)
 @
 
-Este código utiliza la función \lstinline|replicate()| para repetir la operación 500 veces, la función \lstinline|sample()| toma una muestra con reemplazo del tamaño de 92.
+Este código utiliza la función \lstinline|replicate()| para repetir la operación 500 veces, la función \lstinline|sample()| toma una muestra con reemplazo del tamaño de 92. Esto termina generando que \texttt{bootstrap\_samples} tenga 500 vectores, cada uno con 92 observaciones.
 
 \subsection{An histogram of the means of each bootstrapped sample.}
-
 
 <<bootstrap-histogram, echo=TRUE, dev='pdf', fig.width=6, fig.height=4>>=
 # Calcular la media de cada muestra bootstrap
@@ -659,11 +659,98 @@ hist(bootstrap_means,
      main = "Histograma de medias de muestras bootstrap",
      xlab = "Media del % de grasa corporal",
      col = "lightgreen",
-     border = "white")
+     border = "white",
+     probability = TRUE)  # Importante: escala el eje y para densidades
+
+# Parámetros de la normal
+mean_boot <- mean(bootstrap_means)
+sd_boot <- sd(bootstrap_means)
+
+# Añadir curva de distribución normal
+curve(dnorm(x, mean = mean_boot, sd = sd_boot),
+      col = "blue", lwd = 2, add = TRUE)
 @
 
+Con la función \lstinline|sapply()| le aplica a los elementos en \texttt{bootstrap\_samples} la función \lstinline|mean()|. Después se crea el histograma y se dibuja una curva de tipo campana para una ditribución normal, reflejando la similitud de los promedios de los \textit{bootstraps}.
+
+\subsection{A 95 \% bootstrapped confidence interval of the mean.}
 
 
+<<bootstrap-ci, echo=TRUE>>=
+# Calcular intervalo de confianza bootstrap del 95%
+bootstrap_ci <- quantile(bootstrap_means, probs = c(0.025, 0.975))
+
+
+bootstrap_ci
+@
+
+ 
+Se utiliza la función \lstinline|quantile()| para obtener los intervalos exactos, para posteriormente poder hacer la comparación de ambos resultados.
+
+Entonces, el 95\% del intervalo de confianza para la media es:
+
+\[
+\left[ \Sexpr{round(bootstrap_ci[1], 2)},\; \Sexpr{round(bootstrap_ci[2], 2)} \right]
+\]
+
+
+\subsection{A comparison of both confidence intervals}
+
+
+Con el método tradicional del teórema central del límite:
+
+\[
+  \left[ \Sexpr{round(li, 2)},\; \Sexpr{round(ls, 2)} \right]
+\]
+
+Con el método \textit{bootstrap}
+
+\[
+  \left[ \Sexpr{round(bootstrap_ci[1], 2)},\; \Sexpr{round(bootstrap_ci[2], 2)} \right]
+\]
+
+\section{Reliability of a system}
+
+Suppose a 3-out-of-4 system where each component is functioning with probabilities $p = \{pi\}$:
+
+
+\subsection{Write the structure function of the system $\phi(x)$.}
+
+La estructura funciona si al menos 3 de los 4 componentes están estructurados. Dado que hay dos estados; funciona ($\phi = 1$) o lo contrario ($\phi = 0$). Se puede tener un estado de los componentes $x = (x_{1}, x_{2}, x_{3}, x_{4})$, donde cada $x_{i} \in \{0, 1 \}$ representa si el componente $i$ está funcionando.
+
+La estructura entonces es:
+
+\[
+\phi (x_{1}, x_{2}, x_{3}, x_{4}) =
+\begin{cases}
+  1 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} \geq 3 \\
+  0 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} < 3
+\end{cases}
+\]
+
+\subsection{Deduce analytically the reliability function $R(\mathbf{p})$. Evaluate it when $\{p_{i} \} = \{0.9, 0.5, 0.2, 0.1\} $}
+
+Se tomó gran parte de la información del libro \textit{Introduction to Probability Models} de Sheldon Ross \cite{ross2014introduction}
+
+
+\[
+R(\mathbf{p}) = \sum_{\substack{S \subseteq \{1,2,3,4\} \\ |S| = 3}} \left( \prod_{i \in S} p_i \prod_{j \notin S} (1 - p_j) \right) + \prod_{i=1}^{4} p_i
+\]
+
+For $\mathbf{p} = \{0.9, 0.5, 0.2, 0.1\}$, we obtain:
+
+\[
+\begin{aligned}
+R(\mathbf{p}) &= 0.9 \cdot 0.5 \cdot 0.2 \cdot 0.9 + 0.9 \cdot 0.5 \cdot 0.1 \cdot 0.8 + 0.9 \cdot 0.2 \cdot 0.1 \cdot 0.5 \\
+&\quad + 0.5 \cdot 0.2 \cdot 0.1 \cdot 0.1 + 0.9 \cdot 0.5 \cdot 0.2 \cdot 0.1 \\
+&= 0.081 + 0.036 + 0.009 + 0.001 + 0.009 = \boxed{0.136}
+\end{aligned}
+\]
+
+
+
+
+\printbibliography
 
 
 \end{document}

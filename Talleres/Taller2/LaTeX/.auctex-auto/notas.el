@@ -6,7 +6,7 @@
    (TeX-add-to-alist 'LaTeX-provided-class-options
                      '(("article" "12pt")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("graphicx" "") ("amsmath" "") ("geometry" "margin=1in") ("fancyhdr" "") ("enumerate" "") ("enumitem" "shortlabels") ("babel" "spanish") ("xurl" "") ("tcolorbox" "") ("titlesec" "") ("listings" "") ("xcolor" "") ("pgfplots" "") ("tikz" "") ("cancel" "") ("hyperref" "hidelinks")))
+                     '(("graphicx" "") ("amsmath" "") ("amssymb" "") ("geometry" "margin=1in") ("fancyhdr" "") ("enumerate" "") ("enumitem" "shortlabels") ("babel" "spanish" "es-nodecimaldot") ("xurl" "") ("tcolorbox" "") ("titlesec" "") ("listings" "") ("xcolor" "") ("pgfplots" "") ("tikz" "") ("cancel" "") ("hyperref" "hidelinks") ("biblatex" "backend=biber")))
    (add-to-list 'LaTeX-verbatim-environments-local "lstlisting")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "href")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
@@ -23,6 +23,7 @@
     "art12"
     "graphicx"
     "amsmath"
+    "amssymb"
     "geometry"
     "fancyhdr"
     "enumerate"
@@ -36,7 +37,8 @@
     "pgfplots"
     "tikz"
     "cancel"
-    "hyperref")
+    "hyperref"
+    "biblatex")
    (LaTeX-add-labels
     "subsec:p1-a"
     "subsec:p1-b"
@@ -44,6 +46,8 @@
     "subsec:p1-d"
     "subsec:p1-e"
     "tab:p3")
+   (LaTeX-add-bibliographies
+    "referencias")
    (LaTeX-add-counters
     "subsubsubsection")
    (LaTeX-add-listings-lstdefinestyles

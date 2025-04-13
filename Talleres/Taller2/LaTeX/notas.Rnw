@@ -966,7 +966,8 @@ Se optó por buscar una opción gratuita del libro en PDF, esto debido a que la 
 
 \begin{itemize}
   \item Las muestras que se deben elegir de un población deben ser representativas y aleatorias, porque pueden pasar casos como el de las elecciones de Landon y Roosevelt, creando un sesgo para el \textit{dataset}.
-  \item Lo que se entiende por 
+  \item Lo que se entiende por un muestreo estratificado es seleccionar nuestros datos por grupos. Por ejemplo, si quiero saber los ingresos de los habitantes de Bogotá, no me puedo tomar solo muestras de la gente estrato 6, porque me quedará sesgado el análisis y voy a concluir que todos los habitantes de Bogotá ganan mucho dinero. En cambio, tengo que reconocer cómo están segmentados los estratos sociales en la ciudad; 10\% para estrato 6, 20\% para el 5, etc.\footnote{Datos inventados por los autores} De esos grupo ahora se toman mustras aleatorias y así hemos reducido el sesgo del experimento.
+  \item Las diferencias entre $\bar{x}$ y $\mu$ están en que la información sobre muestras es observada, y la información sobre poblaciones grandes es a menudo inferida de muestras más pequeñas.
 \end{itemize}
 
 \printbibliography

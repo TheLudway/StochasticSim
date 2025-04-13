@@ -94,6 +94,12 @@
 
 \begin{document}
 
+\section{Introducción}
+
+El siguiente documento fue compilado usando \href{https://yihui.org/knitr/}{\textbf{knitr}} un paquete diseñado para la generación \textit{dinámica} de reportes para \textsf{R} y \textit{Python}. Esto se hace con el propósito de tener un documento consistente y replicable. Normalmente las entregas tienen un pantallazo del código y de la salida, sin embargo, esto además de verse muy \textit{feo} no tiene alguna manera sencilla de hacer la replicación de la simulación. Por eso mismo, en esta entrega se utiliza este paquete y facilitar manipulación, lectura del código, además de inmediatamente mostrar la salida de los códigos.
+
+En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, y un directorio \texttt{img/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores.  
+
 
 \section{Stopping generating new simulation data}
 
@@ -227,7 +233,6 @@ Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tant
 El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\Sexpr{mean(x)}$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $\Sexpr{var(x)}$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
 
 
-\newpage
 
 \section{Gaining confidence with confidence intervals}
 

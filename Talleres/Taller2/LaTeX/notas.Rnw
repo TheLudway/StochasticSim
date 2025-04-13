@@ -730,6 +730,7 @@ La estructura entonces es:
 \]
 
 \subsection{Deduce analytically the reliability function $R(\mathbf{p})$. Evaluate it when $\{p_{i} \} = \{0.9, 0.5, 0.2, 0.1\} $}
+\label{subsec:p6-b}
 
 Se tomó gran parte de la información del libro \textit{Introduction to Probability Models} de Sheldon Ross \cite{ross2014introduction}.
 
@@ -820,7 +821,8 @@ calculate_reliability <- function(p) {
   x <- rbinom(4, 1, p)
   
   # Apply the reliability function r(p) as given
-  r <- sum(x[1]*x[2]*x[3]) + sum(x[1]*x[2]*x[4]) + sum(x[1]*x[3]*x[4]) + sum(x[2]*x[3]*x[4]) - 3 * prod(x)
+  r <- sum(x[1]*x[2]*x[3]) + sum(x[1]*x[2]*x[4]) + sum(x[1]*x[3]*x[4]) +
+              sum(x[2]*x[3]*x[4]) - 3 * prod(x)
   
   return(r)
 }
@@ -832,12 +834,12 @@ simulate_system_reliability <- function(n, p) {
   for (i in 1:n) {
     reliabilities[i] <- calculate_reliability(p)
   }
-  
-  mean(reliabilities)  # Estimated average reliability
+  return(mean(reliabilities))
 }
 
 # Run simulation for each n: 10^2, 10^3, 10^4, 10^5 realizations
-results <- sapply(c(10^2, 10^3, 10^4, 10^5), function(n) simulate_system_reliability(n, p))
+results <- sapply(c(10^2, 10^3, 10^4, 10^5),
+            function(n) simulate_system_reliability(n, p))
 
 # View results
 names(results) <- c("n=10^2", "n=10^3", "n=10^4", "n=10^5")
@@ -846,7 +848,126 @@ print(results)
 @
 
 
+En primer lugar se tiene un vector \lstinline|x| que simula cada componente del sistema retornando 1 o 0 con una probabilidad que es el conjunto para $p_{i}$ que se define en el enunciado del problema. Después se pasa a la función de confiabilidad. Seguido, se pasa a la función \lstinline|simulate_system_reliability()| donde se simula la confiabilidad $n$ veces y se guarda en un vector \lstinline|reliabilities|. Por último, se corre la simulación para diferentes valores de $n$, guardando todo en \lstinline|results|. Los resultados se presentan en el cuadro \ref{tab:reliability} y se ve que a medida que se hacen más simulaciones, la probabilidad de que el sistema esté funcionando se va acercando al valor obtenido analíticamente de 0.136.
 
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    $n$& Confiabilidad de que el sistema está funcionando. \\ \hline
+    $10^{2}$ & $\Sexpr{results[1]}$ \\ \hline
+    $10^{3}$ & $\Sexpr{results[2]}$ \\ \hline
+    $10^{4}$ & $\Sexpr{results[3]}$\\ \hline
+    $10^{5}$ & $\Sexpr{results[4]}$\\ \hline
+  \end{tabular}
+  \caption{Resultados de la función confiabilidad para diferentes valores de $n$. }
+  \label{tab:reliability}
+\end{table}
+
+\subsection{Find the standard deviation of the reliability estimation for each $n$.}
+
+Se hace una modificación a la función \lstinline|simulate_system_reliability()| para que también entregue la desviación estándar de cada estimación de la confiabilidad.
+
+<<>>=
+simulate_system_reliability <- function(n, p) {
+ reliabilities <- numeric(n)
+ 
+ for (i in 1:n) {
+   reliabilities[i] <- calculate_reliability(p)
+ }
+ 
+ sd_val <- sd(reliabilities)
+ 
+ return(c(SD = sd_val))
+}
+@
+
+
+Se deja tal cual estaba la función, pero ahora retorna la desviación estándar de esa estimación para ese $n$ en específico. Por lo tanto, ahora queda volver a correr la simulación para los diferentes $n$.
+
+<<>>=
+results <- sapply(c(10^2, 10^3, 10^4, 10^5), function(n) simulate_system_reliability(n, p))
+names(results) <- c("n=10^2", "n=10^3", "n=10^4", "n=10^5")
+
+# Print results
+print(results)
+@
+
+Los resultados se muestran en el cuadro \ref{tab:sd} reflejando cómo los sistemas varían entre ellos.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    $n$& Desviación estándar \\ \hline
+    $10^{2}$ & $\Sexpr{results[1]}$ \\ \hline
+    $10^{3}$ & $\Sexpr{results[2]}$ \\ \hline
+    $10^{4}$ & $\Sexpr{results[3]}$\\ \hline
+    $10^{5}$ & $\Sexpr{results[4]}$\\ \hline
+  \end{tabular}
+  \caption{Desviación estándar para cada $n$.}
+  \label{tab:sd}
+\end{table}
+
+\subsection{Find the 95 \% CI’s for each $n$. Do the confidence intervals contain the actual reliability value from item \ref{subsec:p6-b}?}
+
+Teniendo en cuenta:
+
+\[
+CI = \bar{X} \pm c \times \frac{s}{\sqrt{n}}
+\]
+
+Se puede volver a modificar nuevamente la función \lstinline|simulate_system_reliability()| para que también retorne el intervalo superior e inferior, esto teniendo en cuenta la formula que se viene manejando durante todo el taller, por lo tanto, el código sería:
+
+
+<<>>=
+simulate_system_reliability <- function(n, p) {
+  reliabilities <- numeric(n)
+  for (i in 1:n) {
+    reliabilities[i] <- calculate_reliability(p)
+  }
+  
+  mean_val <- mean(reliabilities)
+  sd_val <- sd(reliabilities)
+  error_margin <- 1.96 * (sd_val / sqrt(n))  # 95% CI
+  
+  return(c(mean = mean_val,
+           lower = mean_val - error_margin,
+           upper = mean_val + error_margin))
+}
+@
+
+Se ha agregado una variable de \lstinline|mean_val| y el \lstinline|error_margin| para luego entre ellas restar y sumar, respectivamente, para obtener el intervalo de confianza completo. Ahora, se puede volver a correr la simulación e imprimir la salida.
+
+
+<<>>=
+# Run simulation for each n
+results <- t(sapply(c(10^2, 10^3, 10^4, 10^5),
+                  function(n) simulate_system_reliability(n, p)))
+
+rownames(results) <- c("n=10^2", "n=10^3", "n=10^4", "n=10^5")
+
+# Print result as a table
+print(round(results, 5))
+@
+
+Recordando que el valor de la sección \ref{subsec:p6-b} es 0.136, y el intervalo quedó como:
+ 
+\[
+[\Sexpr{results[4, 2]}, \Sexpr{results[4, 3]} ]
+\]
+
+Por lo tanto, el valor que se encontró anteriormente sí cae en el intervalo de confianza.
+
+
+\section{Reading assignment}
+
+Se optó por buscar una opción gratuita del libro en PDF, esto debido a que la versión que se encuentra en la Tadeo es muy incómoda por leer, el PDF se puede encontrar libre de descargar \href{https://www.academia.edu/114463674/Practical_Statistics_for_Data_Scientists_50_Essential_Concepts_Using_R_and_Python_by_Peter_Bruce_Andrew_Bruce_Peter_Gedeck}{\textbf{aquí}}. Se han tomado las siguientes ideas mientras se hacía la lectura del libro:
+
+\begin{itemize}
+  \item Las muestras que se deben elegir de un población deben ser representativas y aleatorias, porque pueden pasar casos como el de las elecciones de Landon y Roosevelt, creando un sesgo para el \textit{dataset}.
+  \item Lo que se entiende por 
+\end{itemize}
 
 \printbibliography
 

@@ -45,7 +45,10 @@
     "subsec:p1-c"
     "subsec:p1-d"
     "subsec:p1-e"
-    "tab:p3")
+    "tab:p3"
+    "subsec:p6-b"
+    "tab:reliability"
+    "tab:sd")
    (LaTeX-add-bibliographies
     "referencias")
    (LaTeX-add-counters

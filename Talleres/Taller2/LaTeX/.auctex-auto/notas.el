@@ -48,7 +48,8 @@
     "tab:p3"
     "subsec:p6-b"
     "tab:reliability"
-    "tab:sd")
+    "tab:sd"
+    "fig:GH")
    (LaTeX-add-bibliographies
     "referencias")
    (LaTeX-add-counters

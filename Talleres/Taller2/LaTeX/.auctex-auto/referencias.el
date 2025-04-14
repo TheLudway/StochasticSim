@@ -4,6 +4,7 @@
  "referencias"
  (lambda ()
    (LaTeX-add-bibitems
-    "ross2014introduction"))
+    "ross2014introduction"
+    "bruce2020practical"))
  '(or :bibtex :latex))
 

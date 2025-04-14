@@ -98,7 +98,9 @@
 
 El siguiente documento fue compilado usando \href{https://yihui.org/knitr/}{\textbf{knitr}} un paquete diseñado para la generación \textit{dinámica} de reportes para \textsf{R} y \textit{Python}. Esto se hace con el propósito de tener un documento consistente y replicable. Normalmente las entregas tienen un pantallazo del código y de la salida, sin embargo, esto además de verse muy \textit{feo} no tiene alguna manera sencilla de hacer la replicación de la simulación. Por eso mismo, en esta entrega se utiliza este paquete y facilitar manipulación, lectura del código, además de inmediatamente mostrar la salida de los códigos.
 
-En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, y un directorio \texttt{img/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores.  
+En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, \texttt{renv.lock} y unos directorios \texttt{img/} \texttt{renv/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores.
+
+Por último, todo el presente trabajo fue hecho en un entorno virtual de \textsf{R} para evitar conflictos entre librerías, se trabajó con el paquete \lstinline|renv| para manejar el ambiente local junto con sus librerías. Puede revisar la documentación \href{https://rstudio.github.io/renv/articles/renv.html}{\textbf{aquí}} para tener más información de cómo manejar los ambientes virtuales y tener una mayor estabilidad en su sistema, así evita lo que le pasó a uno de los autores, que decidió instalar una librería en el ambiente global de \textit{Python} y dañó todo el sistema base.
 
 
 \section{Stopping generating new simulation data}
@@ -237,6 +239,7 @@ El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\Sexpr{me
 \section{Gaining confidence with confidence intervals}
 
 We know that the $\mathcal{U}(-1, 1)$ r.v. has mean 0. Use a sample of size $1000$ to estimate the mean and give a $95\%$ confidence interval (CI). Does the CI contain 0? Repeat the above a large number of times ($\geq  100$). What percentage of time does the CI contain 0? Write your code so that it produces output similar to the following:
+
 
 \begin{figure}[ht]
   \centering
@@ -973,7 +976,125 @@ Se optó por buscar una opción gratuita del libro en PDF, esto debido a que la 
   \item Las muestras que se deben elegir de un población deben ser representativas y aleatorias, porque pueden pasar casos como el de las elecciones de Landon y Roosevelt, creando un sesgo para el \textit{dataset}.
   \item Lo que se entiende por un muestreo estratificado es seleccionar nuestros datos por grupos. Por ejemplo, si quiero saber los ingresos de los habitantes de Bogotá, no me puedo tomar solo muestras de la gente estrato 6, porque me quedará sesgado el análisis y voy a concluir que todos los habitantes de Bogotá ganan mucho dinero. En cambio, tengo que reconocer cómo están segmentados los estratos sociales en la ciudad; 10\% para estrato 6, 20\% para el 5, etc.\footnote{Datos inventados por los autores} De esos grupo ahora se toman mustras aleatorias y así hemos reducido el sesgo del experimento.
   \item Las diferencias entre $\bar{x}$ y $\mu$ están en que la información sobre muestras es observada, y la información sobre poblaciones grandes es a menudo inferida de muestras más pequeñas.
+  \item ``Si toturas a los datos por un tiempo largo, tarde o temprano confesarán''.
+  \item Especifica una hipótesis y recolectar datos seguido de una aleatoriedad y principios de muestreo aleatorio asegura reducir los sesgos.
+  \item El teorema central del límite tiene mucha importancia en los libros clásicos de estadística pero no es tan \textit{central} en la práctica de la ciencia de datos.
+  \item El error estándar es una métrica que mide la variabilidad de la distribución muestreada para una estadística. A medida que el tamaño de la muestra aumenta, el error estándar disminuye.
+  \item La desviación estándar mide la variabilidad de puntos de datos individuales y el error estándar mide la variabilidad de una muestra.
+  \item Una muestra \textit{bootstrap} es aquella que se toma con reemplazo de un conjunto de datos observado.
+  \item Remuestro es el proceso de tomar repetidamente muestras de los datos observados, incluyendo procedimientos como \textit{bootstrap} y permutaciones.
+  \item Pasos para un algoritmo \textit{Bootstrap}:
+        \begin{enumerate}
+          \item Obtener un valor de muestra, guardarlo, y luego reemplazarlo.
+          \item Repetir $n$ veces.
+          \item Obtener la media de los $n$ valores remuestreados.
+          \item Repetir los pasos 1 a 3 $R$ veces. 
+          \item Usar los $R$ resultados para:
+                \begin{enumerate}
+                  \item Calcular la desviación estándar.
+                  \item Producir un histograma o un \textit{boxplot}.
+                  \item Encontrar el intervalo de confianza.
+                \end{enumerate}
+        \end{enumerate}
+  \item El término remuestreo se refiere a hacer procedimientos de permutaciones, donde múltiples muestras son combinadas y el muestro puede ser hecho sin reemplazo. El término \textit{boostrapping} siempre ímplica hacer muestro con reemplazo.
+  \item La mayoría de los datos no se distribuyen de manera normal y la distribución Gaussiana está sobrevalorada.
+  \item La distribución $t$ es como una distribución normal pero con colas más anchas.
+  \item La distribución binomial es muy usada cuando se trata de una salida de sí/no. Se puede adaptar a varios conceptos; funciona/no funciona, comprar/no comprar, etc.
 \end{itemize}
+
+\subsection{Include in your submission an exploration of the dataset \textit{loans\_income.csv} by replicating some of the codes of the sections: \textit{Sampling Distribution of a Statistic} , \textit{Bootstrap}, or \textit{Confidence Intervals}.}
+
+\subsubsection{\textit{Sampling Distribution onf a Statistic}}
+
+
+<<fig.width = 6, fig.height=3.5>>=
+library(ggplot2)
+
+# Lectura del dataset
+loans_income <- read.csv("loans_income.csv")
+loans_income <- loans_income[[colnames(loans_income)]]
+
+# Tomar una muestra de una variable aleatoria simple. 
+samp_data <- data.frame(income=sample(loans_income, 1000),
+                        type = 'data_dist')
+
+# Tomar una muestra de medias de 5 valores
+samp_mean_05 <- data.frame(income = tapply(sample(loans_income, 1000*5),
+                rep(1:1000, rep(5, 1000)), FUN=mean), type='mean_of_5')
+
+# Tomar una muestra de medias de 20 valores 
+samp_mean_20 <- data.frame(income = tapply(sample(loans_income, 1000*20),
+                  rep(1:1000, rep(20, 1000)), FUN=mean), type='mean_of_20')
+
+# Unir los data frames y convertir la columna type como factor, es decir, 
+# una categoría
+income <- rbind(samp_data, samp_mean_05, samp_mean_20)
+income$type = factor(income$type, levels=c('data_dist', 'mean_of_5',
+        'mean_of_20'), labels=c('Data', 'Mean of 5', 'Mean of 20'))
+
+# Graficar
+ggplot(income, aes(x=income))+geom_histogram(bins=40)+facet_grid(type ~ .)
+
+@
+
+
+\subsubsection{\textit{Bootstrap}}
+
+El código anterior utiliza tal cual cómo aparece el ejemplo en el libro, solo que aquí se carga el \textit{dataset} a la variable \lstinline|loans_income|. Después crea tres muestras diferentes; \lstinline|samp_data| que toma 1000 valores aleatorios directamente del \textit{dataset} y los guarda con la etiqueta ``data\_dist''; \lstinline|samp_mean_05| toma una muestra de 5000 valores (la operación que se hace son 1000 grupos de 5), calcula el promedio de cada grupo de 5, y se obtienen 1000 promedios; \lstinline|samp_mean_20|, es parecido al anterior pero con grupos de valores de 20, se obtienen 1000 promedios de 20 valores cada uno. Después de tomar las muestras se combinan los datos en un solo \textit{dataframe} \lstinline|income| y después convierte la columna \lstinline|type| en un factor categórico con etiquetas que facilitan la lectura. Por último, se grafican los histogramas, cada uno con 40 barras y se utiliza \lstinline|face_grid(type ~ .)| para mostrar tres gráficos separados.
+
+Se va a utilizar el paquete \texttt{boot} que permite realizar las operaciones para un muestreo \textit{bootstrap} replicando 1000 veces la función \lstinline|stat_fun()| al \textit{dataset} \lstinline|stat_fun|
+
+<<>>=
+library(boot)
+stat_fun <- function(x, idx) median(x[idx])
+boot_obj <- boot(loans_income, R=1000, statistic=stat_fun)
+boot_obj
+@
+
+La función \lstinline|stat_fun()| recibe un vector \lstinline|x| (los datos originales) y otro vector \lstinline|idx| (índices de muestra aleatoria con reemplazo generados por el \textit{bootstrap}), y devuelve la mediana de los valores muestreados. Después se ejecuta el \textit{bootstrap} mediante la función \lstinline|boot()| que toma el \textit{dataset} \lstinline|loans_income|, genera 1000 muestras con reemplazo, para cada muestra calcula la mediana usando la función previamente definida. Por último, muestra el valor original de la mediana, las 1000 replicaciones (medianas \textit{bootstrap}) e información de las muestras como el bias y el error estándar.
+
+\subsubsection{\textit{Confidence Intervals}}
+
+Se utiliza el código que se encuentra en el repositorio del libro.
+
+<<>>=
+set.seed(5)
+set.seed(7)
+sample20 <- sample(loans_income, 20)
+sampleMean <- mean(sample20)
+
+stat_fun <- function(x, idx) mean(x[idx])
+boot_obj <- boot(sample20, R=500, statistic=stat_fun)
+boot_ci <- boot.ci(boot_obj, conf=0.9, type='basic')
+X <- data.frame(mean=boot_obj$t)
+ci90 <- boot_ci$basic[4:5]
+ci <- data.frame(ci=ci90, y=c(9, 11))
+ci
+ggplot(X, aes(x=mean)) +
+  geom_histogram(bins=40, fill='#AAAAAA')+
+  geom_vline(xintercept=sampleMean, linetype=2) +
+  geom_path(aes(x=ci, y=10), data=ci, size=2) +
+  geom_path(aes(x=ci90[1], y=y), data=ci, size=2) +
+  geom_path(aes(x=ci90[2], y=y), data=ci, size=2) +
+  annotate('text', x=sampleMean, y=20, label='Sample mean', size=6) +
+  annotate('text', x=sampleMean, y=8, label='90% interval', size=6) +
+  theme_bw() +
+  labs(x = '', y='Counts')
+
+@
+
+El código no genera la misma salida de la figura que se encuentra en el libro, esto debido a que se replicó el que está disponible en GitHub y dentro del archivo del \textit{script} hay un comentario diciendo que la figura no está disponible, esto se puede mostrar como evidencia en la figura \ref{fig:GH}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{img/Punto7.png}
+  \caption{\label{fig:GH} \textit{Script} del libro \textit{Practical statistics for data scientists: 50+ essential concepts using R and Python}\cite{bruce2020practical}.}
+\end{figure}
+
+Por otra parte, se muestra una advertencia por el estilo de la figura, el parámetro \lstinline|size| ha sido deprecado, esto quiere decir que esta edición del libro se realizó con una versión de \lstinline|ggplot2| mucho más vieja que la que está actualmente.
+
+
+
 
 \printbibliography
 

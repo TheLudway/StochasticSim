@@ -1,0 +1,6 @@
+[submodule "abm-forced-displacement"]
+	path = abm-forced-displacement
+	url = https://github.com/TheLudway/abm-forced-displacement
+[submodule "DesplazamientoForzado"]
+	path = DesplazamientoForzado
+	url = https://github.com/TheLudway/abm-forced-displacement

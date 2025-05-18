@@ -148,9 +148,11 @@
 
 El siguiente documento fue compilado usando \href{https://yihui.org/knitr/}{\textbf{knitr}} un paquete diseñado para la generación \textit{dinámica} de reportes para \textsf{R} y \textit{Python}. Esto se hace con el propósito de tener un documento consistente y replicable. Normalmente las entregas tienen un pantallazo del código y de la salida, sin embargo, esto además de verse muy \textit{feo} no tiene alguna manera sencilla de hacer la replicación de la simulación. Por eso mismo, en esta entrega se utiliza este paquete y facilitar manipulación, lectura del código, además de inmediatamente mostrar la salida de los códigos.
 
-En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, \texttt{renv.lock} y unos directorios \texttt{img/} \texttt{renv/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores.
+En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, \texttt{renv.lock} y unos directorios \texttt{img/} \texttt{renv/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores. 
 
 Por último, todo el presente trabajo fue hecho en un entorno virtual de \textsf{R} para evitar conflictos entre librerías, se trabajó con el paquete \lstinline|renv| para manejar el ambiente local junto con sus librerías. Puede revisar la documentación \href{https://rstudio.github.io/renv/articles/renv.html}{\textbf{aquí}} para tener más información de cómo manejar los ambientes virtuales y tener una mayor estabilidad en su sistema, así evita lo que le pasó a uno de los autores, que decidió instalar una librería en el ambiente global de \textit{Python} y dañó todo el sistema base.
+
+Para ver todos los código indexados aquí, los puede encontrar en el archivo \texttt{scripts.R}. Aunque, también están dentro de \texttt{notas.Rnw} y mostrados en el documento.
 
 
 \section{Stopping generating new simulation data}
@@ -177,13 +179,13 @@ Debido a que se va a generar variables aleatorias \textbf{normales estándar} $X
 \hlkwd{cat}\hldef{(}\hlsng{"Cantidad de Xi generados"}\hldef{, n,} \hlsng{"\textbackslash{}n"}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## Cantidad de Xi generados 10198
+## Cantidad de Xi generados 10071
 \end{verbatim}
 \begin{alltt}
 \hlkwd{cat}\hldef{(}\hlsng{"Desviación estándar"}\hldef{,} \hlkwd{round}\hldef{(s,} \hlnum{5}\hldef{),} \hlsng{"\textbackslash{}n"}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## Desviación estándar 1.00985
+## Desviación estándar 1.00349
 \end{verbatim}
 \begin{alltt}
 \hlkwd{cat}\hldef{(}\hlsng{"Error estándar S/sqrt(n)"}\hldef{,} \hlkwd{round}\hldef{(s}\hlopt{/}\hlkwd{sqrt}\hldef{(n),} \hlnum{5}\hldef{),} \hlsng{"\textbackslash{}n"}\hldef{)}
@@ -265,7 +267,7 @@ Este valor se acerca bastante al que se imprime en la simulación.
 
 \subsubsection{Respuesta}
 
-Se han generado \lstinline|n=| $10198$ normales.
+Se han generado \lstinline|n=| $10071$ normales.
 
 
 \subsection{What is the sample mean of all the normals generated?}
@@ -276,7 +278,7 @@ Se han generado \lstinline|n=| $10198$ normales.
 
 \subsubsection{Respuesta}
 
-Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $0.0173852$. 
+Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $0.0038138$. 
 
 \subsection{What is the sample variance?}
 \label{subsec:p1-d}
@@ -290,7 +292,7 @@ La varianza muestral se calcula como:
 S^{2} = \frac{\sum_{i=1}^{n} (X_{i} - \bar{X})^{2}}{n-1}
 \]
 
-Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $1.0197956$.
+Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $1.0069994$.
 
 
 
@@ -299,7 +301,7 @@ Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tant
 
 \subsubsection{Respuesta}
 
-El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $0.0173852$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $1.0197956$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
+El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $0.0038138$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $1.0069994$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
 
 
 
@@ -335,18 +337,18 @@ El siguiente código permite sacar el intervalo de confianza del 95\% y también
 \hlkwd{cat}\hldef{(}\hlsng{"El estimado es"}\hldef{, xmean,} \hlsng{"\textbackslash{}n"}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## El estimado es -0.01663151
+## El estimado es 0.005638998
 \end{verbatim}
 \begin{alltt}
 \hlkwd{cat}\hldef{(}\hlsng{"95% está entre ("}\hldef{, L,} \hlsng{", "}\hldef{, U,} \hlsng{") \textbackslash{}n"}\hldef{,} \hlkwc{sep}\hldef{=}\hlsng{""}\hldef{)}
 \end{alltt}
 \begin{verbatim}
-## 95% está entre (-0.05192202, 0.01865899)
+## 95% está entre (-0.0297046, 0.04098259)
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-Aquí se estimó la media de la distribución uniforme, dando un resultado de $-0.0166315$, muy cercano a 0. El intervalo de confianza está entre $-0.051922$ y $0.018659$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
+Aquí se estimó la media de la distribución uniforme, dando un resultado de $0.005639$, muy cercano a 0. El intervalo de confianza está entre $-0.0297046$ y $0.0409826$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -383,206 +385,206 @@ Aquí se estimó la media de la distribución uniforme, dando un resultado de $-
 \end{alltt}
 \begin{verbatim}
 ##     sample_mean lower_bound upper_bound contains_mean
-## 1     9.114e-03  -0.0259926    0.044220             1
-## 2     1.883e-02  -0.0165825    0.054250             1
-## 3     1.106e-02  -0.0251099    0.047224             1
-## 4    -5.354e-03  -0.0408235    0.030116             1
-## 5     1.880e-03  -0.0324504    0.036210             1
-## 6     2.786e-02  -0.0078839    0.063600             1
-## 7     5.987e-03  -0.0302786    0.042253             1
-## 8    -6.234e-03  -0.0418871    0.029419             1
-## 9    -1.246e-02  -0.0492623    0.024349             1
-## 10   -6.149e-03  -0.0410561    0.028758             1
-## 11   -5.132e-03  -0.0410393    0.030775             1
-## 12   -1.109e-02  -0.0465200    0.024337             1
-## 13    1.308e-02  -0.0228377    0.049004             1
-## 14   -2.340e-03  -0.0383425    0.033662             1
-## 15    7.955e-03  -0.0287899    0.044700             1
-## 16   -1.146e-02  -0.0466822    0.023762             1
-## 17   -2.122e-02  -0.0575987    0.015158             1
-## 18   -2.200e-02  -0.0568909    0.012886             1
-## 19    1.686e-02  -0.0183366    0.052048             1
-## 20    2.216e-03  -0.0337857    0.038218             1
-## 21    3.978e-03  -0.0325484    0.040504             1
-## 22    1.064e-02  -0.0240120    0.045291             1
-## 23   -1.655e-02  -0.0517918    0.018701             1
-## 24   -2.363e-02  -0.0592356    0.011980             1
-## 25   -6.399e-03  -0.0419704    0.029172             1
-## 26   -2.379e-02  -0.0590977    0.011512             1
-## 27   -8.181e-03  -0.0437806    0.027418             1
-## 28   -1.450e-02  -0.0499634    0.020964             1
-## 29   -1.214e-02  -0.0477870    0.023497             1
-## 30   -1.620e-02  -0.0518954    0.019491             1
-## 31    1.943e-02  -0.0161756    0.055034             1
-## 32    8.595e-03  -0.0273695    0.044560             1
-## 33    2.043e-02  -0.0153104    0.056164             1
-## 34   -3.439e-02  -0.0706630    0.001877             1
-## 35    1.966e-02  -0.0163470    0.055657             1
-## 36    1.222e-02  -0.0234325    0.047874             1
-## 37   -1.430e-02  -0.0499019    0.021304             1
-## 38   -2.051e-02  -0.0561805    0.015166             1
-## 39    5.031e-03  -0.0307468    0.040809             1
-## 40    6.933e-04  -0.0351831    0.036570             1
-## 41    1.019e-02  -0.0251782    0.045548             1
-## 42    4.521e-02   0.0090214    0.081405             0
-## 43    4.542e-03  -0.0306436    0.039728             1
-## 44    1.801e-06  -0.0357592    0.035763             1
-## 45   -1.129e-02  -0.0466401    0.024066             1
-## 46    8.932e-03  -0.0262723    0.044137             1
-## 47   -1.937e-02  -0.0545625    0.015820             1
-## 48   -4.169e-03  -0.0402089    0.031871             1
-## 49   -2.265e-02  -0.0582527    0.012943             1
-## 50    1.216e-02  -0.0232116    0.047528             1
-## 51    3.689e-02   0.0007917    0.072989             0
-## 52   -2.001e-03  -0.0381907    0.034189             1
-## 53   -1.378e-02  -0.0496764    0.022112             1
-## 54   -4.266e-03  -0.0407150    0.032182             1
-## 55   -9.889e-03  -0.0452566    0.025478             1
-## 56    1.095e-02  -0.0261696    0.048062             1
-## 57    1.921e-02  -0.0171574    0.055573             1
-## 58   -1.178e-02  -0.0474970    0.023939             1
-## 59   -8.726e-03  -0.0450663    0.027615             1
-## 60   -2.824e-02  -0.0641998    0.007728             1
-## 61   -4.769e-03  -0.0399173    0.030380             1
-## 62    3.001e-02  -0.0052267    0.065240             1
-## 63    8.890e-03  -0.0265681    0.044349             1
-## 64    3.453e-02  -0.0014190    0.070471             1
-## 65    2.600e-02  -0.0094840    0.061479             1
-## 66   -3.690e-03  -0.0404914    0.033111             1
-## 67    2.815e-02  -0.0084581    0.064755             1
-## 68    2.314e-03  -0.0333165    0.037945             1
-## 69    7.242e-03  -0.0297992    0.044284             1
-## 70   -2.589e-02  -0.0620649    0.010289             1
-## 71    1.599e-02  -0.0191483    0.051128             1
-## 72    7.368e-03  -0.0277467    0.042482             1
-## 73   -4.265e-03  -0.0393907    0.030860             1
-## 74    2.556e-02  -0.0106175    0.061728             1
-## 75    2.561e-02  -0.0108899    0.062110             1
-## 76   -3.112e-04  -0.0360654    0.035443             1
-## 77    2.778e-03  -0.0329106    0.038466             1
-## 78   -4.311e-03  -0.0406582    0.032037             1
-## 79    3.943e-03  -0.0315251    0.039412             1
-## 80   -1.886e-02  -0.0553230    0.017595             1
-## 81   -3.333e-04  -0.0352785    0.034612             1
-## 82    6.353e-03  -0.0289269    0.041632             1
-## 83    1.781e-02  -0.0182680    0.053897             1
-## 84    2.454e-02  -0.0103537    0.059443             1
-## 85   -3.148e-02  -0.0679586    0.005002             1
-## 86    1.273e-02  -0.0239809    0.049445             1
-## 87   -1.474e-03  -0.0373964    0.034448             1
-## 88   -7.918e-03  -0.0434727    0.027636             1
-## 89   -2.758e-02  -0.0621813    0.007021             1
-## 90    1.792e-02  -0.0180313    0.053880             1
-## 91   -3.395e-02  -0.0699297    0.002037             1
-## 92   -1.127e-02  -0.0458387    0.023306             1
-## 93   -1.240e-02  -0.0479299    0.023123             1
-## 94   -4.132e-02  -0.0765216   -0.006127             0
-## 95    2.708e-02  -0.0084340    0.062600             1
-## 96    1.249e-02  -0.0229147    0.047891             1
-## 97   -2.190e-02  -0.0576468    0.013841             1
-## 98   -6.273e-03  -0.0413547    0.028809             1
-## 99    6.786e-03  -0.0288930    0.042464             1
-## 100  -1.658e-02  -0.0524504    0.019283             1
-## 101  -2.047e-03  -0.0378436    0.033750             1
-## 102   4.558e-03  -0.0302380    0.039354             1
-## 103  -1.707e-02  -0.0532893    0.019150             1
-## 104   6.857e-03  -0.0294823    0.043196             1
-## 105   3.683e-02   0.0011470    0.072508             0
-## 106   1.173e-02  -0.0253368    0.048799             1
-## 107   4.933e-02   0.0131008    0.085552             0
-## 108   3.401e-02  -0.0022675    0.070293             1
-## 109  -1.937e-03  -0.0386107    0.034737             1
-## 110   3.432e-02  -0.0007225    0.069357             1
-## 111  -7.145e-03  -0.0430597    0.028769             1
-## 112  -1.238e-02  -0.0482504    0.023490             1
-## 113   2.687e-02  -0.0094595    0.063201             1
-## 114   8.631e-03  -0.0268261    0.044087             1
-## 115   1.375e-02  -0.0221151    0.049624             1
-## 116  -9.904e-03  -0.0456088    0.025801             1
-## 117   8.005e-03  -0.0280895    0.044100             1
-## 118   7.882e-03  -0.0275387    0.043303             1
-## 119  -2.355e-02  -0.0591300    0.012037             1
-## 120  -3.051e-02  -0.0667530    0.005724             1
-## 121  -1.161e-02  -0.0473919    0.024182             1
-## 122  -1.112e-03  -0.0358799    0.033656             1
-## 123   3.149e-02  -0.0044495    0.067437             1
-## 124   1.106e-02  -0.0246188    0.046730             1
-## 125   4.471e-03  -0.0317559    0.040698             1
-## 126  -7.970e-03  -0.0432378    0.027299             1
-## 127   2.025e-02  -0.0151102    0.055606             1
-## 128   1.498e-02  -0.0215990    0.051559             1
-## 129   3.055e-02  -0.0044786    0.065574             1
-## 130  -9.231e-03  -0.0447234    0.026260             1
-## 131  -3.236e-02  -0.0681695    0.003456             1
-## 132   2.110e-02  -0.0147306    0.056939             1
-## 133  -1.650e-03  -0.0377649    0.034465             1
-## 134  -1.203e-03  -0.0367873    0.034382             1
-## 135   3.991e-02   0.0036337    0.076193             0
-## 136   1.605e-02  -0.0205843    0.052679             1
-## 137   1.738e-02  -0.0184283    0.053190             1
-## 138   4.354e-02   0.0076194    0.079455             0
-## 139   5.087e-03  -0.0306671    0.040841             1
-## 140   3.743e-03  -0.0305178    0.038004             1
-## 141  -4.356e-02  -0.0797014   -0.007415             0
-## 142   2.252e-03  -0.0343834    0.038887             1
-## 143   2.094e-02  -0.0148651    0.056739             1
-## 144   1.626e-02  -0.0192407    0.051764             1
-## 145   1.384e-02  -0.0214362    0.049108             1
-## 146   1.370e-02  -0.0225243    0.049933             1
-## 147  -1.086e-02  -0.0472441    0.025515             1
-## 148   4.450e-03  -0.0312760    0.040176             1
-## 149   6.852e-03  -0.0286596    0.042364             1
-## 150  -2.081e-02  -0.0566383    0.015019             1
-## 151  -3.608e-03  -0.0392265    0.032011             1
-## 152  -5.167e-03  -0.0419837    0.031649             1
-## 153   5.650e-02   0.0215266    0.091465             0
-## 154  -8.887e-03  -0.0452865    0.027513             1
-## 155   5.030e-03  -0.0310133    0.041072             1
-## 156   2.137e-02  -0.0152626    0.057994             1
-## 157   9.127e-03  -0.0267913    0.045046             1
-## 158  -1.020e-02  -0.0456897    0.025298             1
-## 159  -2.372e-03  -0.0380900    0.033347             1
-## 160   2.810e-03  -0.0327780    0.038399             1
-## 161  -1.833e-02  -0.0537669    0.017114             1
-## 162  -2.113e-02  -0.0571027    0.014852             1
-## 163  -2.870e-03  -0.0387719    0.033033             1
-## 164  -8.018e-03  -0.0442808    0.028246             1
-## 165  -2.240e-02  -0.0592792    0.014478             1
-## 166  -2.698e-02  -0.0624579    0.008493             1
-## 167   2.005e-02  -0.0159614    0.056053             1
-## 168  -1.821e-02  -0.0546434    0.018215             1
-## 169   3.898e-03  -0.0328464    0.040642             1
-## 170  -2.703e-02  -0.0625422    0.008486             1
-## 171   2.961e-02  -0.0055887    0.064807             1
-## 172  -3.368e-04  -0.0365006    0.035827             1
-## 173   1.089e-02  -0.0248871    0.046663             1
-## 174   1.562e-02  -0.0192045    0.050435             1
-## 175  -1.637e-02  -0.0524892    0.019757             1
-## 176  -8.749e-03  -0.0442979    0.026800             1
-## 177  -2.440e-02  -0.0607984    0.011996             1
-## 178   1.583e-02  -0.0201671    0.051828             1
-## 179  -4.655e-02  -0.0819730   -0.011118             0
-## 180  -2.044e-02  -0.0570372    0.016164             1
-## 181   3.853e-03  -0.0310463    0.038752             1
-## 182  -2.604e-02  -0.0608398    0.008759             1
-## 183   2.156e-02  -0.0143727    0.057485             1
-## 184  -1.560e-03  -0.0366291    0.033510             1
-## 185   8.378e-03  -0.0268459    0.043603             1
-## 186  -1.737e-03  -0.0372613    0.033787             1
-## 187   5.647e-04  -0.0357757    0.036905             1
-## 188   2.505e-02  -0.0105823    0.060689             1
-## 189   2.617e-03  -0.0339877    0.039222             1
-## 190  -9.039e-03  -0.0447826    0.026704             1
-## 191  -1.868e-03  -0.0382030    0.034467             1
-## 192  -2.100e-02  -0.0579210    0.015919             1
-## 193  -1.943e-02  -0.0556271    0.016762             1
-## 194   3.817e-03  -0.0322500    0.039884             1
-## 195   2.727e-02  -0.0092706    0.063820             1
-## 196  -1.014e-02  -0.0455805    0.025307             1
-## 197  -1.143e-03  -0.0361035    0.033817             1
-## 198   1.072e-02  -0.0252266    0.046661             1
-## 199  -1.388e-02  -0.0496213    0.021868             1
-## 200   4.852e-03  -0.0313237    0.041028             1
+## 1     0.0194830  -1.641e-02   0.0553764             1
+## 2     0.0117701  -2.448e-02   0.0480196             1
+## 3     0.0053815  -3.019e-02   0.0409557             1
+## 4     0.0028757  -3.355e-02   0.0393006             1
+## 5     0.0207032  -1.488e-02   0.0562843             1
+## 6    -0.0276937  -6.267e-02   0.0072836             1
+## 7     0.0074476  -2.813e-02   0.0430268             1
+## 8    -0.0159952  -5.137e-02   0.0193783             1
+## 9     0.0065895  -2.908e-02   0.0422553             1
+## 10   -0.0118419  -4.745e-02   0.0237636             1
+## 11    0.0058123  -3.020e-02   0.0418229             1
+## 12   -0.0114085  -4.685e-02   0.0240309             1
+## 13    0.0108355  -2.475e-02   0.0464232             1
+## 14   -0.0216916  -5.668e-02   0.0132942             1
+## 15    0.0021061  -3.325e-02   0.0374605             1
+## 16    0.0276564  -8.523e-03   0.0638356             1
+## 17   -0.0159820  -5.192e-02   0.0199517             1
+## 18   -0.0035500  -3.932e-02   0.0322154             1
+## 19   -0.0282815  -6.398e-02   0.0074215             1
+## 20   -0.0369822  -7.299e-02  -0.0009713             0
+## 21   -0.0074517  -4.343e-02   0.0285249             1
+## 22    0.0268640  -8.836e-03   0.0625636             1
+## 23    0.0187788  -1.734e-02   0.0548938             1
+## 24    0.0079385  -2.724e-02   0.0431125             1
+## 25    0.0023868  -3.307e-02   0.0378449             1
+## 26    0.0033708  -3.213e-02   0.0388706             1
+## 27   -0.0044979  -4.036e-02   0.0313669             1
+## 28   -0.0146726  -5.048e-02   0.0211397             1
+## 29   -0.0154169  -5.073e-02   0.0198996             1
+## 30   -0.0104089  -4.592e-02   0.0251048             1
+## 31   -0.0112882  -4.689e-02   0.0243113             1
+## 32    0.0112668  -2.410e-02   0.0466332             1
+## 33    0.0399391   4.520e-03   0.0753581             0
+## 34   -0.0291778  -6.579e-02   0.0074321             1
+## 35    0.0009469  -3.395e-02   0.0358458             1
+## 36   -0.0024475  -3.911e-02   0.0342180             1
+## 37   -0.0122340  -4.806e-02   0.0235953             1
+## 38   -0.0079661  -4.377e-02   0.0278393             1
+## 39   -0.0039441  -3.952e-02   0.0316311             1
+## 40    0.0129483  -2.347e-02   0.0493656             1
+## 41   -0.0341963  -6.986e-02   0.0014710             1
+## 42   -0.0105603  -4.629e-02   0.0251668             1
+## 43    0.0013488  -3.514e-02   0.0378402             1
+## 44    0.0061048  -3.061e-02   0.0428233             1
+## 45   -0.0115306  -4.665e-02   0.0235854             1
+## 46   -0.0071105  -4.313e-02   0.0289111             1
+## 47   -0.0082043  -4.353e-02   0.0271248             1
+## 48   -0.0117417  -4.751e-02   0.0240219             1
+## 49   -0.0183992  -5.532e-02   0.0185250             1
+## 50    0.0210272  -1.535e-02   0.0574054             1
+## 51    0.0038477  -3.073e-02   0.0384256             1
+## 52   -0.0166736  -5.310e-02   0.0197493             1
+## 53    0.0094681  -2.689e-02   0.0458295             1
+## 54    0.0125725  -2.377e-02   0.0489183             1
+## 55    0.0026143  -3.387e-02   0.0391032             1
+## 56    0.0332670  -1.767e-03   0.0683014             1
+## 57    0.0122981  -2.365e-02   0.0482478             1
+## 58    0.0392571   2.895e-03   0.0756194             0
+## 59   -0.0006286  -3.614e-02   0.0348818             1
+## 60   -0.0055853  -4.052e-02   0.0293463             1
+## 61   -0.0168369  -5.191e-02   0.0182340             1
+## 62    0.0047584  -3.166e-02   0.0411725             1
+## 63   -0.0016861  -3.653e-02   0.0331564             1
+## 64   -0.0025631  -3.740e-02   0.0322743             1
+## 65   -0.0335068  -6.851e-02   0.0014958             1
+## 66    0.0090303  -2.687e-02   0.0449259             1
+## 67   -0.0153926  -5.160e-02   0.0208130             1
+## 68    0.0047771  -3.142e-02   0.0409735             1
+## 69   -0.0012061  -3.760e-02   0.0351838             1
+## 70    0.0031894  -3.250e-02   0.0388754             1
+## 71   -0.0031713  -3.944e-02   0.0330951             1
+## 72    0.0092775  -2.657e-02   0.0451251             1
+## 73    0.0077200  -2.849e-02   0.0439289             1
+## 74   -0.0032373  -3.923e-02   0.0327541             1
+## 75   -0.0061887  -4.183e-02   0.0294519             1
+## 76    0.0063682  -2.881e-02   0.0415470             1
+## 77    0.0180158  -1.822e-02   0.0542558             1
+## 78   -0.0005311  -3.540e-02   0.0343416             1
+## 79   -0.0135113  -4.797e-02   0.0209518             1
+## 80    0.0239400  -1.165e-02   0.0595267             1
+## 81   -0.0088291  -4.498e-02   0.0273243             1
+## 82    0.0197693  -1.560e-02   0.0551369             1
+## 83   -0.0152498  -5.169e-02   0.0211909             1
+## 84    0.0079762  -2.817e-02   0.0441228             1
+## 85    0.0182619  -1.789e-02   0.0544162             1
+## 86   -0.0016841  -3.767e-02   0.0342986             1
+## 87    0.0057236  -2.981e-02   0.0412564             1
+## 88    0.0140329  -2.078e-02   0.0488498             1
+## 89   -0.0165493  -5.187e-02   0.0187732             1
+## 90    0.0083309  -2.670e-02   0.0433650             1
+## 91    0.0167368  -1.945e-02   0.0529239             1
+## 92    0.0269488  -8.635e-03   0.0625325             1
+## 93   -0.0141960  -5.019e-02   0.0217971             1
+## 94   -0.0102410  -4.576e-02   0.0252774             1
+## 95   -0.0159921  -5.198e-02   0.0199909             1
+## 96    0.0069601  -2.876e-02   0.0426795             1
+## 97    0.0092764  -2.602e-02   0.0445749             1
+## 98   -0.0002121  -3.546e-02   0.0350349             1
+## 99    0.0139333  -2.070e-02   0.0485665             1
+## 100   0.0068058  -2.865e-02   0.0422627             1
+## 101   0.0102635  -2.589e-02   0.0464192             1
+## 102  -0.0320440  -6.760e-02   0.0035126             1
+## 103   0.0061576  -2.994e-02   0.0422513             1
+## 104  -0.0025816  -3.774e-02   0.0325801             1
+## 105   0.0036819  -3.108e-02   0.0384477             1
+## 106  -0.0289025  -6.494e-02   0.0071316             1
+## 107   0.0238667  -1.218e-02   0.0599104             1
+## 108   0.0198279  -1.543e-02   0.0550808             1
+## 109  -0.0272782  -6.334e-02   0.0087855             1
+## 110   0.0081960  -2.702e-02   0.0434122             1
+## 111  -0.0058445  -4.173e-02   0.0300402             1
+## 112   0.0172606  -1.873e-02   0.0532502             1
+## 113  -0.0121828  -4.750e-02   0.0231327             1
+## 114  -0.0114915  -4.659e-02   0.0236102             1
+## 115   0.0196570  -1.545e-02   0.0547616             1
+## 116  -0.0304363  -6.556e-02   0.0046897             1
+## 117   0.0302257  -5.331e-03   0.0657826             1
+## 118   0.0363277  -2.865e-04   0.0729419             1
+## 119   0.0036580  -3.217e-02   0.0394911             1
+## 120  -0.0200019  -5.534e-02   0.0153395             1
+## 121  -0.0227576  -5.872e-02   0.0132062             1
+## 122  -0.0096766  -4.493e-02   0.0255791             1
+## 123  -0.0180018  -5.357e-02   0.0175686             1
+## 124  -0.0101399  -4.604e-02   0.0257613             1
+## 125   0.0353075  -3.209e-04   0.0709358             1
+## 126   0.0051111  -3.061e-02   0.0408371             1
+## 127   0.0007787  -3.498e-02   0.0365369             1
+## 128  -0.0024621  -3.779e-02   0.0328674             1
+## 129  -0.0190729  -5.501e-02   0.0168603             1
+## 130   0.0090687  -2.645e-02   0.0445910             1
+## 131  -0.0028539  -3.939e-02   0.0336842             1
+## 132   0.0163514  -1.976e-02   0.0524613             1
+## 133  -0.0156170  -5.146e-02   0.0202265             1
+## 134   0.0118330  -2.344e-02   0.0471049             1
+## 135  -0.0332728  -6.940e-02   0.0028554             1
+## 136   0.0118567  -2.385e-02   0.0475612             1
+## 137   0.0130067  -2.375e-02   0.0497635             1
+## 138  -0.0162514  -5.201e-02   0.0195070             1
+## 139   0.0367435   9.843e-04   0.0725028             0
+## 140  -0.0193231  -5.540e-02   0.0167537             1
+## 141  -0.0366165  -7.149e-02  -0.0017453             0
+## 142   0.0451504   9.758e-03   0.0805432             0
+## 143   0.0132924  -2.263e-02   0.0492146             1
+## 144   0.0004046  -3.526e-02   0.0360656             1
+## 145  -0.0068566  -4.241e-02   0.0286930             1
+## 146   0.0022098  -3.322e-02   0.0376430             1
+## 147  -0.0145845  -5.069e-02   0.0215230             1
+## 148   0.0355473  -4.898e-05   0.0711436             1
+## 149  -0.0020614  -3.913e-02   0.0350049             1
+## 150  -0.0100938  -4.589e-02   0.0257008             1
+## 151   0.0133768  -2.259e-02   0.0493452             1
+## 152   0.0171438  -1.782e-02   0.0521101             1
+## 153  -0.0142764  -4.964e-02   0.0210922             1
+## 154  -0.0151106  -5.182e-02   0.0215956             1
+## 155   0.0014531  -3.409e-02   0.0369919             1
+## 156   0.0037605  -3.219e-02   0.0397077             1
+## 157   0.0145899  -2.126e-02   0.0504369             1
+## 158   0.0180928  -1.686e-02   0.0530487             1
+## 159   0.0203167  -1.512e-02   0.0557505             1
+## 160   0.0077000  -2.820e-02   0.0436014             1
+## 161  -0.0121287  -4.814e-02   0.0238852             1
+## 162   0.0182720  -1.735e-02   0.0538901             1
+## 163   0.0015856  -3.456e-02   0.0377324             1
+## 164  -0.0060382  -4.204e-02   0.0299643             1
+## 165  -0.0113585  -4.698e-02   0.0242584             1
+## 166  -0.0110811  -4.601e-02   0.0238519             1
+## 167  -0.0409417  -7.669e-02  -0.0051899             0
+## 168  -0.0170257  -5.245e-02   0.0183999             1
+## 169  -0.0034387  -3.894e-02   0.0320656             1
+## 170  -0.0181260  -5.349e-02   0.0172426             1
+## 171  -0.0283448  -6.432e-02   0.0076330             1
+## 172  -0.0049828  -4.021e-02   0.0302414             1
+## 173  -0.0202476  -5.642e-02   0.0159285             1
+## 174   0.0075196  -2.784e-02   0.0428835             1
+## 175  -0.0015967  -3.685e-02   0.0336563             1
+## 176  -0.0191859  -5.573e-02   0.0173566             1
+## 177   0.0072481  -2.859e-02   0.0430885             1
+## 178   0.0068329  -2.906e-02   0.0427227             1
+## 179  -0.0011457  -3.699e-02   0.0346941             1
+## 180   0.0256057  -1.089e-02   0.0621024             1
+## 181  -0.0057862  -4.203e-02   0.0304606             1
+## 182  -0.0173430  -5.356e-02   0.0188772             1
+## 183  -0.0137030  -4.908e-02   0.0216755             1
+## 184   0.0264140  -9.706e-03   0.0625342             1
+## 185  -0.0249882  -6.112e-02   0.0111453             1
+## 186   0.0388814   3.460e-03   0.0743031             0
+## 187  -0.0144943  -4.991e-02   0.0209197             1
+## 188  -0.0244568  -6.076e-02   0.0118454             1
+## 189  -0.0387248  -7.457e-02  -0.0028756             0
+## 190   0.0014038  -3.573e-02   0.0385383             1
+## 191  -0.0179470  -5.345e-02   0.0175572             1
+## 192  -0.0050947  -4.074e-02   0.0305506             1
+## 193   0.0175074  -1.940e-02   0.0544104             1
+## 194   0.0135019  -2.248e-02   0.0494843             1
+## 195  -0.0009711  -3.629e-02   0.0343495             1
+## 196   0.0024471  -3.335e-02   0.0382434             1
+## 197   0.0301579  -5.924e-03   0.0662403             1
+## 198   0.0081308  -2.750e-02   0.0437588             1
+## 199  -0.0075688  -4.343e-02   0.0282935             1
+## 200  -0.0276058  -6.327e-02   0.0080554             1
 \end{verbatim}
 \begin{alltt}
 \hldef{porcentaje} \hlkwb{<-} \hlkwd{mean}\hldef{(results}\hlopt{$}\hldef{contains_mean)} \hlopt{*} \hlnum{100}
@@ -592,13 +594,13 @@ Aquí se estimó la media de la distribución uniforme, dando un resultado de $-
 \end{alltt}
 \begin{verbatim}
 ## 
-##  95 % de los intervalos de confianza contienen la media real
+##  95.5 % de los intervalos de confianza contienen la media real
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
 
-En conclusión, el $95$ \% de los intervalos generados incluyen al 0.
+En conclusión, el $95.5$ \% de los intervalos generados incluyen al 0.
 
 
 \section{Standard deviation of a proportion}
@@ -795,7 +797,7 @@ Ahora se le resta el cuadrado de la media:
 \end{alltt}
 \begin{verbatim}
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  -10000   -5000   -5000   -3769   -5000    5000
+##  -10000  -10000   -5000   -3778   -5000    5000
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -1507,7 +1509,7 @@ Se utiliza el código que se encuentra en el repositorio del libro.
 \end{alltt}
 
 
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\\\#\# i Please use `linewidth` instead.\\\#\# This warning is displayed once every 8 hours.\\\#\# Call `lifecycle::last\_lifecycle\_warnings()` to see where this warning was\\\#\# generated.}}\end{kframe}
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\\\#\# i Please use `linewidth` instead.\\\#\# This warning is displayed once every 8 hours.\\\#\# Call `lifecycle::last\_lifecycle\_warnings()` to see where this\\\#\# warning was generated.}}\end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-14-1} 
 \end{knitrout}
 

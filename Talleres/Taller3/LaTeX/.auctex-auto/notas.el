@@ -39,17 +39,6 @@
     "cancel"
     "hyperref"
     "biblatex")
-   (LaTeX-add-labels
-    "subsec:p1-a"
-    "subsec:p1-b"
-    "subsec:p1-c"
-    "subsec:p1-d"
-    "subsec:p1-e"
-    "tab:p3"
-    "subsec:p6-b"
-    "tab:reliability"
-    "tab:sd"
-    "fig:GH")
    (LaTeX-add-bibliographies
     "referencias")
    (LaTeX-add-counters

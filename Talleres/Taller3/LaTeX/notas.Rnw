@@ -1,0 +1,1104 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{xurl}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{cancel}
+\usepackage[hidelinks]{hyperref}
+\usepackage[backend=biber]{biblatex}
+
+\bibliography{referencias}
+
+
+
+\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\renewcommand\theparagraph{\thesubsubsubsection.\arabic{paragraph}} % optional; useful if paragraphs are to be numbered
+
+\titleformat{\subsubsubsection}
+{\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}%
+  {3.25ex \@plus1ex \@minus .2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+% \def\toclevel@paragraph{6}
+\def\toclevel@subparagraph{6}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{6}{14em}{6em}}
+\makeatother
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% Set up headers and footers
+\pagestyle{fancy}
+\fancyhf{}  % Clear previous settings
+
+\fancyhead[L]{Julián - Ludwig}
+\fancyhead[C]{Taller 2 - Sim Estocástica}
+\fancyhead[R]{\today}
+
+\fancyfoot[C]{\thepage}
+\fancyfoot[C]{\footnotesize Este trabajo está bajo una licencia CC BY-SA 4.0. Más info: \url{https://creativecommons.org/licenses/by/4.0/}}
+
+\renewcommand{\headrulewidth}{0.2pt}
+
+
+% Define R Style for listings
+\lstdefinestyle{RStyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!40!black}\itshape,
+  stringstyle=\color{red!70!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{gray!10},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{black},
+  captionpos=b,
+  morekeywords={generator}
+}
+
+% Set RStyle as default
+\lstset{style=RStyle}
+
+\begin{document}
+
+\section{Introducción}
+
+El siguiente documento fue compilado usando \href{https://yihui.org/knitr/}{\textbf{knitr}} un paquete diseñado para la generación \textit{dinámica} de reportes para \textsf{R} y \textit{Python}. Esto se hace con el propósito de tener un documento consistente y replicable. Normalmente las entregas tienen un pantallazo del código y de la salida, sin embargo, esto además de verse muy \textit{feo} no tiene alguna manera sencilla de hacer la replicación de la simulación. Por eso mismo, en esta entrega se utiliza este paquete y facilitar manipulación, lectura del código, además de inmediatamente mostrar la salida de los códigos.
+
+En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, \texttt{renv.lock} y unos directorios \texttt{img/} \texttt{renv/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores. 
+
+Por último, todo el presente trabajo fue hecho en un entorno virtual de \textsf{R} para evitar conflictos entre librerías, se trabajó con el paquete \lstinline|renv| para manejar el ambiente local junto con sus librerías. Puede revisar la documentación \href{https://rstudio.github.io/renv/articles/renv.html}{\textbf{aquí}} para tener más información de cómo manejar los ambientes virtuales y tener una mayor estabilidad en su sistema, así evita lo que le pasó a uno de los autores, que decidió instalar una librería en el ambiente global de \textit{Python} y dañó todo el sistema base.
+
+Para ver todos los código indexados aquí, los puede encontrar en el archivo \texttt{scripts.R}. Aunque, también están dentro de \texttt{notas.Rnw} y mostrados en el documento.
+
+
+\section{Stopping generating new simulation data}
+
+Write a program to generate standard normal random variables until you have generated n of them, where $n \geq 100$ is such that $S/\sqrt{n} < 0.01$, where S is the sample standard deviation of the n data values. Note that this is the ``Method for Determining When to Stop Generating New Data''. Also, answer the following questions:
+
+
+
+Debido a que se va a generar variables aleatorias \textbf{normales estándar} $X_{i}$, es decir, $X_{i} \sim \mathcal{N}(0, 1)$ y se debe parar de generar cuando $\frac{S}{\sqrt{n}} < 0.01$.
+
+<<>>==
+x <- numeric()
+s <- 1
+n <- 0
+
+while(n < 100 || s / sqrt(n) >= 0.01) {
+  x <- c(x, rnorm(1))
+  n <- length(x)
+  s <- sd(x)
+}
+
+cat("Cantidad de Xi generados", n, "\n")
+cat("Desviación estándar", round(s, 5), "\n")
+cat("Error estándar S/sqrt(n)", round(s/sqrt(n), 5), "\n")
+@
+
+
+En el código se declara una variable $s$ inicializada en 1 para que luego sea nuevamente computada a la desviación estándar de $x$ que es un vector que va a almacenar todas las variables normales aleatorias generadas. Según el enunciado tenemos una condición de que al menos deben haber 100 variables aleatorias generadas ($n \geq 100$) y que el error estándar sea menor a 0.01 ($S / \sqrt{n} < 0.01$). En el ciclo \lstinline|while|, por lo tanto, tiene sentido que el ciclo continue si alguna de las afirmaciones anteriores son falsas, por eso queda la condición de esa manera. Se hace uso de la función \lstinline|rnorm(1)| para que genere una variable aleatoria normal con los valores por defecto (promedio 0 y desviación 1). 
+
+
+
+
+
+
+\subsection{How many normals do you think will be generated? Give an analytic estimate.}
+\label{subsec:p1-a}
+
+\subsubsection{Respuesta}
+
+Aunque ya se tengan los resultados de la simulación, se puede hacer un estimado analítico con la condición $S / \sqrt{n} < 0.01$ donde se puede despejar $n$ para saber cuántas variables se necesitan para parar el criterio.
+
+Se tiene en primer lugar la inecuación:
+
+\[
+\frac{S}{\sqrt{n}} < 0.01
+\]
+
+Se eleva ambas partes con menos 1:
+
+\begin{align*}
+  \left(\frac{S}{\sqrt{n}}  \right)^{-1} &> 0.01^{-1} \\
+  \frac{\sqrt{n}}{S}  &> 100
+\end{align*}
+
+Multiplicando ambas partes por $S$:
+
+\begin{align*}
+  \cancel{S} \times \frac{\sqrt{n}}{\cancel{S}}  &> 100 \times S \\
+  \sqrt{n} &> 100 \times S 
+\end{align*}
+
+Ahora se cancela la raíz elevando ambas partes al cuadrado:
+
+\begin{align*}
+  (\cancel{\sqrt{n}})^{\cancel{2}} &> (100 \times S)^{2} 
+\end{align*}
+
+Quedando entonces:
+
+\[
+n > 10000\times S^{2}
+\]
+
+Para hacer el ejercicio se utilizó en \textsf{R} la función \texttt{rnorm(1, mean = 0, sd = 1)}, de esta manera genera únicamente 1 valor con media 0 y desviación 1, por lo tanto, podemos hacer $S = 1$ para estimar cuántos $n$ necesitamos para que se cumpla condición y deje de generar variables aleatorias, por lo tanto:
+
+\begin{align*}
+  n &> 10000 \times (1)^{2} \\
+  n &> 10000 
+\end{align*}
+
+Este valor se acerca bastante al que se imprime en la simulación. 
+
+
+
+
+
+
+
+
+
+
+
+\subsection{How many normals did you generate?}
+\label{subsec:p1-b}
+
+\subsubsection{Respuesta}
+
+Se han generado \lstinline|n=| $\Sexpr{n}$ normales.
+
+
+\subsection{What is the sample mean of all the normals generated?}
+\label{subsec:p1-c}
+
+
+
+
+\subsubsection{Respuesta}
+
+Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $\Sexpr{mean(x)}$. 
+
+\subsection{What is the sample variance?}
+\label{subsec:p1-d}
+
+
+\subsubsection{Respuesta}
+
+La varianza muestral se calcula como:
+
+\[
+S^{2} = \frac{\sum_{i=1}^{n} (X_{i} - \bar{X})^{2}}{n-1}
+\]
+
+Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $\Sexpr{var(x)}$.
+
+
+
+\subsection{Comment on the results of (\ref{subsec:p1-c}) and (\ref{subsec:p1-d}). Were they surprising?}
+\label{subsec:p1-e}
+
+\subsubsection{Respuesta}
+
+El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $\Sexpr{mean(x)}$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $\Sexpr{var(x)}$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
+
+
+
+\section{Gaining confidence with confidence intervals}
+
+We know that the $\mathcal{U}(-1, 1)$ r.v. has mean 0. Use a sample of size $1000$ to estimate the mean and give a $95\%$ confidence interval (CI). Does the CI contain 0? Repeat the above a large number of times ($\geq  100$). What percentage of time does the CI contain 0? Write your code so that it produces output similar to the following:
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{img/Punto2.png}
+\end{figure}
+
+\subsection{Respuesta}
+
+Se sabe que para tener un intervalo de confianza de 95\%, el límite inferior y superior serán, respectivamente:
+
+\[
+\left( \bar{X} - 1.96 \frac{S}{\sqrt{n}}, \bar{X} + 1.96 \frac{S}{\sqrt{n}} \right)
+\]
+
+El siguiente código permite sacar el intervalo de confianza del 95\% y también el estimado de la media.
+
+<<>>==
+n <- 1000
+x <- runif(n, -1, 1)
+xmean <- mean(x)
+S <- sd(x)
+L <- xmean - 1.96 * S/sqrt(n)
+U <- xmean + 1.96 * S/sqrt(n)
+cat("El estimado es", xmean, "\n")
+cat("95% está entre (", L, ", ", U, ") \n", sep="")
+@
+
+Aquí se estimó la media de la distribución uniforme, dando un resultado de $\Sexpr{xmean}$, muy cercano a 0. El intervalo de confianza está entre $\Sexpr{L}$ y $\Sexpr{U}$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
+
+<<>>==
+trials <- 200
+n <- 1000
+true_mean <- 0
+
+results <- data.frame(
+  sample_mean = numeric(trials),
+  lower_bound = numeric(trials),
+  upper_bound = numeric(trials),
+  contains_mean = integer(trials)
+)  
+
+for (i in 1:trials){
+  x <- runif(n, -1, 1)
+  xmean <- mean(x)
+  S <- sd(x)
+  L <- xmean - 1.96 * S/sqrt(n)
+  U <- xmean + 1.96 * S/sqrt(n)
+  contains <- as.integer(L <= true_mean & true_mean <= U)
+
+  results[i, ] <- c(xmean, L, U, contains)
+}
+
+cat("Número de intentos:", trials, "\n")
+
+print(results, digits= 4)
+
+porcentaje <- mean(results$contains_mean) * 100
+
+cat("\n", porcentaje, "% de los intervalos de", 
+"confianza contienen la media real\n")
+@
+
+
+En conclusión, el $\Sexpr{porcentaje}$ \% de los intervalos generados incluyen al 0.
+
+
+\section{Standard deviation of a proportion}
+
+Assume a manager is using the sample proportion $\hat{p}$ to estimate the proportion p of a new shipment of computer chips that are defective. He doesn’t know $p$ for this shipment, but in previous shipments it has been close to $0.01$, that is $1 \% $ of chips have been defective.
+
+\subsection{If the manager wants the standard deviation of $\hat{p}$ to be about $0.02$, how large a sample should she take based on the assumption that the rate of defectives has not changed dramatically?}
+
+En clase se vieron los estimadores de probabilidad, donde se quiere estimar
+
+\[
+  p = (P X \in A)
+\]
+
+Donde \(A\) es el subconjunto del espacio de estados de \(\Omega \) de \(X\). Es decir, para nuestro problema, este subconjunto de espacios en la muestra que tomó la administradora del cargamento de chips defectuosos. Se puede definir la variable indicadora \(Z\) como:
+
+\[
+  Z = 
+  \begin{cases}
+    1, & \quad X \in A \\
+    0, & \quad X \notin A
+  \end{cases}
+\]
+
+1 significa que sí está defectuoso y 0 que no lo está. Se puede escribir el estimador como:
+
+\[
+p = E[Z]
+\]
+
+En clase se realizó una demostración de como el valor esperado de \(Z\) se le puede asignar a \(p\). Se define la varianza de \(Z\) como:
+
+\begin{align*}
+\mathrm{Var}(Z) &= E[Z^{2}] - E[Z]^{2} \\
+  &= (1^{2} \times P(X \in A) + 0^{2} \times P (X \notin A)) - (P(X \in A))^{²} \\
+  &= p - p^{2}
+\end{align*}
+
+Aplicando factorización:
+
+\[
+\mathrm{Var}(Z) = p (1 - p)
+\]
+
+Estimar $p$ se puede realizar mediante el promedio muestral de $Z$, es decir, se puede estimar la proporción $\hat{p}$ con el promedio de los chips que son defectuosos:
+
+\[
+\hat{p} = \frac{1}{n} \sum_{i =1}^{n} Z_{i}
+\]
+
+Se puede calcular entonces, la varianza del estimador:
+
+\[
+\mathrm{Var}(\hat{p}) = \frac{1}{n} \mathrm{Var} \left(\sum_{i=1}^{n} Z_{i} \right)
+\]
+
+Por independencia de los valores del cargamento de chips $Z_{i}$ se puede meter la varianza de estos en la suma:
+
+\begin{align*}
+  \mathrm{Var}(\hat{p}) &= \frac{1}{n^{2}} \sum_{i=1}^{n} \mathrm{Var}(Z_{i}) \\
+  &= \frac{1}{n^{2}} \sum_{i=1}^{n} p(1 - p) = \frac{1}{n} p (1 -p) 
+\end{align*}
+
+Por lo tanto, una aproximación es:
+
+\[
+\mathrm{Var}(\hat{p}) \approx \frac{1}{n} \hat{p} (1 - \hat{p}) 
+\]
+
+Teniendo en cuenta que la desviación estándar es el cuadrado de la varianza, se puede despejar:
+
+\[
+\sigma_{\hat{p}} \approx \sqrt{\frac{\hat{p} (1 - \hat{p})}{n}}
+\]
+
+El problema nos dice que la desviación estándar de $\hat{p}$ ($\sigma_{\hat{p}}$) debe ser sobre 0.02 y nos piden hallar cuántas muestras debe tomar la administradora, por lo tanto, en la parte izquierda de la ecuación reemplazamos por $0.02$, se despeja para $n$ y la proporción de defectuosos se toma como $0.01$ debido a que en el problema se nos dice que no ha cambiado tanto.
+
+\begin{align*}
+  \sigma_{\hat{p}} &\approx \sqrt{\frac{\hat{p} (1 - \hat{p})}{n}} \\
+  0.02 &\approx \sqrt{\frac{0.1 (1 - 0.1)}{n}  } \\
+  0.02 &\approx \sqrt{\frac{0.0099}{n}  } \\
+  (0.02)^{2} &\approx \left(\cancel{\sqrt{\frac{0.0099}{n}  }} \right)^{\cancel{2}}\\
+  0.0004 &\approx \frac{0.0099}{n} \\
+  n &\approx \frac{0.0099}{0.0004} = 24.75
+\end{align*}
+
+Por lo tanto, la administradora debe tomar un muestra de por lo menos 25 chips para tener una desviación estándar de al menos $0.02$.
+
+\subsection{Now suppose something went wrong with the production run and the actual proportion of defectives in the shipment is 0.3, that is 30 \% are defective. Now what would be the actual standard deviation of $\hat{p}$ for the sample size you choose in a)?}
+
+Teniendo 25 chips y cambiando el valor de la proporción de defectuosos, se obtiene:
+
+\begin{align*}
+  \sigma_{\hat{p}} &\approx \sqrt{\frac{\hat{p}(1 - \hat{p}) }{n}} \\
+                   &\approx   \sqrt{\frac{0.3(1 - 0.3) }{25}} \\
+  &\approx 0.091
+\end{align*}
+
+Es decir, si la proporción de detección es del 30\%, la desviación estándar de $\hat{p}$ con una cantidad de chips de 25, será aproximadamente $0.091$.
+
+\section{Bets}
+
+You pay $10.000$ pesos to participate in a bet game, which consists in tossing two coins together. If two heads fall, you earn $15.000$ pesos. If one head and one tail fall you earn $5.000$ pesos. In any other case you earn nothing. Let $X$ the random variable of your profit.
+
+\subsection{Analytically find the probability mass function $p_{X}$, the mean $E[X]$, and variance $\mathrm{Var}(X)$ of $X$.}
+
+Dado que $X$ es la variable aleatoria de la ganancia, podemos listar los posibles valores que puede tomar de acuerdo a los lanzamientos:
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}[h]{|c|c|c|c|}
+    \hline
+    \textbf{Salida moneda} & \textbf{Ganancia} & \textbf{Ganancia} $X$ & \textbf{Probabilidad} \\ \hline
+    HH & $15.000$ & $+5.000$ & 0.25 \\ \hline
+    HT-TH & $5.000$ & $-5.000$ & 0.5 \\ \hline
+    TT & $0$ & $-10.000$ & 0.25 \\ \hline 
+  \end{tabular}
+  \caption{Posibles salidas y ganancias al tirar dos monedas, (H) cara y (T) sello.}
+  \label{tab:p3}
+\end{table}
+
+Del cuadro \ref{tab:p3} se toma que los posibles valores para las ganancias son:
+
+\[
+X \in \{-5000, -10000, 5000  \} 
+\]
+
+Teniendo en cuenta los valores que puede tomar $X$, la función probabilidad de masa debe retornar la probabilidad (valga la redundancia) de obtener alguno de los valores de $X$, en el cuadro \ref{tab:p3} se pueden ver dichas probabilidades, estas fueron calculadas de acuerdo a contar cuántas veces pueden salir los diferentes valores para la ganancia de $X$.
+
+\[
+p_{X} (x)  =
+\begin{cases}
+  0.25,& \quad x = 5000 \\
+  0.5,&  \quad x = -5000 \\
+  0.25,& \quad x = -10000 \\
+  0,& \quad \text{En otro caso}
+\end{cases}
+\]
+
+Debido a que estamos con un conjunto continuo para $X$, el valor esperado se multiplica la probabilidad por cada valor de este:
+
+\begin{gather*}
+  E[X] = \sum_{I=1}^{3} x \dot p_{X}(x) = 5000(0.25) + (-5000)(0.5) + (-10000)(0.25) \\
+  E[X] = 1250 - 2500 - 2500 = -3750
+\end{gather*}
+
+Es decir, en promedio se pierde $3.750$ pesos por jugada.
+
+Para calcular la varianza se puede utilizar la fórmula:
+
+\[
+\mathrm{Var}(X) = E[X^{2}] - (E[X])^{2}
+\]
+
+Se computa $E[X^{2}]$:
+
+\begin{align*}
+  E[X^{2}] &= 5000^{2}(0.25) + (-5000)^{2}(0.5) + (-10000)^{2}(0.25) \\
+           &= 25000000 (0.25) + 25000000 (0.5) + 100000000 (0.25) \\
+  &= 6250000 + 12500000 + 25000000 = 43750000
+\end{align*}
+
+Ahora se le resta el cuadrado de la media:
+
+\[
+\mathrm{Var}(X) = 43750000 - (-3750)^{2} = 43750000 - 14062500 = 29687500
+\]
+
+
+
+
+
+
+\subsection{Write a code that simulates the r.v. \textbf{X} using the command sample. Generate an \textit{iid} \lstinline|sample| $\{X_{i}\}$ of size $n = 10^{5}$.}
+
+
+<<>>==
+
+outcomes <- c(-10000, -5000, 5000)
+probabilities <- c(0.25, 0.5, 0.25)
+
+n <- 10^5 
+
+X <- sample(outcomes, size = n , replace = TRUE, prob = probabilities)
+
+length(X)
+
+summary(X)
+@
+
+En este fragmento de código se realiza la creación del vector \lstinline|X| de tamaño $10^{5}$ creado con la función \lstinline|sample| que toma las salidas que se explicaron anteriormente, el tamaño de $10^{5}$, que se reemplace y la probabilidad.
+
+
+\subsection{Modify your code to calculate: (i) the estimated mean profit $\bar{X}_{j}$ for each sample subsequence: $\{X_{1}, X_{2}, . . . , X_{j} \}$, $j = 2, 3, \dots, n$, (ii) the $95 \%$ CI’s of each estimated mean profit $\bar{X}_{j}$ .}
+
+
+<<cache=TRUE>>==
+mean_estimates <- numeric(n)
+lower_CI <- numeric(n)
+upper_CI <- numeric(n)
+ie <- 1.96 
+
+for (j in 2:n) {
+  x_sub <- X[1:j]
+  mean_j <- mean(x_sub)
+  sd_j <- sd(x_sub)
+  se_j <- sd_j / sqrt(j)
+  
+  mean_estimates[j] <- mean_j
+  lower_CI[j] <- mean_j - ie * se_j
+  upper_CI[j] <- mean_j + ie * se_j
+}
+@
+
+En esta parte del código se crean tres vectores \lstinline|mean_estimates|, \lstinline|lower_CI|, \lstinline|upper_CI| de tamaño $10^{5}$ y también una variable \lstinline|ie|. El bucle en cada iteración calcula la media muestral de los valores $\bar{X}_{j}$, la desviación estándar \lstinline|sd_j| y el error estándar, estos son necesarios para luego calcular el intervalo de confianza junto con la media.
+
+
+\subsection{Plot $\bar{X}_{j}$ and their $95 \%$ CI’s in terms of $j = 2, \dots , 10^{5}$. Add an horizontal line corresponding to the actual value $E[X]$.}
+
+<<grafico-pdf, dev='pdf', fig.width=6, fig.height=4>>=
+# Your plotting code remains the same
+plot(2:n, mean_estimates[2:n], type = "l", col = "blue", lwd = 1,
+     xlab = "j (tamaño de la submuestra)",
+     ylab = "Ganancia esperada estimada",
+     main = "Evolución de la media muestral y su IC del 95%")
+lines(2:n, lower_CI[2:n], col = "red", lty = 2)
+lines(2:n, upper_CI[2:n], col = "red", lty = 2)
+abline(h = -3750, col = "darkgreen", lty = 3, lwd = 2)
+legend("topright", legend = c("Media estimada", "IC 95%", "Valor real E[X]"),
+       col = c("blue", "red", "darkgreen"), lty = c(1, 2, 3), bty = "n")
+@
+
+Se puede ver que a medida que se aumenta la submuestra $j$, la media estimada $\bar{X}$ se acerca más al valor esperado $E[X]$ y también, el intervalo de confianza se va acortando más.
+
+
+
+
+\subsection{Repeat \textit{c)} and \textit{d)} to estimate the probabilities $p_{X} (x)$, their $95 \%$ CI’s, and their plots for each $j = 2, \dots , 10^{5}$, adding the actual values.}
+
+
+
+<<probability-estimation, cache=TRUE>>=
+# Posibles valores de X
+outcomes <- c(-10000, -5000, 5000)
+probs_true <- c(0.25, 0.5, 0.25)
+
+# Inicializar matrices para almacenar las estimaciones y CIs
+p_estimates <- matrix(0, nrow = n, ncol = 3)
+p_lower <- matrix(0, nrow = n, ncol = 3)
+p_upper <- matrix(0, nrow = n, ncol = 3)
+
+z <- 1.96  # Nivel de confianza del 95%
+
+for (j in 2:n) {
+  x_sub <- X[1:j]
+  for (i in 1:3) {
+    val <- outcomes[i]
+    p_hat <- mean(x_sub == val)
+    se <- sqrt(p_hat * (1 - p_hat) / j)
+    
+    p_estimates[j, i] <- p_hat
+    p_lower[j, i] <- max(0, p_hat - z * se)
+    p_upper[j, i] <- min(1, p_hat + z * se)
+  }
+}
+@
+
+\textbf{Gráfico de las probabilidades estimadas con sus ICs para cada posible valor de $X$:}
+
+<<plot-probabilities, dev='pdf', fig.width=6, fig.height=4>>=
+colors <- c("blue", "orange", "purple")
+labels <- c("p_X(-10000)", "p_X(-5000)", "p_X(5000)")
+true_values <- c(0.25, 0.5, 0.25)
+
+plot(2:n, p_estimates[2:n,1], type = "l", col = colors[1], ylim = c(0,1),
+     xlab = "j (tamaño de la submuestra)", ylab = "Probabilidad estimada",
+     main = "Estimación de $p_X(x)$ con ICs del 95%")
+
+for (i in 1:3) {
+  lines(2:n, p_estimates[2:n,i], col = colors[i], lwd = 1)
+  lines(2:n, p_lower[2:n,i], col = colors[i], lty = 2)
+  lines(2:n, p_upper[2:n,i], col = colors[i], lty = 2)
+  abline(h = true_values[i], col = colors[i], lty = 3, lwd = 1.5)
+}
+
+legend("topright", legend = labels, col = colors, lty = 1:1, bty = "n")
+@
+
+Se observa cómo las probabilidades estimadas convergen a los valores reales a medida que aumenta el tamaño de muestra $j$, y cómo los intervalos de confianza se vuelven más estrechos.
+
+
+\section{Bootstrap}
+
+This exercise is based on the article Introduction to Bootstrapping in Statistics with an Example and the dataset body fat.csv that contains the body fat percentages of 92 adolescent girls. Generate a program that gives:
+
+\subsection{An histogram of the sample data.}
+
+
+<<histograma-fat, echo=TRUE, results='hide', fig=TRUE, dev='pdf', fig.width=6, fig.height=4>>=
+# Leer el archivo
+fat_data <- read.csv("body_fat.csv" )
+
+# Histograma
+hist(fat_data[[colnames(fat_data)[1]]],
+     main = "Histograma del porcentaje de grasa corporal",
+     xlab = "Body Fat (%)",
+     col = "skyblue",
+     border = "white")
+@
+
+Realizar el histograma en \textsf{R} es bastante sencillo, únicamente tener el archivo \texttt{.csv} en la misma ruta local que donde se está trabajando, utilizar la función \lstinline|read.csv()| para leer este archivo y luego con la función \lstinline|hist()| se colocan los datos de la primera columna y otras opciones para el estilo del gráfico.
+
+Se muestra que la mayor frecuencia de grasa corporal se encuentra entre 20-30\%. 
+
+
+\subsection{The 95 \% confidence interval of the mean of the data from the traditional method (i.e., via the Central Limit Theorem).}
+
+
+<<ic-clt, echo=TRUE>>=
+# Estadísticas necesarias
+media <- mean(fat_data[[colnames(fat_data)[1]]])
+std <- sd(fat_data[[colnames(fat_data)[1]]])
+n <- length(fat_data[[colnames(fat_data)[1]]])  
+
+# Cálculo del error estándar
+se <- std / sqrt(n)
+
+# Intervalo de confianza del 95%
+c <- 1.96
+li <- media - c*se
+ls <- media + c*se
+
+# Mostrar resultado
+cat(sprintf("The 95%% confidence interval for the mean is: [%.2f, %.2f]",
+                                                                li, ls))
+@
+
+Como se puede apreciar en el programa, hay un 95\% de confianza para que la media esté en el intervalo $[\Sexpr{li}, \Sexpr{ls}]$. Las funciones de \textsf{R} ayudan mucho a hacer los cálculos del promedio, la desviación estándar y el valor de $n$ se sacaron con la ayuda de estas funciones. Los intervalos de confianza se sacaron como ya se viene haciendo, utilizando un $c = 1.96$.
+
+\subsection{A number of 500 bootstrapped samples from the original dataset, with 92 observations each.}
+
+
+<<bootstrap-samples, echo=TRUE>>=
+original_data <- fat_data[[colnames(fat_data)[1]]]
+n <- length(original_data)
+
+# Generar 500 muestras bootstrap
+bootstrap_samples <- replicate(500, sample(original_data, size = n,
+                    replace = TRUE), simplify = FALSE)
+@
+
+Este código utiliza la función \lstinline|replicate()| para repetir la operación 500 veces, la función \lstinline|sample()| toma una muestra con reemplazo del tamaño de 92. Esto termina generando que \texttt{bootstrap\_samples} tenga 500 vectores, cada uno con 92 observaciones.
+
+\subsection{An histogram of the means of each bootstrapped sample.}
+
+<<bootstrap-histogram, echo=TRUE, dev='pdf', fig.width=6, fig.height=4>>=
+# Calcular la media de cada muestra bootstrap
+bootstrap_means <- sapply(bootstrap_samples, mean)
+
+# Histograma de las medias
+hist(bootstrap_means,
+     main = "Histograma de medias de muestras bootstrap",
+     xlab = "Media del % de grasa corporal",
+     col = "lightgreen",
+     border = "white",
+     probability = TRUE)  # Importante: escala el eje y para densidades
+
+# Parámetros de la normal
+mean_boot <- mean(bootstrap_means)
+sd_boot <- sd(bootstrap_means)
+
+# Añadir curva de distribución normal
+curve(dnorm(x, mean = mean_boot, sd = sd_boot),
+      col = "blue", lwd = 2, add = TRUE)
+@
+
+Con la función \lstinline|sapply()| le aplica a los elementos en \texttt{bootstrap\_samples} la función \lstinline|mean()|. Después se crea el histograma y se dibuja una curva de tipo campana para una ditribución normal, reflejando la similitud de los promedios de los \textit{bootstraps}.
+
+\subsection{A 95 \% bootstrapped confidence interval of the mean.}
+
+
+<<bootstrap-ci, echo=TRUE>>=
+# Calcular intervalo de confianza bootstrap del 95%
+bootstrap_ci <- quantile(bootstrap_means, probs = c(0.025, 0.975))
+
+
+bootstrap_ci
+@
+
+ 
+Se utiliza la función \lstinline|quantile()| para obtener los intervalos exactos, para posteriormente poder hacer la comparación de ambos resultados.
+
+Entonces, el 95\% del intervalo de confianza para la media es:
+
+\[
+\left[ \Sexpr{round(bootstrap_ci[1], 2)},\; \Sexpr{round(bootstrap_ci[2], 2)} \right]
+\]
+
+
+\subsection{A comparison of both confidence intervals}
+
+
+Con el método tradicional del teórema central del límite:
+
+\[
+  \left[ \Sexpr{round(li, 2)},\; \Sexpr{round(ls, 2)} \right]
+\]
+
+Con el método \textit{bootstrap}
+
+\[
+  \left[ \Sexpr{round(bootstrap_ci[1], 2)},\; \Sexpr{round(bootstrap_ci[2], 2)} \right]
+\]
+
+\section{Reliability of a system}
+
+Suppose a 3-out-of-4 system where each component is functioning with probabilities $p = \{pi\}$:
+
+
+\subsection{Write the structure function of the system $\phi(x)$.}
+
+La estructura funciona si al menos 3 de los 4 componentes están estructurados. Dado que hay dos estados; funciona ($\phi = 1$) o lo contrario ($\phi = 0$). Se puede tener un estado de los componentes $x = (x_{1}, x_{2}, x_{3}, x_{4})$, donde cada $x_{i} \in \{0, 1 \}$ representa si el componente $i$ está funcionando.
+
+La estructura entonces es:
+
+\[
+\phi (x_{1}, x_{2}, x_{3}, x_{4}) =
+\begin{cases}
+  1 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} \geq 3 \\
+  0 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} < 3
+\end{cases}
+\]
+
+\subsection{Deduce analytically the reliability function $R(\mathbf{p})$. Evaluate it when $\{p_{i} \} = \{0.9, 0.5, 0.2, 0.1\} $}
+\label{subsec:p6-b}
+
+Se tomó gran parte de la información del libro \textit{Introduction to Probability Models} de Sheldon Ross \cite{ross2014introduction}.
+
+
+Suponiendo que $X_{i}$, el estado del $i$-ésimo componente, es una variable aleatoria tal que:
+
+\[
+P\{X_{i} = 1 \} = p_{i} = 1 - P\{X_{i} = 0 \}
+\]
+
+El valor $p_{i}$ es la probabilidad de que el $i$-ésimo componente está funcionando, esto se llama la confiabilidad del $i$-ésimo componente. Si definimos $r$ como:
+
+\[
+r = P\{\phi (X) = 1 \}, \quad \text{donde } X = (X_{1}, \dots, X_{n})
+\]
+
+$r$ es llamada la confiabilidad del sistema. Cuando los componentes, es decir, las variables aleatorias $X_{i}, i = 1, \dots, n$, son independientes, se expresa $r$ como una función de componentes de confiabilidad. Es decir:
+
+\[
+r = r (\mathbf{p}), \quad \text{donde } \mathbf{p} = (p_{1}, \dots, p_{n})
+\]
+
+Esta función $r(\mathbf{p})$ es llamada la función de confiabilidad, que es la que se busca encontrar paes este sistema 3-out-of-4.
+
+Dado que para este sistema se necesita que por lo menos 3 de los 4 componentes sirvan, uno puede pasar a la función $\phi$ unos parámetros de $(1, 1, 1, 0)$, simbolizando que los componentes $x_{1}, x_{2}$ y $ x_{3}$ están funcionando. La función de confiabilidad está dada entonces por todas las posibles combinaciones de los elementos que sumadas den mayor o igual a 3, es decir:
+
+\[
+r(\mathbf{p}) = P \left\{ \sum_{i=1}^{n} X_{i} \geq 3  \right\}
+\]
+
+Esto se puede expandir como:
+
+\begin{multline*}
+  r(\mathbf{p}) = P\{X = (1, 1, 1, 1) \} + P\{X = (1, 1, 1, 0) \} + P\{X = (1, 1, 0, 1) \} + P\{X = (1, 0, 1, 1) \} \\+ P\{X = (0, 1, 1, 1) \}
+\end{multline*}
+
+Teniendo que $p_{i}$ simboliza la probabilidad de que el $i$-ésimo componente está funcionando y 1 - $p_{i}$ es que no está funcionando el componente, lo anterior se puede escribir como:
+
+\begin{multline*}
+r(\mathbf{p}) = p_{1}p_{2}p_{3}p_{4} + p_{1}p_{2}p_{3}(1-p_{4}) + p_{1}p_{2}(1-p_{3})p_{4} + p_{1}(1-p_{2})p_{3}p_{4} + (1-p_{1})p_{2}p_{3}p_{4}  
+\end{multline*}
+ 
+
+Los casos para los cuales el sistema cuenta con un componente no funcionando, es decir, $1 - p_{i}$, se pueden agrupar en uno mismo, quedando:
+
+\[
+\begin{aligned}
+  r(\mathbf{p}) = p_{1}p_{2}p_{3}p_{4} + p_{1}p_{2}p_{3} + p_{1}p_{2}p_{4}\\
+  + p_{1}p_{3}p_{4} + p_{2}p_{3}p_{4} - 4p_{1}p_{2}p_{3}p_{4}  
+\end{aligned}
+\]
+
+Sustrayendo con el término positivo $p_{1}p_{2}p_{3}p_{4}$:
+\begin{tcolorbox}
+\[
+  \begin{aligned}
+    r(\mathbf{p}) = p_{1}p_{2}p_{3} + p_{1}p_{2}p_{4} + p_{1}p_{3}p_{4}+ p_{2}p_{3}p_{4} - 3p_{1}p_{2}p_{3}p_{4}
+  \end{aligned}
+\]
+\end{tcolorbox}
+
+Ahora, podemos evaluar cuando $\mathbf{p} = \{0.9, 0.5, 0.2, 0.1 \}$:
+
+\[
+  \begin{aligned}
+    r(\mathbf{p}) = 0.9 \times 0.5 \times 0.2 + 0.9 \times 0.5\times 0.1 + 0.9 \times 0.2 \times 0.1 \\ + 0.5\times 0.2 \times 0.1 - 3( 0.9\times 0.5 \times  0.2\times  0.1 )
+  \end{aligned}
+\]
+
+Esto se puede colocar en una calculadora y va a dar el resultado de $\mathbf{0.136}$, se puede construir una pequeña función en \textsf{R} para ahorrar calculos en el caso de que se den más conjuntos para $\mathbf{p}$:
+
+<<>>==
+reli_fun <- function(p1, p2, p3, p4){
+  return (p1*p2*p3 + p1*p2*p4 + p1*p3*p4 + p2*p3*p4 - 3 * (p1 * p2 * p3 * p4))
+}
+
+reli_fun(0.9, 0.5, 0.2, 0.1)
+@
+
+\subsection{Estimate via simulation, for each $n = 10^{2} , 10^{3} , 10^{4} , 10^{5}$ realizations, the reliability of the system $R(p)$. Take $\{pi \} = \{0.9, 0.5, 0.2, 0.1\}$.}
+<<>>==
+# Given probabilities
+p <- c(0.9, 0.5, 0.2, 0.1)
+
+# Function to calculate system reliability for one trial
+calculate_reliability <- function(p) {
+  # Simulate the components as working (1) or failing (0) based on probabilities
+  x <- rbinom(4, 1, p)
+  
+  # Apply the reliability function r(p) as given
+  r <- sum(x[1]*x[2]*x[3]) + sum(x[1]*x[2]*x[4]) + sum(x[1]*x[3]*x[4]) +
+              sum(x[2]*x[3]*x[4]) - 3 * prod(x)
+  
+  return(r)
+}
+
+# Function to run simulation for different number of realizations n
+simulate_system_reliability <- function(n, p) {
+  reliabilities <- numeric(n)
+  
+  for (i in 1:n) {
+    reliabilities[i] <- calculate_reliability(p)
+  }
+  return(mean(reliabilities))
+}
+
+# Run simulation for each n: 10^2, 10^3, 10^4, 10^5 realizations
+results <- sapply(c(10^2, 10^3, 10^4, 10^5),
+            function(n) simulate_system_reliability(n, p))
+
+# View results
+names(results) <- c("n=10^2", "n=10^3", "n=10^4", "n=10^5")
+print(results)
+
+@
+
+
+En primer lugar se tiene un vector \lstinline|x| que simula cada componente del sistema retornando 1 o 0 con una probabilidad que es el conjunto para $p_{i}$ que se define en el enunciado del problema. Después se pasa a la función de confiabilidad. Seguido, se pasa a la función \lstinline|simulate_system_reliability()| donde se simula la confiabilidad $n$ veces y se guarda en un vector \lstinline|reliabilities|. Por último, se corre la simulación para diferentes valores de $n$, guardando todo en \lstinline|results|. Los resultados se presentan en el cuadro \ref{tab:reliability} y se ve que a medida que se hacen más simulaciones, la probabilidad de que el sistema esté funcionando se va acercando al valor obtenido analíticamente de 0.136.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    $n$& Confiabilidad de que el sistema está funcionando. \\ \hline
+    $10^{2}$ & $\Sexpr{results[1]}$ \\ \hline
+    $10^{3}$ & $\Sexpr{results[2]}$ \\ \hline
+    $10^{4}$ & $\Sexpr{results[3]}$\\ \hline
+    $10^{5}$ & $\Sexpr{results[4]}$\\ \hline
+  \end{tabular}
+  \caption{Resultados de la función confiabilidad para diferentes valores de $n$. }
+  \label{tab:reliability}
+\end{table}
+
+\subsection{Find the standard deviation of the reliability estimation for each $n$.}
+
+Se hace una modificación a la función \lstinline|simulate_system_reliability()| para que también entregue la desviación estándar de cada estimación de la confiabilidad.
+
+<<>>=
+simulate_system_reliability <- function(n, p) {
+ reliabilities <- numeric(n)
+ 
+ for (i in 1:n) {
+   reliabilities[i] <- calculate_reliability(p)
+ }
+ 
+ sd_val <- sd(reliabilities)
+ 
+ return(c(SD = sd_val))
+}
+@
+
+
+Se deja tal cual estaba la función, pero ahora retorna la desviación estándar de esa estimación para ese $n$ en específico. Por lo tanto, ahora queda volver a correr la simulación para los diferentes $n$.
+
+<<>>=
+results <- sapply(c(10^2, 10^3, 10^4, 10^5), function(n) simulate_system_reliability(n, p))
+names(results) <- c("n=10^2", "n=10^3", "n=10^4", "n=10^5")
+
+# Print results
+print(results)
+@
+
+Los resultados se muestran en el cuadro \ref{tab:sd} reflejando cómo los sistemas varían entre ellos.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    $n$& Desviación estándar \\ \hline
+    $10^{2}$ & $\Sexpr{results[1]}$ \\ \hline
+    $10^{3}$ & $\Sexpr{results[2]}$ \\ \hline
+    $10^{4}$ & $\Sexpr{results[3]}$\\ \hline
+    $10^{5}$ & $\Sexpr{results[4]}$\\ \hline
+  \end{tabular}
+  \caption{Desviación estándar para cada $n$.}
+  \label{tab:sd}
+\end{table}
+
+\subsection{Find the 95 \% CI’s for each $n$. Do the confidence intervals contain the actual reliability value from item \ref{subsec:p6-b}?}
+
+Teniendo en cuenta:
+
+\[
+CI = \bar{X} \pm c \times \frac{s}{\sqrt{n}}
+\]
+
+Se puede volver a modificar nuevamente la función \lstinline|simulate_system_reliability()| para que también retorne el intervalo superior e inferior, esto teniendo en cuenta la formula que se viene manejando durante todo el taller, por lo tanto, el código sería:
+
+
+<<>>=
+simulate_system_reliability <- function(n, p) {
+  reliabilities <- numeric(n)
+  for (i in 1:n) {
+    reliabilities[i] <- calculate_reliability(p)
+  }
+  
+  mean_val <- mean(reliabilities)
+  sd_val <- sd(reliabilities)
+  error_margin <- 1.96 * (sd_val / sqrt(n))  # 95% CI
+  
+  return(c(mean = mean_val,
+           lower = mean_val - error_margin,
+           upper = mean_val + error_margin))
+}
+@
+
+Se ha agregado una variable de \lstinline|mean_val| y el \lstinline|error_margin| para luego entre ellas restar y sumar, respectivamente, para obtener el intervalo de confianza completo. Ahora, se puede volver a correr la simulación e imprimir la salida.
+
+
+<<>>=
+# Run simulation for each n
+results <- t(sapply(c(10^2, 10^3, 10^4, 10^5),
+                  function(n) simulate_system_reliability(n, p)))
+
+rownames(results) <- c("n=10^2", "n=10^3", "n=10^4", "n=10^5")
+
+# Print result as a table
+print(round(results, 5))
+@
+
+Recordando que el valor de la sección \ref{subsec:p6-b} es 0.136, y el intervalo quedó como:
+ 
+\[
+[\Sexpr{results[4, 2]}, \Sexpr{results[4, 3]} ]
+\]
+
+Por lo tanto, el valor que se encontró anteriormente sí cae en el intervalo de confianza.
+
+
+\section{Reading assignment}
+
+Se optó por buscar una opción gratuita del libro en PDF, esto debido a que la versión que se encuentra en la Tadeo es muy incómoda por leer, el PDF se puede encontrar libre de descargar \href{https://www.academia.edu/114463674/Practical_Statistics_for_Data_Scientists_50_Essential_Concepts_Using_R_and_Python_by_Peter_Bruce_Andrew_Bruce_Peter_Gedeck}{\textbf{aquí}}. Se han tomado las siguientes ideas mientras se hacía la lectura del libro:
+
+\begin{itemize}
+  \item Las muestras que se deben elegir de un población deben ser representativas y aleatorias, porque pueden pasar casos como el de las elecciones de Landon y Roosevelt, creando un sesgo para el \textit{dataset}.
+  \item Lo que se entiende por un muestreo estratificado es seleccionar nuestros datos por grupos. Por ejemplo, si quiero saber los ingresos de los habitantes de Bogotá, no me puedo tomar solo muestras de la gente estrato 6, porque me quedará sesgado el análisis y voy a concluir que todos los habitantes de Bogotá ganan mucho dinero. En cambio, tengo que reconocer cómo están segmentados los estratos sociales en la ciudad; 10\% para estrato 6, 20\% para el 5, etc.\footnote{Datos inventados por los autores} De esos grupo ahora se toman mustras aleatorias y así hemos reducido el sesgo del experimento.
+  \item Las diferencias entre $\bar{x}$ y $\mu$ están en que la información sobre muestras es observada, y la información sobre poblaciones grandes es a menudo inferida de muestras más pequeñas.
+  \item ``Si toturas a los datos por un tiempo largo, tarde o temprano confesarán''.
+  \item Especifica una hipótesis y recolectar datos seguido de una aleatoriedad y principios de muestreo aleatorio asegura reducir los sesgos.
+  \item El teorema central del límite tiene mucha importancia en los libros clásicos de estadística pero no es tan \textit{central} en la práctica de la ciencia de datos.
+  \item El error estándar es una métrica que mide la variabilidad de la distribución muestreada para una estadística. A medida que el tamaño de la muestra aumenta, el error estándar disminuye.
+  \item La desviación estándar mide la variabilidad de puntos de datos individuales y el error estándar mide la variabilidad de una muestra.
+  \item Una muestra \textit{bootstrap} es aquella que se toma con reemplazo de un conjunto de datos observado.
+  \item Remuestro es el proceso de tomar repetidamente muestras de los datos observados, incluyendo procedimientos como \textit{bootstrap} y permutaciones.
+  \item Pasos para un algoritmo \textit{Bootstrap}:
+        \begin{enumerate}
+          \item Obtener un valor de muestra, guardarlo, y luego reemplazarlo.
+          \item Repetir $n$ veces.
+          \item Obtener la media de los $n$ valores remuestreados.
+          \item Repetir los pasos 1 a 3 $R$ veces. 
+          \item Usar los $R$ resultados para:
+                \begin{enumerate}
+                  \item Calcular la desviación estándar.
+                  \item Producir un histograma o un \textit{boxplot}.
+                  \item Encontrar el intervalo de confianza.
+                \end{enumerate}
+        \end{enumerate}
+  \item El término remuestreo se refiere a hacer procedimientos de permutaciones, donde múltiples muestras son combinadas y el muestro puede ser hecho sin reemplazo. El término \textit{boostrapping} siempre ímplica hacer muestro con reemplazo.
+  \item La mayoría de los datos no se distribuyen de manera normal y la distribución Gaussiana está sobrevalorada.
+  \item La distribución $t$ es como una distribución normal pero con colas más anchas.
+  \item La distribución binomial es muy usada cuando se trata de una salida de sí/no. Se puede adaptar a varios conceptos; funciona/no funciona, comprar/no comprar, etc.
+\end{itemize}
+
+\subsection{Include in your submission an exploration of the dataset \textit{loans\_income.csv} by replicating some of the codes of the sections: \textit{Sampling Distribution of a Statistic} , \textit{Bootstrap}, or \textit{Confidence Intervals}.}
+
+\subsubsection{\textit{Sampling Distribution onf a Statistic}}
+
+
+<<fig.width = 6, fig.height=3.5>>=
+library(ggplot2)
+
+# Lectura del dataset
+loans_income <- read.csv("loans_income.csv")
+loans_income <- loans_income[[colnames(loans_income)]]
+
+# Tomar una muestra de una variable aleatoria simple. 
+samp_data <- data.frame(income=sample(loans_income, 1000),
+                        type = 'data_dist')
+
+# Tomar una muestra de medias de 5 valores
+samp_mean_05 <- data.frame(income = tapply(sample(loans_income, 1000*5),
+                rep(1:1000, rep(5, 1000)), FUN=mean), type='mean_of_5')
+
+# Tomar una muestra de medias de 20 valores 
+samp_mean_20 <- data.frame(income = tapply(sample(loans_income, 1000*20),
+                  rep(1:1000, rep(20, 1000)), FUN=mean), type='mean_of_20')
+
+# Unir los data frames y convertir la columna type como factor, es decir, 
+# una categoría
+income <- rbind(samp_data, samp_mean_05, samp_mean_20)
+income$type = factor(income$type, levels=c('data_dist', 'mean_of_5',
+        'mean_of_20'), labels=c('Data', 'Mean of 5', 'Mean of 20'))
+
+# Graficar
+ggplot(income, aes(x=income))+geom_histogram(bins=40)+facet_grid(type ~ .)
+
+@
+
+
+\subsubsection{\textit{Bootstrap}}
+
+El código anterior utiliza tal cual cómo aparece el ejemplo en el libro, solo que aquí se carga el \textit{dataset} a la variable \lstinline|loans_income|. Después crea tres muestras diferentes; \lstinline|samp_data| que toma 1000 valores aleatorios directamente del \textit{dataset} y los guarda con la etiqueta ``data\_dist''; \lstinline|samp_mean_05| toma una muestra de 5000 valores (la operación que se hace son 1000 grupos de 5), calcula el promedio de cada grupo de 5, y se obtienen 1000 promedios; \lstinline|samp_mean_20|, es parecido al anterior pero con grupos de valores de 20, se obtienen 1000 promedios de 20 valores cada uno. Después de tomar las muestras se combinan los datos en un solo \textit{dataframe} \lstinline|income| y después convierte la columna \lstinline|type| en un factor categórico con etiquetas que facilitan la lectura. Por último, se grafican los histogramas, cada uno con 40 barras y se utiliza \lstinline|face_grid(type ~ .)| para mostrar tres gráficos separados.
+
+Se va a utilizar el paquete \texttt{boot} que permite realizar las operaciones para un muestreo \textit{bootstrap} replicando 1000 veces la función \lstinline|stat_fun()| al \textit{dataset} \lstinline|stat_fun|
+
+<<>>=
+library(boot)
+stat_fun <- function(x, idx) median(x[idx])
+boot_obj <- boot(loans_income, R=1000, statistic=stat_fun)
+boot_obj
+@
+
+La función \lstinline|stat_fun()| recibe un vector \lstinline|x| (los datos originales) y otro vector \lstinline|idx| (índices de muestra aleatoria con reemplazo generados por el \textit{bootstrap}), y devuelve la mediana de los valores muestreados. Después se ejecuta el \textit{bootstrap} mediante la función \lstinline|boot()| que toma el \textit{dataset} \lstinline|loans_income|, genera 1000 muestras con reemplazo, para cada muestra calcula la mediana usando la función previamente definida. Por último, muestra el valor original de la mediana, las 1000 replicaciones (medianas \textit{bootstrap}) e información de las muestras como el bias y el error estándar.
+
+\subsubsection{\textit{Confidence Intervals}}
+
+Se utiliza el código que se encuentra en el repositorio del libro.
+
+<<>>=
+set.seed(5)
+set.seed(7)
+sample20 <- sample(loans_income, 20)
+sampleMean <- mean(sample20)
+
+stat_fun <- function(x, idx) mean(x[idx])
+boot_obj <- boot(sample20, R=500, statistic=stat_fun)
+boot_ci <- boot.ci(boot_obj, conf=0.9, type='basic')
+X <- data.frame(mean=boot_obj$t)
+ci90 <- boot_ci$basic[4:5]
+ci <- data.frame(ci=ci90, y=c(9, 11))
+ci
+ggplot(X, aes(x=mean)) +
+  geom_histogram(bins=40, fill='#AAAAAA')+
+  geom_vline(xintercept=sampleMean, linetype=2) +
+  geom_path(aes(x=ci, y=10), data=ci, size=2) +
+  geom_path(aes(x=ci90[1], y=y), data=ci, size=2) +
+  geom_path(aes(x=ci90[2], y=y), data=ci, size=2) +
+  annotate('text', x=sampleMean, y=20, label='Sample mean', size=6) +
+  annotate('text', x=sampleMean, y=8, label='90% interval', size=6) +
+  theme_bw() +
+  labs(x = '', y='Counts')
+
+@
+
+El código no genera la misma salida de la figura que se encuentra en el libro, esto debido a que se replicó el que está disponible en GitHub y dentro del archivo del \textit{script} hay un comentario diciendo que la figura no está disponible, esto se puede mostrar como evidencia en la figura \ref{fig:GH}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{img/Punto7.png}
+  \caption{\label{fig:GH} \textit{Script} del libro \textit{Practical statistics for data scientists: 50+ essential concepts using R and Python}\cite{bruce2020practical}.}
+\end{figure}
+
+Por otra parte, se muestra una advertencia por el estilo de la figura, el parámetro \lstinline|size| ha sido deprecado, esto quiere decir que esta edición del libro se realizó con una versión de \lstinline|ggplot2| mucho más vieja que la que está actualmente.
+
+
+
+
+\printbibliography
+
+
+\end{document}

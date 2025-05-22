@@ -23,6 +23,7 @@
 
 
 
+
 \titleclass{\subsubsubsection}{straight}[\subsection]
 
 \newcounter{subsubsubsection}[subsubsection]
@@ -94,8 +95,358 @@
 
 \begin{document}
 
+\tableofcontents
 
 
+\section{Chapter 2, Section 2.10: Exercises 3, 8, 10}
+
+\subsection{Exercise 3}
+
+Download some monthly Australian retail data from the book website. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+
+\subsubsection{Solución}
+
+<<results='hide', message=FALSE, echo=FALSE>>==
+renv::init()
+renv::install("fpp2")
+renv::install("readxl")
+renv::install("ggfortify")
+renv::install("TSA")
+renv::install("tseries")
+library(fpp2)
+library(readxl)
+library(ggplot2)
+library(forecast)
+library(ggfortify)
+library(TSA)
+library(tseries)
+@
+
+<<fig.height=3, fig.width=6, fig.pos="h", fig.align = 'center'>>==
+retaildata <- readxl::read_excel("retail.xlsx", skip=1)
+myts <- ts(retaildata[,"A3349337W"],
+           frequency=12, start=c(1982,4))
+
+autoplot(myts) +
+  ggtitle("Retail Time Series") +
+  xlab("Year") + ylab("Sales")
+@
+
+En este gráfico del \textit{retail} se observa una estacionalidad cada 10 años en los datos que va ascendiendo.
+
+
+<<fig.height=4, fig.width=6, fig.pos="h", fig.align = 'center'>>==
+ggseasonplot(myts, year.labels=TRUE, year.labels.left=TRUE) +
+  ggtitle("Seasonal Plot") +
+  ylab("Sales")
+@
+
+De acuerdo al gráfico estacional, se puede ver que todos los años tienen una tendencia positiva.
+
+
+<<fig.height=4, fig.width=6, fig.pos="h", fig.align = 'center'>>==
+ggsubseriesplot(myts) +
+  ggtitle("Subseries Plot") +
+  ylab("Sales")
+  @
+
+
+Las ventas durante todos los meses de todos los años tienen un promedio similar, sin embargo, en diciembre estas se disparan, puede deverse a que sea temporada de regalos y festividades.
+
+
+
+
+<<fig.pos="h", fig.align = 'center'>>==
+gglagplot(myts) +
+  ggtitle("Lag Plot")
+
+@
+
+
+Para el \textit{lag plot} podemos que que en el 12 y el 1 los datos presentan una autocorrelación alta.
+
+
+<<fig.height=4, fig.width=6, fig.pos="h", fig.align = 'center'>>==
+ggAcf(myts) +
+  ggtitle("ACF Plot")
+@
+
+
+En este gráfico se confirma lo que se pensaba de la autocorrelación del gráfico anterior.
+
+\subsection{Exercise 8}
+
+The following time plots and ACF plots correspond to four different time series. Your task is to match each time plot in the first row with one of the ACF plots in the second row.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{img/Punto8.png}
+\end{figure}
+
+
+
+\subsubsection{Solución}
+
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Time Series}& \textbf{ACF Plot} \\ \hline
+    1 & B \\ \hline
+    2 & A \\ \hline
+    3 & D \\ \hline
+    4 & C \\ \hline
+  \end{tabular}
+\end{table}
+
+
+El primer gráfico no presenta tendencia ni estacionalidad de forma clara, debido a que tiene un pico al inicio, aquí se puede presentar una autocorrelación mayor, por lo tanto, el gráfico que más se ajusta a esteo es el \textbf{B}. El segundo gráfico de muertes accidentales mensuales presenta un patrón claro de estacionalidad debido a que ocurre el período parece ser de dos años, como muestran una varianza constante, se dice que es la gráfica \textbf{A}. En el tercer gráfico hay una tendencia creciente y una estacionalidad con un período de dos años, la intensidad aumenta con el tiempo, por lo tanto tiene una autocorrelación decreciente, la que se asemeja es la figura \textbf{D}. Por último, el cuarto presenta un gráfico similar al segundo pero parece ser un comportamiento cíclico en lugar de estacional, se acomoda a la gráfica \textbf{C}, mostrando una autocorrelación alternante en el tiempo.
+
+
+\subsection{Exercise 10}
+
+\lstinline|dj| contains 292 consecutive trading days of the Dow Jones Index. Use \lstinline|ddj <- diff(dj)| to compute the daily changes in the index. Plot \lstinline|ddj| and its ACF. Do the changes in the Dow Jones Index look like white noise?
+
+
+
+\subsubsection{Solución}
+
+<<fig.height=4, fig.align = 'center'>>==
+ddj <- diff(dj)  # Compute daily differences
+
+# Plot the time series of differences
+plot(ddj, type = "l", main = "Daily Changes in Dow Jones Index",
+    ylab = "Change", xlab = "Day")
+
+# Plot the ACF
+acf(ddj, main = "ACF of Daily Changes in Dow Jones Index")
+@
+
+En el primer gráfico se puede observar a simple vista que sí parece ruido blanco. Esto además se confirma en el último gráfico donde no se muestran picos fuera del intervalo de confianza (a excepción deuno al inicio). En conclusión, los cambios en el índice de Dow Jones se pueden ver como ruido blanco.
+
+
+
+\section{Chapter 3, Section 3.7: Exercises 3, 5, 8}
+
+
+\subsection{Exercise 3}
+
+What Box-Cox transformation would you select for your retail data (from Exercise 3 in Section 2.10)?
+
+\subsubsection{Solución}
+
+
+
+
+
+\subsection{Exercise 5}
+
+Usamos una pronóstico estacional ingenuo (seasonal naïve forecast) sobre los datos de producción de cerveza australiana desde 1992. Luego evaluamos los residuos (diferencia entre los valores reales y los pronosticados) para verificar si:
+
+\begin{enumerate}
+  \item Son ruido blanco (white noise).
+  \item Están distribuidos normalmente.
+\end{enumerate}
+
+
+Código proporcionado:
+
+<<fig.height=3>>==
+beer <- window(ausbeer, start=1992)
+fc <- snaive(beer)
+autoplot(fc)
+res <- residuals(fc)
+autoplot(res)
+checkresiduals(fc)
+@
+
+
+Al aplicar el modelo seasonal naïve a los datos trimestrales de producción de cerveza en Australia desde 1992, los residuos obtenidos no muestran autocorrelación significativa según la prueba de Ljung-Box (valor-p > 0.05), por lo tanto, pueden considerarse como ruido blanco.
+
+En cuanto a la normalidad, los residuos no se desvían drásticamente de una distribución normal, aunque podría haber ligeras desviaciones.
+
+El modelo estacional ingenuo parece ser razonable para estos datos, ya que sus residuos cumplen con las condiciones básicas: ruido blanco y aproximadamente normales.
+
+
+\subsection{Exercise 8}
+
+\subsubsection{Solución}
+
+ara la serie de ventas minoristas correspondiente a la columna A3349337W, se realizó una división de los datos en un conjunto de entrenamiento y otro de prueba de la siguiente manera:
+
+<<fig.height=3>>==
+myts.train <- window(myts, end=c(2010,12))
+myts.test <- window(myts, start=2011)
+@
+
+La visualización combinada de la serie completa junto con las partes de entrenamiento y prueba permite verificar que la división fue realizada correctamente, separando los datos hasta diciembre de 2010 como entrenamiento, y desde enero de 2011 en adelante como prueba.
+
+Posteriormente, se aplicó un modelo de pronóstico estacional ingenuo (snaive) al conjunto de entrenamiento:
+
+<<fig.height=3>>==
+fc <- snaive(myts.train)
+@
+
+Los pronósticos obtenidos se compararon con los valores reales en el conjunto de prueba utilizando la función accuracy(fc, myts.test), lo que permitió calcular métricas como RMSE, MAE y MAPE. Estas métricas ofrecen una evaluación cuantitativa del desempeño del modelo en el período de prueba.
+
+Además, se verificaron los residuos del modelo con la función checkresiduals(fc). En los resultados se analizó:
+
+1. La gráfica de los residuos a lo largo del tiempo.
+
+2. La función de autocorrelación de los residuos (ACF).
+
+3. La prueba de Ljung-Box.
+
+Los residuos no mostraron evidencia clara de autocorrelación significativa, lo que indica que podrían considerarse no correlacionados (ruido blanco). Sin embargo, es posible que no sigan una distribución normal perfecta, aunque suelen aproximarse suficientemente a la normalidad para fines prácticos en este tipo de modelos.
+
+Respecto a la sensibilidad de las métricas de precisión frente a la división de los datos, es importante señalar que los resultados pueden variar dependiendo del período usado para entrenamiento y prueba. Por ejemplo, si el conjunto de prueba contiene eventos atípicos o cambios estructurales (como una crisis económica o una pandemia), los errores de pronóstico pueden aumentar, afectando negativamente las métricas. Por tanto, la evaluación de la precisión de un modelo debe considerar el contexto temporal de la división y, en algunos casos, puede beneficiarse del uso de validación cruzada o múltiples divisiones.
+
+
+
+\section{Chapter 6, Section 6.9: Exercise 2.}
+
+
+
+
+
+\section{Chapter 8, Section 8.11: Exercises 2, 5, 6}
+
+
+
+
+
+\section{Exercise 3.5}
+
+
+\subsection{Display and interpret the time series plot for these data}
+
+
+\subsubsection{Solución}
+
+
+<<fig.height=3>>==
+data(wages)
+wages_ts <- ts(wages, frequency = 12)
+autoplot(wages_ts) +
+  ylab("Dollars") + xlab("Year")
+@
+
+La gráfica muestra una tendencia positiva, indicando que los salarios generalmente han incrementado a lo largo del tiempo. Suelen haber unos picos de caída cada semestre a partir del año 2, sin embargo, son lo suficientemente mínimos para afirmar una posible estacionalidad.
+
+\subsection{Use least squares to fit a linear time trend to this time series. Interpret the
+regression output. Save the standardized residuals from the fit for further analysis.}
+
+\subsubsection{Solución}
+
+
+<<>>==
+time <- 1:length(wages_ts)
+fit_linear <- lm(wages_ts ~ time)
+summary(fit_linear)
+@
+
+<<>>==
+resid_linear <- rstandard(fit_linear)
+@
+
+Se puede interpretar con respecto al intercepto que es de 7.9314, es decir, al principio del tiempo del estudio los trabajadores ganaban en promedio 7.93 dólares la hora.
+
+
+\subsection{Construct and interpret the time series plot of the standardized residuals from
+part (b).}
+
+\subsubsection{Solución}
+
+<<fig.height=3>>==
+plot(resid_linear, type = "l", main = "Standardized Residuals - Linear Trend", ylab = "Residuals")
+abline(h = 0, col = "red")
+@
+
+Los valores están alrededor del 0, es decir, el modelo es apropiado, aunque no lo explique por completo.
+
+
+\subsection{ Use least squares to fit a quadratic time trend to the wages time series. Interpret the regression output. Save the standardized residuals from the fit for further analysis.}
+
+
+\subsubsection{Solución}
+
+<<fig.height=3>>==
+fit_quad <- lm(wages_ts ~ time + I(time^2))
+summary(fit_quad)
+resid_quad <- rstandard(fit_quad)
+@
+
+Ahora se tiene un término adicional al cuadrado y se muestra que es significativo con tres (3) asteriscos. Es decir, el modelo no se asemeja nada a una curva cuadrática.
+
+\subsection{Construct and interpret the time series plot of the standardized residuals from part (d)}
+
+<<fig.height=3>>==
+plot(resid_quad, type = "l", main = "Standardized Residuals - Quadratic Trend", ylab = "Residuals")
+abline(h = 0, col = "red")
+@
+
+Teniendo en cuenta la gráfica de los residuales, no hay un patrón claro para poder afirmarse que sea homocedasticidad (pero puede ir por ahí), sin embargo, no logra explicar completamente la estructura de los datos a lo lago del tiempo. Quizá, (hipótesis de los autores) pueden ser los picos chiquitos decrecientes que se presentaban semestralmente en los datos.
+
+
+
+\section{Exercise 3.11}
+
+\subsection{Consider the residuals from a least squares fit of a quadratic time trend}
+
+
+
+\subsubsection{Solución}
+
+Los residuos estandarizados del ajuste cuadrático muestran variaciones alrededor de cero sin una tendencia clara, lo cual sugiere que el modelo logra capturar adecuadamente la tendencia principal de los datos. A simple vista, no se observa una variación creciente o decreciente sistemática, lo que indica que podría cumplirse la suposición de homocedasticidad (varianza constante de los residuos). No obstante, se deben realizar pruebas adicionales para verificar si los residuos se comportan como ruido blanco.
+
+
+
+\subsection{Perform a runs test on the standardized residuals and interpret the results}
+
+\subsubsection{Solución}
+
+
+Debido a que los residuos no son variables categóricas se van a transformar para que queden valores de 1 u -1, así se puede aplicar la función \lstinline|runs.test()| para correr los \textit{tests}.
+
+
+<<>>==
+# Convertir residuos estandarizados en secuencia de signos: +1 si >0, -1 si <0
+signs <- ifelse(resid_quad > 0, 1, -1)
+signs_factor <- factor(signs)
+runs.test(signs_factor)
+@
+
+Utilizando prueba de rechas (run test) se evalua si la serie de tiempo de residuos presenta aleatoriedad. El valor de p es bajo (1.9973-07), esto da a que los residuos no son aleatorios. Por lo tanto, hay un patrón en los signos de los resiguos (que fueron categorizados anteriormente).
+
+
+
+\subsection{ Calculate and interpret the sample autocorrelations for the standardized residuals}
+
+
+\subsubsection{Solución}
+
+
+<<>>==
+acf(resid_quad, main = "ACF of Standardized Residuals")
+@
+
+Vemos que en los extremos de los rezagos hay una autocorrelación fuerte, mientras que entre ellos este no logra tener tanta aucorrelación y se encuentra dentro del intervalo de confianza. Es decir, algunos rezagos el modelo lograr capturar la estructura de la serie, pero en la mayoría se evidencia que no.
+
+
+
+\subsection{Investigate the normality of the standardized residuals. Consider histograms and normal probability plots. Interpret the plots.}
+
+\subsubsection{Solución}
+
+<<>>==
+hist(resid_quad, breaks = 10, main = "Histograma de residuos estandarizados", col = "skyblue")
+qqnorm(resid_quad, main = "Gráfico Q-Q de residuos estandarizados")
+qqline(resid_quad, col = "red")
+@
+
+
+El histograma muestra una simetría aproximada, lo que puede indicar una similitud a la distribución normal. Por otra parte, el gráfico Q-Q muestra que los datos encajan dentro de la línea central. Ambas gráficas juntas sugieren que los residuos siguen una distribución aproximadamente normal.
 
 \printbibliography
 

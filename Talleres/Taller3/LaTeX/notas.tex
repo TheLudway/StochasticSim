@@ -73,6 +73,7 @@
 
 
 
+
 \titleclass{\subsubsubsection}{straight}[\subsection]
 
 \newcounter{subsubsubsection}[subsubsection]
@@ -110,7 +111,7 @@
 \fancyhf{}  % Clear previous settings
 
 \fancyhead[L]{Julián - Ludwig}
-\fancyhead[C]{Taller 2 - Sim Estocástica}
+\fancyhead[C]{Taller 3 - Sim Estocástica}
 \fancyhead[R]{\today}
 
 \fancyfoot[C]{\thepage}
@@ -144,1387 +145,540 @@
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
-\section{Introducción}
-
-El siguiente documento fue compilado usando \href{https://yihui.org/knitr/}{\textbf{knitr}} un paquete diseñado para la generación \textit{dinámica} de reportes para \textsf{R} y \textit{Python}. Esto se hace con el propósito de tener un documento consistente y replicable. Normalmente las entregas tienen un pantallazo del código y de la salida, sin embargo, esto además de verse muy \textit{feo} no tiene alguna manera sencilla de hacer la replicación de la simulación. Por eso mismo, en esta entrega se utiliza este paquete y facilitar manipulación, lectura del código, además de inmediatamente mostrar la salida de los códigos.
-
-En el archivo comprimido \texttt{.7z} se encuentran varios archivos; \texttt{notas.tex}, \texttt{notas.Rnw}, \texttt{notas.pdf}, \texttt{referencias.bib}, \texttt{run.R}, \texttt{body\_fat.csv}, \texttt{loans\_income.csv}, \texttt{renv.lock} y unos directorios \texttt{img/} \texttt{renv/}. Aquí interesan dos archivos; \texttt{notas.Rnw} se encuentra todo el código fuente del documento (\LaTeX y \textsf{R}), en \texttt{run.R} se encuentra el \textit{script} para poder compilar el documento. Si se desea hacer uso del \textit{script} se necesitan unas librerías, paquetes y programas ya instalados en su máquina local, estos son; \LaTeX, se recomienda hacer la instalación local dependiendo de su sistema operativo; \textsf{R}, lenguaje de programación para estadística; \href{https://yihui.org/knitr/}{\textbf{knitr}}, para poder compilar el \texttt{.Rnw} y que genere un PDF. Con estas dependencias ya instaladas, tiene que ejecutar el archivo \texttt{run.R} (en sistemas UNIX como GNU/Linux, MacOSX, FreeBSD, etc. Se puede correr como cualquier \textit{script} de \textit{bash}, si cuenta con otro sistema operativo tiene que ejecutar el \textit{script} dentro de un entorno para correr código en \textsf{R}). Esto va a generar un PDF y de ahí puede ejecutar cuantas veces desee el \textit{script} y ver cómo cambian los valores del PDF dinámicamente. Si no desea hacer todo ese proceso de compilación del \texttt{.Rnw} puede ejecutar directamente el PDF que viene en el comprimido, siendo este la última salida de la compilación de los autores. 
-
-Por último, todo el presente trabajo fue hecho en un entorno virtual de \textsf{R} para evitar conflictos entre librerías, se trabajó con el paquete \lstinline|renv| para manejar el ambiente local junto con sus librerías. Puede revisar la documentación \href{https://rstudio.github.io/renv/articles/renv.html}{\textbf{aquí}} para tener más información de cómo manejar los ambientes virtuales y tener una mayor estabilidad en su sistema, así evita lo que le pasó a uno de los autores, que decidió instalar una librería en el ambiente global de \textit{Python} y dañó todo el sistema base.
-
-Para ver todos los código indexados aquí, los puede encontrar en el archivo \texttt{scripts.R}. Aunque, también están dentro de \texttt{notas.Rnw} y mostrados en el documento.
+\tableofcontents
 
 
-\section{Stopping generating new simulation data}
+\section{Chapter 2, Section 2.10: Exercises 3, 8, 10}
 
-Write a program to generate standard normal random variables until you have generated n of them, where $n \geq 100$ is such that $S/\sqrt{n} < 0.01$, where S is the sample standard deviation of the n data values. Note that this is the ``Method for Determining When to Stop Generating New Data''. Also, answer the following questions:
+\subsection{Exercise 3}
+
+Download some monthly Australian retail data from the book website. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+
+\subsubsection{Solución}
 
 
-
-Debido a que se va a generar variables aleatorias \textbf{normales estándar} $X_{i}$, es decir, $X_{i} \sim \mathcal{N}(0, 1)$ y se debe parar de generar cuando $\frac{S}{\sqrt{n}} < 0.01$.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hldef{x} \hlkwb{<-} \hlkwd{numeric}\hldef{()}
-\hldef{s} \hlkwb{<-} \hlnum{1}
-\hldef{n} \hlkwb{<-} \hlnum{0}
+\hldef{retaildata} \hlkwb{<-} \hldef{readxl}\hlopt{::}\hlkwd{read_excel}\hldef{(}\hlsng{"retail.xlsx"}\hldef{,} \hlkwc{skip}\hldef{=}\hlnum{1}\hldef{)}
+\hldef{myts} \hlkwb{<-} \hlkwd{ts}\hldef{(retaildata[,}\hlsng{"A3349337W"}\hldef{],}
+           \hlkwc{frequency}\hldef{=}\hlnum{12}\hldef{,} \hlkwc{start}\hldef{=}\hlkwd{c}\hldef{(}\hlnum{1982}\hldef{,}\hlnum{4}\hldef{))}
 
-\hlkwa{while}\hldef{(n} \hlopt{<} \hlnum{100} \hlopt{||} \hldef{s} \hlopt{/} \hlkwd{sqrt}\hldef{(n)} \hlopt{>=} \hlnum{0.01}\hldef{) \{}
-  \hldef{x} \hlkwb{<-} \hlkwd{c}\hldef{(x,} \hlkwd{rnorm}\hldef{(}\hlnum{1}\hldef{))}
-  \hldef{n} \hlkwb{<-} \hlkwd{length}\hldef{(x)}
-  \hldef{s} \hlkwb{<-} \hlkwd{sd}\hldef{(x)}
-\hldef{\}}
-
-\hlkwd{cat}\hldef{(}\hlsng{"Cantidad de Xi generados"}\hldef{, n,} \hlsng{"\textbackslash{}n"}\hldef{)}
+\hlkwd{autoplot}\hldef{(myts)} \hlopt{+}
+  \hlkwd{ggtitle}\hldef{(}\hlsng{"Retail Time Series"}\hldef{)} \hlopt{+}
+  \hlkwd{xlab}\hldef{(}\hlsng{"Year"}\hldef{)} \hlopt{+} \hlkwd{ylab}\hldef{(}\hlsng{"Sales"}\hldef{)}
 \end{alltt}
-\begin{verbatim}
-## Cantidad de Xi generados 10071
-\end{verbatim}
-\begin{alltt}
-\hlkwd{cat}\hldef{(}\hlsng{"Desviación estándar"}\hldef{,} \hlkwd{round}\hldef{(s,} \hlnum{5}\hldef{),} \hlsng{"\textbackslash{}n"}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## Desviación estándar 1.00349
-\end{verbatim}
-\begin{alltt}
-\hlkwd{cat}\hldef{(}\hlsng{"Error estándar S/sqrt(n)"}\hldef{,} \hlkwd{round}\hldef{(s}\hlopt{/}\hlkwd{sqrt}\hldef{(n),} \hlnum{5}\hldef{),} \hlsng{"\textbackslash{}n"}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## Error estándar S/sqrt(n) 0.01
-\end{verbatim}
 \end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-1} 
+
+}
+
+
+\end{knitrout}
+
+En este gráfico del \textit{retail} se observa una estacionalidad cada 10 años en los datos que va ascendiendo.
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{ggseasonplot}\hldef{(myts,} \hlkwc{year.labels}\hldef{=}\hlnum{TRUE}\hldef{,} \hlkwc{year.labels.left}\hldef{=}\hlnum{TRUE}\hldef{)} \hlopt{+}
+  \hlkwd{ggtitle}\hldef{(}\hlsng{"Seasonal Plot"}\hldef{)} \hlopt{+}
+  \hlkwd{ylab}\hldef{(}\hlsng{"Sales"}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-1} 
+
+}
+
+
+\end{knitrout}
+
+De acuerdo al gráfico estacional, se puede ver que todos los años tienen una tendencia positiva.
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{ggsubseriesplot}\hldef{(myts)} \hlopt{+}
+  \hlkwd{ggtitle}\hldef{(}\hlsng{"Subseries Plot"}\hldef{)} \hlopt{+}
+  \hlkwd{ylab}\hldef{(}\hlsng{"Sales"}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-4-1} 
+
+}
+
+
 \end{knitrout}
 
 
-En el código se declara una variable $s$ inicializada en 1 para que luego sea nuevamente computada a la desviación estándar de $x$ que es un vector que va a almacenar todas las variables normales aleatorias generadas. Según el enunciado tenemos una condición de que al menos deben haber 100 variables aleatorias generadas ($n \geq 100$) y que el error estándar sea menor a 0.01 ($S / \sqrt{n} < 0.01$). En el ciclo \lstinline|while|, por lo tanto, tiene sentido que el ciclo continue si alguna de las afirmaciones anteriores son falsas, por eso queda la condición de esa manera. Se hace uso de la función \lstinline|rnorm(1)| para que genere una variable aleatoria normal con los valores por defecto (promedio 0 y desviación 1). 
+Las ventas durante todos los meses de todos los años tienen un promedio similar, sin embargo, en diciembre estas se disparan, puede deverse a que sea temporada de regalos y festividades.
 
 
 
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{gglagplot}\hldef{(myts)} \hlopt{+}
+  \hlkwd{ggtitle}\hldef{(}\hlsng{"Lag Plot"}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-5-1} 
+
+}
 
 
-\subsection{How many normals do you think will be generated? Give an analytic estimate.}
-\label{subsec:p1-a}
-
-\subsubsection{Respuesta}
-
-Aunque ya se tengan los resultados de la simulación, se puede hacer un estimado analítico con la condición $S / \sqrt{n} < 0.01$ donde se puede despejar $n$ para saber cuántas variables se necesitan para parar el criterio.
-
-Se tiene en primer lugar la inecuación:
-
-\[
-\frac{S}{\sqrt{n}} < 0.01
-\]
-
-Se eleva ambas partes con menos 1:
-
-\begin{align*}
-  \left(\frac{S}{\sqrt{n}}  \right)^{-1} &> 0.01^{-1} \\
-  \frac{\sqrt{n}}{S}  &> 100
-\end{align*}
-
-Multiplicando ambas partes por $S$:
-
-\begin{align*}
-  \cancel{S} \times \frac{\sqrt{n}}{\cancel{S}}  &> 100 \times S \\
-  \sqrt{n} &> 100 \times S 
-\end{align*}
-
-Ahora se cancela la raíz elevando ambas partes al cuadrado:
-
-\begin{align*}
-  (\cancel{\sqrt{n}})^{\cancel{2}} &> (100 \times S)^{2} 
-\end{align*}
-
-Quedando entonces:
-
-\[
-n > 10000\times S^{2}
-\]
-
-Para hacer el ejercicio se utilizó en \textsf{R} la función \texttt{rnorm(1, mean = 0, sd = 1)}, de esta manera genera únicamente 1 valor con media 0 y desviación 1, por lo tanto, podemos hacer $S = 1$ para estimar cuántos $n$ necesitamos para que se cumpla condición y deje de generar variables aleatorias, por lo tanto:
-
-\begin{align*}
-  n &> 10000 \times (1)^{2} \\
-  n &> 10000 
-\end{align*}
-
-Este valor se acerca bastante al que se imprime en la simulación. 
+\end{knitrout}
 
 
+Para el \textit{lag plot} podemos que que en el 12 y el 1 los datos presentan una autocorrelación alta.
 
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{ggAcf}\hldef{(myts)} \hlopt{+}
+  \hlkwd{ggtitle}\hldef{(}\hlsng{"ACF Plot"}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-6-1} 
+
+}
 
 
+\end{knitrout}
 
 
+En este gráfico se confirma lo que se pensaba de la autocorrelación del gráfico anterior.
 
+\subsection{Exercise 8}
 
-
-\subsection{How many normals did you generate?}
-\label{subsec:p1-b}
-
-\subsubsection{Respuesta}
-
-Se han generado \lstinline|n=| $10071$ normales.
-
-
-\subsection{What is the sample mean of all the normals generated?}
-\label{subsec:p1-c}
-
-
-
-
-\subsubsection{Respuesta}
-
-Utilizando el comando \lstinline|mean()| al vector \lstinline|x| se obtiene $0.0038138$. 
-
-\subsection{What is the sample variance?}
-\label{subsec:p1-d}
-
-
-\subsubsection{Respuesta}
-
-La varianza muestral se calcula como:
-
-\[
-S^{2} = \frac{\sum_{i=1}^{n} (X_{i} - \bar{X})^{2}}{n-1}
-\]
-
-Esto se puede sacar con la función \lstinline|var()| de \textsf{R}, por lo tanto, aplicando eso al vector \lstinline|x| se obtiene $1.0069994$.
-
-
-
-\subsection{Comment on the results of (\ref{subsec:p1-c}) and (\ref{subsec:p1-d}). Were they surprising?}
-\label{subsec:p1-e}
-
-\subsubsection{Respuesta}
-
-El resultado de \ref{subsec:p1-c} es la media de \lstinline|x| que es $0.0038138$ y el de \ref{subsec:p1-d} es la varianza muestral de \lstinline|x| dando $1.0069994$. Estos valores muy sorprendentes no fueron... Se espera que al simular muchas veces una distribución normal, esta nos dé los valores de la media y la desviación estándar al cuadrado. Pero sí es interesante que dado este algoritmo para detenerse después de cruzar un $S / \sqrt{n}$ nos dé valores muy cercanos a una distribución normal con $\mu = 0$ y $\sigma = 1$.
-
-
-
-\section{Gaining confidence with confidence intervals}
-
-We know that the $\mathcal{U}(-1, 1)$ r.v. has mean 0. Use a sample of size $1000$ to estimate the mean and give a $95\%$ confidence interval (CI). Does the CI contain 0? Repeat the above a large number of times ($\geq  100$). What percentage of time does the CI contain 0? Write your code so that it produces output similar to the following:
-
+The following time plots and ACF plots correspond to four different time series. Your task is to match each time plot in the first row with one of the ACF plots in the second row.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.6\textwidth]{img/Punto2.png}
+  \includegraphics[width=\textwidth]{img/Punto8.png}
 \end{figure}
 
-\subsection{Respuesta}
 
-Se sabe que para tener un intervalo de confianza de 95\%, el límite inferior y superior serán, respectivamente:
 
-\[
-\left( \bar{X} - 1.96 \frac{S}{\sqrt{n}}, \bar{X} + 1.96 \frac{S}{\sqrt{n}} \right)
-\]
+\subsubsection{Solución}
 
-El siguiente código permite sacar el intervalo de confianza del 95\% y también el estimado de la media.
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{n} \hlkwb{<-} \hlnum{1000}
-\hldef{x} \hlkwb{<-} \hlkwd{runif}\hldef{(n,} \hlopt{-}\hlnum{1}\hldef{,} \hlnum{1}\hldef{)}
-\hldef{xmean} \hlkwb{<-} \hlkwd{mean}\hldef{(x)}
-\hldef{S} \hlkwb{<-} \hlkwd{sd}\hldef{(x)}
-\hldef{L} \hlkwb{<-} \hldef{xmean} \hlopt{-} \hlnum{1.96} \hlopt{*} \hldef{S}\hlopt{/}\hlkwd{sqrt}\hldef{(n)}
-\hldef{U} \hlkwb{<-} \hldef{xmean} \hlopt{+} \hlnum{1.96} \hlopt{*} \hldef{S}\hlopt{/}\hlkwd{sqrt}\hldef{(n)}
-\hlkwd{cat}\hldef{(}\hlsng{"El estimado es"}\hldef{, xmean,} \hlsng{"\textbackslash{}n"}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## El estimado es 0.005638998
-\end{verbatim}
-\begin{alltt}
-\hlkwd{cat}\hldef{(}\hlsng{"95% está entre ("}\hldef{, L,} \hlsng{", "}\hldef{, U,} \hlsng{") \textbackslash{}n"}\hldef{,} \hlkwc{sep}\hldef{=}\hlsng{""}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## 95% está entre (-0.0297046, 0.04098259)
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-Aquí se estimó la media de la distribución uniforme, dando un resultado de $0.005639$, muy cercano a 0. El intervalo de confianza está entre $-0.0297046$ y $0.0409826$, en este caso sí contiene a 0.\footnote{Aquí hay que hacer una aclaración, los autores utilizaron \href{https://yihui.org/knitr/}{knitr}, una herramienta para la generación de reportes dinámicos en \textsf{R}, entonces cada vez que se compile este archivo \texttt{.Rnw} va a salir una salida diferente y puede ser que ya el intervalo no contenga 0.} Ahora, se va a realizar el proceso unas 200 veces para conocer el porcentaje de intervalos de confianza que contienen 0.
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{trials} \hlkwb{<-} \hlnum{200}
-\hldef{n} \hlkwb{<-} \hlnum{1000}
-\hldef{true_mean} \hlkwb{<-} \hlnum{0}
-
-\hldef{results} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}
-  \hlkwc{sample_mean} \hldef{=} \hlkwd{numeric}\hldef{(trials),}
-  \hlkwc{lower_bound} \hldef{=} \hlkwd{numeric}\hldef{(trials),}
-  \hlkwc{upper_bound} \hldef{=} \hlkwd{numeric}\hldef{(trials),}
-  \hlkwc{contains_mean} \hldef{=} \hlkwd{integer}\hldef{(trials)}
-\hldef{)}
-
-\hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hldef{trials)\{}
-  \hldef{x} \hlkwb{<-} \hlkwd{runif}\hldef{(n,} \hlopt{-}\hlnum{1}\hldef{,} \hlnum{1}\hldef{)}
-  \hldef{xmean} \hlkwb{<-} \hlkwd{mean}\hldef{(x)}
-  \hldef{S} \hlkwb{<-} \hlkwd{sd}\hldef{(x)}
-  \hldef{L} \hlkwb{<-} \hldef{xmean} \hlopt{-} \hlnum{1.96} \hlopt{*} \hldef{S}\hlopt{/}\hlkwd{sqrt}\hldef{(n)}
-  \hldef{U} \hlkwb{<-} \hldef{xmean} \hlopt{+} \hlnum{1.96} \hlopt{*} \hldef{S}\hlopt{/}\hlkwd{sqrt}\hldef{(n)}
-  \hldef{contains} \hlkwb{<-} \hlkwd{as.integer}\hldef{(L} \hlopt{<=} \hldef{true_mean} \hlopt{&} \hldef{true_mean} \hlopt{<=} \hldef{U)}
-
-  \hldef{results[i, ]} \hlkwb{<-} \hlkwd{c}\hldef{(xmean, L, U, contains)}
-\hldef{\}}
-
-\hlkwd{cat}\hldef{(}\hlsng{"Número de intentos:"}\hldef{, trials,} \hlsng{"\textbackslash{}n"}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## Número de intentos: 200
-\end{verbatim}
-\begin{alltt}
-\hlkwd{print}\hldef{(results,} \hlkwc{digits}\hldef{=} \hlnum{4}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-##     sample_mean lower_bound upper_bound contains_mean
-## 1     0.0194830  -1.641e-02   0.0553764             1
-## 2     0.0117701  -2.448e-02   0.0480196             1
-## 3     0.0053815  -3.019e-02   0.0409557             1
-## 4     0.0028757  -3.355e-02   0.0393006             1
-## 5     0.0207032  -1.488e-02   0.0562843             1
-## 6    -0.0276937  -6.267e-02   0.0072836             1
-## 7     0.0074476  -2.813e-02   0.0430268             1
-## 8    -0.0159952  -5.137e-02   0.0193783             1
-## 9     0.0065895  -2.908e-02   0.0422553             1
-## 10   -0.0118419  -4.745e-02   0.0237636             1
-## 11    0.0058123  -3.020e-02   0.0418229             1
-## 12   -0.0114085  -4.685e-02   0.0240309             1
-## 13    0.0108355  -2.475e-02   0.0464232             1
-## 14   -0.0216916  -5.668e-02   0.0132942             1
-## 15    0.0021061  -3.325e-02   0.0374605             1
-## 16    0.0276564  -8.523e-03   0.0638356             1
-## 17   -0.0159820  -5.192e-02   0.0199517             1
-## 18   -0.0035500  -3.932e-02   0.0322154             1
-## 19   -0.0282815  -6.398e-02   0.0074215             1
-## 20   -0.0369822  -7.299e-02  -0.0009713             0
-## 21   -0.0074517  -4.343e-02   0.0285249             1
-## 22    0.0268640  -8.836e-03   0.0625636             1
-## 23    0.0187788  -1.734e-02   0.0548938             1
-## 24    0.0079385  -2.724e-02   0.0431125             1
-## 25    0.0023868  -3.307e-02   0.0378449             1
-## 26    0.0033708  -3.213e-02   0.0388706             1
-## 27   -0.0044979  -4.036e-02   0.0313669             1
-## 28   -0.0146726  -5.048e-02   0.0211397             1
-## 29   -0.0154169  -5.073e-02   0.0198996             1
-## 30   -0.0104089  -4.592e-02   0.0251048             1
-## 31   -0.0112882  -4.689e-02   0.0243113             1
-## 32    0.0112668  -2.410e-02   0.0466332             1
-## 33    0.0399391   4.520e-03   0.0753581             0
-## 34   -0.0291778  -6.579e-02   0.0074321             1
-## 35    0.0009469  -3.395e-02   0.0358458             1
-## 36   -0.0024475  -3.911e-02   0.0342180             1
-## 37   -0.0122340  -4.806e-02   0.0235953             1
-## 38   -0.0079661  -4.377e-02   0.0278393             1
-## 39   -0.0039441  -3.952e-02   0.0316311             1
-## 40    0.0129483  -2.347e-02   0.0493656             1
-## 41   -0.0341963  -6.986e-02   0.0014710             1
-## 42   -0.0105603  -4.629e-02   0.0251668             1
-## 43    0.0013488  -3.514e-02   0.0378402             1
-## 44    0.0061048  -3.061e-02   0.0428233             1
-## 45   -0.0115306  -4.665e-02   0.0235854             1
-## 46   -0.0071105  -4.313e-02   0.0289111             1
-## 47   -0.0082043  -4.353e-02   0.0271248             1
-## 48   -0.0117417  -4.751e-02   0.0240219             1
-## 49   -0.0183992  -5.532e-02   0.0185250             1
-## 50    0.0210272  -1.535e-02   0.0574054             1
-## 51    0.0038477  -3.073e-02   0.0384256             1
-## 52   -0.0166736  -5.310e-02   0.0197493             1
-## 53    0.0094681  -2.689e-02   0.0458295             1
-## 54    0.0125725  -2.377e-02   0.0489183             1
-## 55    0.0026143  -3.387e-02   0.0391032             1
-## 56    0.0332670  -1.767e-03   0.0683014             1
-## 57    0.0122981  -2.365e-02   0.0482478             1
-## 58    0.0392571   2.895e-03   0.0756194             0
-## 59   -0.0006286  -3.614e-02   0.0348818             1
-## 60   -0.0055853  -4.052e-02   0.0293463             1
-## 61   -0.0168369  -5.191e-02   0.0182340             1
-## 62    0.0047584  -3.166e-02   0.0411725             1
-## 63   -0.0016861  -3.653e-02   0.0331564             1
-## 64   -0.0025631  -3.740e-02   0.0322743             1
-## 65   -0.0335068  -6.851e-02   0.0014958             1
-## 66    0.0090303  -2.687e-02   0.0449259             1
-## 67   -0.0153926  -5.160e-02   0.0208130             1
-## 68    0.0047771  -3.142e-02   0.0409735             1
-## 69   -0.0012061  -3.760e-02   0.0351838             1
-## 70    0.0031894  -3.250e-02   0.0388754             1
-## 71   -0.0031713  -3.944e-02   0.0330951             1
-## 72    0.0092775  -2.657e-02   0.0451251             1
-## 73    0.0077200  -2.849e-02   0.0439289             1
-## 74   -0.0032373  -3.923e-02   0.0327541             1
-## 75   -0.0061887  -4.183e-02   0.0294519             1
-## 76    0.0063682  -2.881e-02   0.0415470             1
-## 77    0.0180158  -1.822e-02   0.0542558             1
-## 78   -0.0005311  -3.540e-02   0.0343416             1
-## 79   -0.0135113  -4.797e-02   0.0209518             1
-## 80    0.0239400  -1.165e-02   0.0595267             1
-## 81   -0.0088291  -4.498e-02   0.0273243             1
-## 82    0.0197693  -1.560e-02   0.0551369             1
-## 83   -0.0152498  -5.169e-02   0.0211909             1
-## 84    0.0079762  -2.817e-02   0.0441228             1
-## 85    0.0182619  -1.789e-02   0.0544162             1
-## 86   -0.0016841  -3.767e-02   0.0342986             1
-## 87    0.0057236  -2.981e-02   0.0412564             1
-## 88    0.0140329  -2.078e-02   0.0488498             1
-## 89   -0.0165493  -5.187e-02   0.0187732             1
-## 90    0.0083309  -2.670e-02   0.0433650             1
-## 91    0.0167368  -1.945e-02   0.0529239             1
-## 92    0.0269488  -8.635e-03   0.0625325             1
-## 93   -0.0141960  -5.019e-02   0.0217971             1
-## 94   -0.0102410  -4.576e-02   0.0252774             1
-## 95   -0.0159921  -5.198e-02   0.0199909             1
-## 96    0.0069601  -2.876e-02   0.0426795             1
-## 97    0.0092764  -2.602e-02   0.0445749             1
-## 98   -0.0002121  -3.546e-02   0.0350349             1
-## 99    0.0139333  -2.070e-02   0.0485665             1
-## 100   0.0068058  -2.865e-02   0.0422627             1
-## 101   0.0102635  -2.589e-02   0.0464192             1
-## 102  -0.0320440  -6.760e-02   0.0035126             1
-## 103   0.0061576  -2.994e-02   0.0422513             1
-## 104  -0.0025816  -3.774e-02   0.0325801             1
-## 105   0.0036819  -3.108e-02   0.0384477             1
-## 106  -0.0289025  -6.494e-02   0.0071316             1
-## 107   0.0238667  -1.218e-02   0.0599104             1
-## 108   0.0198279  -1.543e-02   0.0550808             1
-## 109  -0.0272782  -6.334e-02   0.0087855             1
-## 110   0.0081960  -2.702e-02   0.0434122             1
-## 111  -0.0058445  -4.173e-02   0.0300402             1
-## 112   0.0172606  -1.873e-02   0.0532502             1
-## 113  -0.0121828  -4.750e-02   0.0231327             1
-## 114  -0.0114915  -4.659e-02   0.0236102             1
-## 115   0.0196570  -1.545e-02   0.0547616             1
-## 116  -0.0304363  -6.556e-02   0.0046897             1
-## 117   0.0302257  -5.331e-03   0.0657826             1
-## 118   0.0363277  -2.865e-04   0.0729419             1
-## 119   0.0036580  -3.217e-02   0.0394911             1
-## 120  -0.0200019  -5.534e-02   0.0153395             1
-## 121  -0.0227576  -5.872e-02   0.0132062             1
-## 122  -0.0096766  -4.493e-02   0.0255791             1
-## 123  -0.0180018  -5.357e-02   0.0175686             1
-## 124  -0.0101399  -4.604e-02   0.0257613             1
-## 125   0.0353075  -3.209e-04   0.0709358             1
-## 126   0.0051111  -3.061e-02   0.0408371             1
-## 127   0.0007787  -3.498e-02   0.0365369             1
-## 128  -0.0024621  -3.779e-02   0.0328674             1
-## 129  -0.0190729  -5.501e-02   0.0168603             1
-## 130   0.0090687  -2.645e-02   0.0445910             1
-## 131  -0.0028539  -3.939e-02   0.0336842             1
-## 132   0.0163514  -1.976e-02   0.0524613             1
-## 133  -0.0156170  -5.146e-02   0.0202265             1
-## 134   0.0118330  -2.344e-02   0.0471049             1
-## 135  -0.0332728  -6.940e-02   0.0028554             1
-## 136   0.0118567  -2.385e-02   0.0475612             1
-## 137   0.0130067  -2.375e-02   0.0497635             1
-## 138  -0.0162514  -5.201e-02   0.0195070             1
-## 139   0.0367435   9.843e-04   0.0725028             0
-## 140  -0.0193231  -5.540e-02   0.0167537             1
-## 141  -0.0366165  -7.149e-02  -0.0017453             0
-## 142   0.0451504   9.758e-03   0.0805432             0
-## 143   0.0132924  -2.263e-02   0.0492146             1
-## 144   0.0004046  -3.526e-02   0.0360656             1
-## 145  -0.0068566  -4.241e-02   0.0286930             1
-## 146   0.0022098  -3.322e-02   0.0376430             1
-## 147  -0.0145845  -5.069e-02   0.0215230             1
-## 148   0.0355473  -4.898e-05   0.0711436             1
-## 149  -0.0020614  -3.913e-02   0.0350049             1
-## 150  -0.0100938  -4.589e-02   0.0257008             1
-## 151   0.0133768  -2.259e-02   0.0493452             1
-## 152   0.0171438  -1.782e-02   0.0521101             1
-## 153  -0.0142764  -4.964e-02   0.0210922             1
-## 154  -0.0151106  -5.182e-02   0.0215956             1
-## 155   0.0014531  -3.409e-02   0.0369919             1
-## 156   0.0037605  -3.219e-02   0.0397077             1
-## 157   0.0145899  -2.126e-02   0.0504369             1
-## 158   0.0180928  -1.686e-02   0.0530487             1
-## 159   0.0203167  -1.512e-02   0.0557505             1
-## 160   0.0077000  -2.820e-02   0.0436014             1
-## 161  -0.0121287  -4.814e-02   0.0238852             1
-## 162   0.0182720  -1.735e-02   0.0538901             1
-## 163   0.0015856  -3.456e-02   0.0377324             1
-## 164  -0.0060382  -4.204e-02   0.0299643             1
-## 165  -0.0113585  -4.698e-02   0.0242584             1
-## 166  -0.0110811  -4.601e-02   0.0238519             1
-## 167  -0.0409417  -7.669e-02  -0.0051899             0
-## 168  -0.0170257  -5.245e-02   0.0183999             1
-## 169  -0.0034387  -3.894e-02   0.0320656             1
-## 170  -0.0181260  -5.349e-02   0.0172426             1
-## 171  -0.0283448  -6.432e-02   0.0076330             1
-## 172  -0.0049828  -4.021e-02   0.0302414             1
-## 173  -0.0202476  -5.642e-02   0.0159285             1
-## 174   0.0075196  -2.784e-02   0.0428835             1
-## 175  -0.0015967  -3.685e-02   0.0336563             1
-## 176  -0.0191859  -5.573e-02   0.0173566             1
-## 177   0.0072481  -2.859e-02   0.0430885             1
-## 178   0.0068329  -2.906e-02   0.0427227             1
-## 179  -0.0011457  -3.699e-02   0.0346941             1
-## 180   0.0256057  -1.089e-02   0.0621024             1
-## 181  -0.0057862  -4.203e-02   0.0304606             1
-## 182  -0.0173430  -5.356e-02   0.0188772             1
-## 183  -0.0137030  -4.908e-02   0.0216755             1
-## 184   0.0264140  -9.706e-03   0.0625342             1
-## 185  -0.0249882  -6.112e-02   0.0111453             1
-## 186   0.0388814   3.460e-03   0.0743031             0
-## 187  -0.0144943  -4.991e-02   0.0209197             1
-## 188  -0.0244568  -6.076e-02   0.0118454             1
-## 189  -0.0387248  -7.457e-02  -0.0028756             0
-## 190   0.0014038  -3.573e-02   0.0385383             1
-## 191  -0.0179470  -5.345e-02   0.0175572             1
-## 192  -0.0050947  -4.074e-02   0.0305506             1
-## 193   0.0175074  -1.940e-02   0.0544104             1
-## 194   0.0135019  -2.248e-02   0.0494843             1
-## 195  -0.0009711  -3.629e-02   0.0343495             1
-## 196   0.0024471  -3.335e-02   0.0382434             1
-## 197   0.0301579  -5.924e-03   0.0662403             1
-## 198   0.0081308  -2.750e-02   0.0437588             1
-## 199  -0.0075688  -4.343e-02   0.0282935             1
-## 200  -0.0276058  -6.327e-02   0.0080554             1
-\end{verbatim}
-\begin{alltt}
-\hldef{porcentaje} \hlkwb{<-} \hlkwd{mean}\hldef{(results}\hlopt{$}\hldef{contains_mean)} \hlopt{*} \hlnum{100}
-
-\hlkwd{cat}\hldef{(}\hlsng{"\textbackslash{}n"}\hldef{, porcentaje,} \hlsng{"% de los intervalos de"}\hldef{,}
-\hlsng{"confianza contienen la media real\textbackslash{}n"}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## 
-##  95.5 % de los intervalos de confianza contienen la media real
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-
-En conclusión, el $95.5$ \% de los intervalos generados incluyen al 0.
-
-
-\section{Standard deviation of a proportion}
-
-Assume a manager is using the sample proportion $\hat{p}$ to estimate the proportion p of a new shipment of computer chips that are defective. He doesn’t know $p$ for this shipment, but in previous shipments it has been close to $0.01$, that is $1 \% $ of chips have been defective.
-
-\subsection{If the manager wants the standard deviation of $\hat{p}$ to be about $0.02$, how large a sample should she take based on the assumption that the rate of defectives has not changed dramatically?}
-
-En clase se vieron los estimadores de probabilidad, donde se quiere estimar
-
-\[
-  p = (P X \in A)
-\]
-
-Donde \(A\) es el subconjunto del espacio de estados de \(\Omega \) de \(X\). Es decir, para nuestro problema, este subconjunto de espacios en la muestra que tomó la administradora del cargamento de chips defectuosos. Se puede definir la variable indicadora \(Z\) como:
-
-\[
-  Z = 
-  \begin{cases}
-    1, & \quad X \in A \\
-    0, & \quad X \notin A
-  \end{cases}
-\]
-
-1 significa que sí está defectuoso y 0 que no lo está. Se puede escribir el estimador como:
-
-\[
-p = E[Z]
-\]
-
-En clase se realizó una demostración de como el valor esperado de \(Z\) se le puede asignar a \(p\). Se define la varianza de \(Z\) como:
-
-\begin{align*}
-\mathrm{Var}(Z) &= E[Z^{2}] - E[Z]^{2} \\
-  &= (1^{2} \times P(X \in A) + 0^{2} \times P (X \notin A)) - (P(X \in A))^{²} \\
-  &= p - p^{2}
-\end{align*}
-
-Aplicando factorización:
-
-\[
-\mathrm{Var}(Z) = p (1 - p)
-\]
-
-Estimar $p$ se puede realizar mediante el promedio muestral de $Z$, es decir, se puede estimar la proporción $\hat{p}$ con el promedio de los chips que son defectuosos:
-
-\[
-\hat{p} = \frac{1}{n} \sum_{i =1}^{n} Z_{i}
-\]
-
-Se puede calcular entonces, la varianza del estimador:
-
-\[
-\mathrm{Var}(\hat{p}) = \frac{1}{n} \mathrm{Var} \left(\sum_{i=1}^{n} Z_{i} \right)
-\]
-
-Por independencia de los valores del cargamento de chips $Z_{i}$ se puede meter la varianza de estos en la suma:
-
-\begin{align*}
-  \mathrm{Var}(\hat{p}) &= \frac{1}{n^{2}} \sum_{i=1}^{n} \mathrm{Var}(Z_{i}) \\
-  &= \frac{1}{n^{2}} \sum_{i=1}^{n} p(1 - p) = \frac{1}{n} p (1 -p) 
-\end{align*}
-
-Por lo tanto, una aproximación es:
-
-\[
-\mathrm{Var}(\hat{p}) \approx \frac{1}{n} \hat{p} (1 - \hat{p}) 
-\]
-
-Teniendo en cuenta que la desviación estándar es el cuadrado de la varianza, se puede despejar:
-
-\[
-\sigma_{\hat{p}} \approx \sqrt{\frac{\hat{p} (1 - \hat{p})}{n}}
-\]
-
-El problema nos dice que la desviación estándar de $\hat{p}$ ($\sigma_{\hat{p}}$) debe ser sobre 0.02 y nos piden hallar cuántas muestras debe tomar la administradora, por lo tanto, en la parte izquierda de la ecuación reemplazamos por $0.02$, se despeja para $n$ y la proporción de defectuosos se toma como $0.01$ debido a que en el problema se nos dice que no ha cambiado tanto.
-
-\begin{align*}
-  \sigma_{\hat{p}} &\approx \sqrt{\frac{\hat{p} (1 - \hat{p})}{n}} \\
-  0.02 &\approx \sqrt{\frac{0.1 (1 - 0.1)}{n}  } \\
-  0.02 &\approx \sqrt{\frac{0.0099}{n}  } \\
-  (0.02)^{2} &\approx \left(\cancel{\sqrt{\frac{0.0099}{n}  }} \right)^{\cancel{2}}\\
-  0.0004 &\approx \frac{0.0099}{n} \\
-  n &\approx \frac{0.0099}{0.0004} = 24.75
-\end{align*}
-
-Por lo tanto, la administradora debe tomar un muestra de por lo menos 25 chips para tener una desviación estándar de al menos $0.02$.
-
-\subsection{Now suppose something went wrong with the production run and the actual proportion of defectives in the shipment is 0.3, that is 30 \% are defective. Now what would be the actual standard deviation of $\hat{p}$ for the sample size you choose in a)?}
-
-Teniendo 25 chips y cambiando el valor de la proporción de defectuosos, se obtiene:
-
-\begin{align*}
-  \sigma_{\hat{p}} &\approx \sqrt{\frac{\hat{p}(1 - \hat{p}) }{n}} \\
-                   &\approx   \sqrt{\frac{0.3(1 - 0.3) }{25}} \\
-  &\approx 0.091
-\end{align*}
-
-Es decir, si la proporción de detección es del 30\%, la desviación estándar de $\hat{p}$ con una cantidad de chips de 25, será aproximadamente $0.091$.
-
-\section{Bets}
-
-You pay $10.000$ pesos to participate in a bet game, which consists in tossing two coins together. If two heads fall, you earn $15.000$ pesos. If one head and one tail fall you earn $5.000$ pesos. In any other case you earn nothing. Let $X$ the random variable of your profit.
-
-\subsection{Analytically find the probability mass function $p_{X}$, the mean $E[X]$, and variance $\mathrm{Var}(X)$ of $X$.}
-
-Dado que $X$ es la variable aleatoria de la ganancia, podemos listar los posibles valores que puede tomar de acuerdo a los lanzamientos:
-
-\begin{table}[ht]
-  \centering
-  \begin{tabular}[h]{|c|c|c|c|}
-    \hline
-    \textbf{Salida moneda} & \textbf{Ganancia} & \textbf{Ganancia} $X$ & \textbf{Probabilidad} \\ \hline
-    HH & $15.000$ & $+5.000$ & 0.25 \\ \hline
-    HT-TH & $5.000$ & $-5.000$ & 0.5 \\ \hline
-    TT & $0$ & $-10.000$ & 0.25 \\ \hline 
-  \end{tabular}
-  \caption{Posibles salidas y ganancias al tirar dos monedas, (H) cara y (T) sello.}
-  \label{tab:p3}
-\end{table}
-
-Del cuadro \ref{tab:p3} se toma que los posibles valores para las ganancias son:
-
-\[
-X \in \{-5000, -10000, 5000  \} 
-\]
-
-Teniendo en cuenta los valores que puede tomar $X$, la función probabilidad de masa debe retornar la probabilidad (valga la redundancia) de obtener alguno de los valores de $X$, en el cuadro \ref{tab:p3} se pueden ver dichas probabilidades, estas fueron calculadas de acuerdo a contar cuántas veces pueden salir los diferentes valores para la ganancia de $X$.
-
-\[
-p_{X} (x)  =
-\begin{cases}
-  0.25,& \quad x = 5000 \\
-  0.5,&  \quad x = -5000 \\
-  0.25,& \quad x = -10000 \\
-  0,& \quad \text{En otro caso}
-\end{cases}
-\]
-
-Debido a que estamos con un conjunto continuo para $X$, el valor esperado se multiplica la probabilidad por cada valor de este:
-
-\begin{gather*}
-  E[X] = \sum_{I=1}^{3} x \dot p_{X}(x) = 5000(0.25) + (-5000)(0.5) + (-10000)(0.25) \\
-  E[X] = 1250 - 2500 - 2500 = -3750
-\end{gather*}
-
-Es decir, en promedio se pierde $3.750$ pesos por jugada.
-
-Para calcular la varianza se puede utilizar la fórmula:
-
-\[
-\mathrm{Var}(X) = E[X^{2}] - (E[X])^{2}
-\]
-
-Se computa $E[X^{2}]$:
-
-\begin{align*}
-  E[X^{2}] &= 5000^{2}(0.25) + (-5000)^{2}(0.5) + (-10000)^{2}(0.25) \\
-           &= 25000000 (0.25) + 25000000 (0.5) + 100000000 (0.25) \\
-  &= 6250000 + 12500000 + 25000000 = 43750000
-\end{align*}
-
-Ahora se le resta el cuadrado de la media:
-
-\[
-\mathrm{Var}(X) = 43750000 - (-3750)^{2} = 43750000 - 14062500 = 29687500
-\]
-
-
-
-
-
-
-\subsection{Write a code that simulates the r.v. \textbf{X} using the command sample. Generate an \textit{iid} \lstinline|sample| $\{X_{i}\}$ of size $n = 10^{5}$.}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{outcomes} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlopt{-}\hlnum{10000}\hldef{,} \hlopt{-}\hlnum{5000}\hldef{,} \hlnum{5000}\hldef{)}
-\hldef{probabilities} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.25}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.25}\hldef{)}
-
-\hldef{n} \hlkwb{<-} \hlnum{10}\hlopt{^}\hlnum{5}
-
-\hldef{X} \hlkwb{<-} \hlkwd{sample}\hldef{(outcomes,} \hlkwc{size} \hldef{= n ,} \hlkwc{replace} \hldef{=} \hlnum{TRUE}\hldef{,} \hlkwc{prob} \hldef{= probabilities)}
-
-\hlkwd{length}\hldef{(X)}
-\end{alltt}
-\begin{verbatim}
-## [1] 100000
-\end{verbatim}
-\begin{alltt}
-\hlkwd{summary}\hldef{(X)}
-\end{alltt}
-\begin{verbatim}
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  -10000  -10000   -5000   -3778   -5000    5000
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-En este fragmento de código se realiza la creación del vector \lstinline|X| de tamaño $10^{5}$ creado con la función \lstinline|sample| que toma las salidas que se explicaron anteriormente, el tamaño de $10^{5}$, que se reemplace y la probabilidad.
-
-
-\subsection{Modify your code to calculate: (i) the estimated mean profit $\bar{X}_{j}$ for each sample subsequence: $\{X_{1}, X_{2}, . . . , X_{j} \}$, $j = 2, 3, \dots, n$, (ii) the $95 \%$ CI’s of each estimated mean profit $\bar{X}_{j}$ .}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{mean_estimates} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
-\hldef{lower_CI} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
-\hldef{upper_CI} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
-\hldef{ie} \hlkwb{<-} \hlnum{1.96}
-
-\hlkwa{for} \hldef{(j} \hlkwa{in} \hlnum{2}\hlopt{:}\hldef{n) \{}
-  \hldef{x_sub} \hlkwb{<-} \hldef{X[}\hlnum{1}\hlopt{:}\hldef{j]}
-  \hldef{mean_j} \hlkwb{<-} \hlkwd{mean}\hldef{(x_sub)}
-  \hldef{sd_j} \hlkwb{<-} \hlkwd{sd}\hldef{(x_sub)}
-  \hldef{se_j} \hlkwb{<-} \hldef{sd_j} \hlopt{/} \hlkwd{sqrt}\hldef{(j)}
-
-  \hldef{mean_estimates[j]} \hlkwb{<-} \hldef{mean_j}
-  \hldef{lower_CI[j]} \hlkwb{<-} \hldef{mean_j} \hlopt{-} \hldef{ie} \hlopt{*} \hldef{se_j}
-  \hldef{upper_CI[j]} \hlkwb{<-} \hldef{mean_j} \hlopt{+} \hldef{ie} \hlopt{*} \hldef{se_j}
-\hldef{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-
-En esta parte del código se crean tres vectores \lstinline|mean_estimates|, \lstinline|lower_CI|, \lstinline|upper_CI| de tamaño $10^{5}$ y también una variable \lstinline|ie|. El bucle en cada iteración calcula la media muestral de los valores $\bar{X}_{j}$, la desviación estándar \lstinline|sd_j| y el error estándar, estos son necesarios para luego calcular el intervalo de confianza junto con la media.
-
-
-\subsection{Plot $\bar{X}_{j}$ and their $95 \%$ CI’s in terms of $j = 2, \dots , 10^{5}$. Add an horizontal line corresponding to the actual value $E[X]$.}
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Your plotting code remains the same}
-\hlkwd{plot}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, mean_estimates[}\hlnum{2}\hlopt{:}\hldef{n],} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"blue"}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{1}\hldef{,}
-     \hlkwc{xlab} \hldef{=} \hlsng{"j (tamaño de la submuestra)"}\hldef{,}
-     \hlkwc{ylab} \hldef{=} \hlsng{"Ganancia esperada estimada"}\hldef{,}
-     \hlkwc{main} \hldef{=} \hlsng{"Evolución de la media muestral y su IC del 95%"}\hldef{)}
-\hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, lower_CI[}\hlnum{2}\hlopt{:}\hldef{n],} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{,} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
-\hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, upper_CI[}\hlnum{2}\hlopt{:}\hldef{n],} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{,} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
-\hlkwd{abline}\hldef{(}\hlkwc{h} \hldef{=} \hlopt{-}\hlnum{3750}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"darkgreen"}\hldef{,} \hlkwc{lty} \hldef{=} \hlnum{3}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{2}\hldef{)}
-\hlkwd{legend}\hldef{(}\hlsng{"topright"}\hldef{,} \hlkwc{legend} \hldef{=} \hlkwd{c}\hldef{(}\hlsng{"Media estimada"}\hldef{,} \hlsng{"IC 95%"}\hldef{,} \hlsng{"Valor real E[X]"}\hldef{),}
-       \hlkwc{col} \hldef{=} \hlkwd{c}\hldef{(}\hlsng{"blue"}\hldef{,} \hlsng{"red"}\hldef{,} \hlsng{"darkgreen"}\hldef{),} \hlkwc{lty} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{1}\hldef{,} \hlnum{2}\hldef{,} \hlnum{3}\hldef{),} \hlkwc{bty} \hldef{=} \hlsng{"n"}\hldef{)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/grafico-pdf-1} 
-\end{knitrout}
-
-Se puede ver que a medida que se aumenta la submuestra $j$, la media estimada $\bar{X}$ se acerca más al valor esperado $E[X]$ y también, el intervalo de confianza se va acortando más.
-
-
-
-
-\subsection{Repeat \textit{c)} and \textit{d)} to estimate the probabilities $p_{X} (x)$, their $95 \%$ CI’s, and their plots for each $j = 2, \dots , 10^{5}$, adding the actual values.}
-
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Posibles valores de X}
-\hldef{outcomes} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlopt{-}\hlnum{10000}\hldef{,} \hlopt{-}\hlnum{5000}\hldef{,} \hlnum{5000}\hldef{)}
-\hldef{probs_true} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.25}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.25}\hldef{)}
-
-\hlcom{# Inicializar matrices para almacenar las estimaciones y CIs}
-\hldef{p_estimates} \hlkwb{<-} \hlkwd{matrix}\hldef{(}\hlnum{0}\hldef{,} \hlkwc{nrow} \hldef{= n,} \hlkwc{ncol} \hldef{=} \hlnum{3}\hldef{)}
-\hldef{p_lower} \hlkwb{<-} \hlkwd{matrix}\hldef{(}\hlnum{0}\hldef{,} \hlkwc{nrow} \hldef{= n,} \hlkwc{ncol} \hldef{=} \hlnum{3}\hldef{)}
-\hldef{p_upper} \hlkwb{<-} \hlkwd{matrix}\hldef{(}\hlnum{0}\hldef{,} \hlkwc{nrow} \hldef{= n,} \hlkwc{ncol} \hldef{=} \hlnum{3}\hldef{)}
-
-\hldef{z} \hlkwb{<-} \hlnum{1.96}  \hlcom{# Nivel de confianza del 95%}
-
-\hlkwa{for} \hldef{(j} \hlkwa{in} \hlnum{2}\hlopt{:}\hldef{n) \{}
-  \hldef{x_sub} \hlkwb{<-} \hldef{X[}\hlnum{1}\hlopt{:}\hldef{j]}
-  \hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{3}\hldef{) \{}
-    \hldef{val} \hlkwb{<-} \hldef{outcomes[i]}
-    \hldef{p_hat} \hlkwb{<-} \hlkwd{mean}\hldef{(x_sub} \hlopt{==} \hldef{val)}
-    \hldef{se} \hlkwb{<-} \hlkwd{sqrt}\hldef{(p_hat} \hlopt{*} \hldef{(}\hlnum{1} \hlopt{-} \hldef{p_hat)} \hlopt{/} \hldef{j)}
-
-    \hldef{p_estimates[j, i]} \hlkwb{<-} \hldef{p_hat}
-    \hldef{p_lower[j, i]} \hlkwb{<-} \hlkwd{max}\hldef{(}\hlnum{0}\hldef{, p_hat} \hlopt{-} \hldef{z} \hlopt{*} \hldef{se)}
-    \hldef{p_upper[j, i]} \hlkwb{<-} \hlkwd{min}\hldef{(}\hlnum{1}\hldef{, p_hat} \hlopt{+} \hldef{z} \hlopt{*} \hldef{se)}
-  \hldef{\}}
-\hldef{\}}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-
-\textbf{Gráfico de las probabilidades estimadas con sus ICs para cada posible valor de $X$:}
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{colors} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"blue"}\hldef{,} \hlsng{"orange"}\hldef{,} \hlsng{"purple"}\hldef{)}
-\hldef{labels} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"p_X(-10000)"}\hldef{,} \hlsng{"p_X(-5000)"}\hldef{,} \hlsng{"p_X(5000)"}\hldef{)}
-\hldef{true_values} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.25}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.25}\hldef{)}
-
-\hlkwd{plot}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_estimates[}\hlnum{2}\hlopt{:}\hldef{n,}\hlnum{1}\hldef{],} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{col} \hldef{= colors[}\hlnum{1}\hldef{],} \hlkwc{ylim} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{0}\hldef{,}\hlnum{1}\hldef{),}
-     \hlkwc{xlab} \hldef{=} \hlsng{"j (tamaño de la submuestra)"}\hldef{,} \hlkwc{ylab} \hldef{=} \hlsng{"Probabilidad estimada"}\hldef{,}
-     \hlkwc{main} \hldef{=} \hlsng{"Estimación de $p_X(x)$ con ICs del 95%"}\hldef{)}
-
-\hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{3}\hldef{) \{}
-  \hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_estimates[}\hlnum{2}\hlopt{:}\hldef{n,i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lwd} \hldef{=} \hlnum{1}\hldef{)}
-  \hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_lower[}\hlnum{2}\hlopt{:}\hldef{n,i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
-  \hlkwd{lines}\hldef{(}\hlnum{2}\hlopt{:}\hldef{n, p_upper[}\hlnum{2}\hlopt{:}\hldef{n,i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lty} \hldef{=} \hlnum{2}\hldef{)}
-  \hlkwd{abline}\hldef{(}\hlkwc{h} \hldef{= true_values[i],} \hlkwc{col} \hldef{= colors[i],} \hlkwc{lty} \hldef{=} \hlnum{3}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{1.5}\hldef{)}
-\hldef{\}}
-
-\hlkwd{legend}\hldef{(}\hlsng{"topright"}\hldef{,} \hlkwc{legend} \hldef{= labels,} \hlkwc{col} \hldef{= colors,} \hlkwc{lty} \hldef{=} \hlnum{1}\hlopt{:}\hlnum{1}\hldef{,} \hlkwc{bty} \hldef{=} \hlsng{"n"}\hldef{)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/plot-probabilities-1} 
-\end{knitrout}
-
-Se observa cómo las probabilidades estimadas convergen a los valores reales a medida que aumenta el tamaño de muestra $j$, y cómo los intervalos de confianza se vuelven más estrechos.
-
-
-\section{Bootstrap}
-
-This exercise is based on the article Introduction to Bootstrapping in Statistics with an Example and the dataset body fat.csv that contains the body fat percentages of 92 adolescent girls. Generate a program that gives:
-
-\subsection{An histogram of the sample data.}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Leer el archivo}
-\hldef{fat_data} \hlkwb{<-} \hlkwd{read.csv}\hldef{(}\hlsng{"body_fat.csv"} \hldef{)}
-
-\hlcom{# Histograma}
-\hlkwd{hist}\hldef{(fat_data[[}\hlkwd{colnames}\hldef{(fat_data)[}\hlnum{1}\hldef{]]],}
-     \hlkwc{main} \hldef{=} \hlsng{"Histograma del porcentaje de grasa corporal"}\hldef{,}
-     \hlkwc{xlab} \hldef{=} \hlsng{"Body Fat (%)"}\hldef{,}
-     \hlkwc{col} \hldef{=} \hlsng{"skyblue"}\hldef{,}
-     \hlkwc{border} \hldef{=} \hlsng{"white"}\hldef{)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/histograma-fat-1} 
-\end{knitrout}
-
-Realizar el histograma en \textsf{R} es bastante sencillo, únicamente tener el archivo \texttt{.csv} en la misma ruta local que donde se está trabajando, utilizar la función \lstinline|read.csv()| para leer este archivo y luego con la función \lstinline|hist()| se colocan los datos de la primera columna y otras opciones para el estilo del gráfico.
-
-Se muestra que la mayor frecuencia de grasa corporal se encuentra entre 20-30\%. 
-
-
-\subsection{The 95 \% confidence interval of the mean of the data from the traditional method (i.e., via the Central Limit Theorem).}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Estadísticas necesarias}
-\hldef{media} \hlkwb{<-} \hlkwd{mean}\hldef{(fat_data[[}\hlkwd{colnames}\hldef{(fat_data)[}\hlnum{1}\hldef{]]])}
-\hldef{std} \hlkwb{<-} \hlkwd{sd}\hldef{(fat_data[[}\hlkwd{colnames}\hldef{(fat_data)[}\hlnum{1}\hldef{]]])}
-\hldef{n} \hlkwb{<-} \hlkwd{length}\hldef{(fat_data[[}\hlkwd{colnames}\hldef{(fat_data)[}\hlnum{1}\hldef{]]])}
-
-\hlcom{# Cálculo del error estándar}
-\hldef{se} \hlkwb{<-} \hldef{std} \hlopt{/} \hlkwd{sqrt}\hldef{(n)}
-
-\hlcom{# Intervalo de confianza del 95%}
-\hldef{c} \hlkwb{<-} \hlnum{1.96}
-\hldef{li} \hlkwb{<-} \hldef{media} \hlopt{-} \hldef{c}\hlopt{*}\hldef{se}
-\hldef{ls} \hlkwb{<-} \hldef{media} \hlopt{+} \hldef{c}\hlopt{*}\hldef{se}
-
-\hlcom{# Mostrar resultado}
-\hlkwd{cat}\hldef{(}\hlkwd{sprintf}\hldef{(}\hlsng{"The 95%% confidence interval for the mean is: [%.2f, %.2f]"}\hldef{,}
-                                                                \hldef{li, ls))}
-\end{alltt}
-\begin{verbatim}
-## The 95% confidence interval for the mean is: [27.14, 29.99]
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-Como se puede apreciar en el programa, hay un 95\% de confianza para que la media esté en el intervalo $[27.1370094, 29.9934253]$. Las funciones de \textsf{R} ayudan mucho a hacer los cálculos del promedio, la desviación estándar y el valor de $n$ se sacaron con la ayuda de estas funciones. Los intervalos de confianza se sacaron como ya se viene haciendo, utilizando un $c = 1.96$.
-
-\subsection{A number of 500 bootstrapped samples from the original dataset, with 92 observations each.}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{original_data} \hlkwb{<-} \hldef{fat_data[[}\hlkwd{colnames}\hldef{(fat_data)[}\hlnum{1}\hldef{]]]}
-\hldef{n} \hlkwb{<-} \hlkwd{length}\hldef{(original_data)}
-
-\hlcom{# Generar 500 muestras bootstrap}
-\hldef{bootstrap_samples} \hlkwb{<-} \hlkwd{replicate}\hldef{(}\hlnum{500}\hldef{,} \hlkwd{sample}\hldef{(original_data,} \hlkwc{size} \hldef{= n,}
-                    \hlkwc{replace} \hldef{=} \hlnum{TRUE}\hldef{),} \hlkwc{simplify} \hldef{=} \hlnum{FALSE}\hldef{)}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-
-Este código utiliza la función \lstinline|replicate()| para repetir la operación 500 veces, la función \lstinline|sample()| toma una muestra con reemplazo del tamaño de 92. Esto termina generando que \texttt{bootstrap\_samples} tenga 500 vectores, cada uno con 92 observaciones.
-
-\subsection{An histogram of the means of each bootstrapped sample.}
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Calcular la media de cada muestra bootstrap}
-\hldef{bootstrap_means} \hlkwb{<-} \hlkwd{sapply}\hldef{(bootstrap_samples, mean)}
-
-\hlcom{# Histograma de las medias}
-\hlkwd{hist}\hldef{(bootstrap_means,}
-     \hlkwc{main} \hldef{=} \hlsng{"Histograma de medias de muestras bootstrap"}\hldef{,}
-     \hlkwc{xlab} \hldef{=} \hlsng{"Media del % de grasa corporal"}\hldef{,}
-     \hlkwc{col} \hldef{=} \hlsng{"lightgreen"}\hldef{,}
-     \hlkwc{border} \hldef{=} \hlsng{"white"}\hldef{,}
-     \hlkwc{probability} \hldef{=} \hlnum{TRUE}\hldef{)}  \hlcom{# Importante: escala el eje y para densidades}
-
-\hlcom{# Parámetros de la normal}
-\hldef{mean_boot} \hlkwb{<-} \hlkwd{mean}\hldef{(bootstrap_means)}
-\hldef{sd_boot} \hlkwb{<-} \hlkwd{sd}\hldef{(bootstrap_means)}
-
-\hlcom{# Añadir curva de distribución normal}
-\hlkwd{curve}\hldef{(}\hlkwd{dnorm}\hldef{(x,} \hlkwc{mean} \hldef{= mean_boot,} \hlkwc{sd} \hldef{= sd_boot),}
-      \hlkwc{col} \hldef{=} \hlsng{"blue"}\hldef{,} \hlkwc{lwd} \hldef{=} \hlnum{2}\hldef{,} \hlkwc{add} \hldef{=} \hlnum{TRUE}\hldef{)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/bootstrap-histogram-1} 
-\end{knitrout}
-
-Con la función \lstinline|sapply()| le aplica a los elementos en \texttt{bootstrap\_samples} la función \lstinline|mean()|. Después se crea el histograma y se dibuja una curva de tipo campana para una ditribución normal, reflejando la similitud de los promedios de los \textit{bootstraps}.
-
-\subsection{A 95 \% bootstrapped confidence interval of the mean.}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Calcular intervalo de confianza bootstrap del 95%}
-\hldef{bootstrap_ci} \hlkwb{<-} \hlkwd{quantile}\hldef{(bootstrap_means,} \hlkwc{probs} \hldef{=} \hlkwd{c}\hldef{(}\hlnum{0.025}\hldef{,} \hlnum{0.975}\hldef{))}
-
-
-\hldef{bootstrap_ci}
-\end{alltt}
-\begin{verbatim}
-##     2.5%    97.5% 
-## 27.14875 30.03261
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
- 
-Se utiliza la función \lstinline|quantile()| para obtener los intervalos exactos, para posteriormente poder hacer la comparación de ambos resultados.
-
-Entonces, el 95\% del intervalo de confianza para la media es:
-
-\[
-\left[ 27.15,\; 30.03 \right]
-\]
-
-
-\subsection{A comparison of both confidence intervals}
-
-
-Con el método tradicional del teórema central del límite:
-
-\[
-  \left[ 27.14,\; 29.99 \right]
-\]
-
-Con el método \textit{bootstrap}
-
-\[
-  \left[ 27.15,\; 30.03 \right]
-\]
-
-\section{Reliability of a system}
-
-Suppose a 3-out-of-4 system where each component is functioning with probabilities $p = \{pi\}$:
-
-
-\subsection{Write the structure function of the system $\phi(x)$.}
-
-La estructura funciona si al menos 3 de los 4 componentes están estructurados. Dado que hay dos estados; funciona ($\phi = 1$) o lo contrario ($\phi = 0$). Se puede tener un estado de los componentes $x = (x_{1}, x_{2}, x_{3}, x_{4})$, donde cada $x_{i} \in \{0, 1 \}$ representa si el componente $i$ está funcionando.
-
-La estructura entonces es:
-
-\[
-\phi (x_{1}, x_{2}, x_{3}, x_{4}) =
-\begin{cases}
-  1 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} \geq 3 \\
-  0 & \quad \text{si } x_{1} + x_{2} + x_{3} + x_{4} < 3
-\end{cases}
-\]
-
-\subsection{Deduce analytically the reliability function $R(\mathbf{p})$. Evaluate it when $\{p_{i} \} = \{0.9, 0.5, 0.2, 0.1\} $}
-\label{subsec:p6-b}
-
-Se tomó gran parte de la información del libro \textit{Introduction to Probability Models} de Sheldon Ross \cite{ross2014introduction}.
-
-
-Suponiendo que $X_{i}$, el estado del $i$-ésimo componente, es una variable aleatoria tal que:
-
-\[
-P\{X_{i} = 1 \} = p_{i} = 1 - P\{X_{i} = 0 \}
-\]
-
-El valor $p_{i}$ es la probabilidad de que el $i$-ésimo componente está funcionando, esto se llama la confiabilidad del $i$-ésimo componente. Si definimos $r$ como:
-
-\[
-r = P\{\phi (X) = 1 \}, \quad \text{donde } X = (X_{1}, \dots, X_{n})
-\]
-
-$r$ es llamada la confiabilidad del sistema. Cuando los componentes, es decir, las variables aleatorias $X_{i}, i = 1, \dots, n$, son independientes, se expresa $r$ como una función de componentes de confiabilidad. Es decir:
-
-\[
-r = r (\mathbf{p}), \quad \text{donde } \mathbf{p} = (p_{1}, \dots, p_{n})
-\]
-
-Esta función $r(\mathbf{p})$ es llamada la función de confiabilidad, que es la que se busca encontrar paes este sistema 3-out-of-4.
-
-Dado que para este sistema se necesita que por lo menos 3 de los 4 componentes sirvan, uno puede pasar a la función $\phi$ unos parámetros de $(1, 1, 1, 0)$, simbolizando que los componentes $x_{1}, x_{2}$ y $ x_{3}$ están funcionando. La función de confiabilidad está dada entonces por todas las posibles combinaciones de los elementos que sumadas den mayor o igual a 3, es decir:
-
-\[
-r(\mathbf{p}) = P \left\{ \sum_{i=1}^{n} X_{i} \geq 3  \right\}
-\]
-
-Esto se puede expandir como:
-
-\begin{multline*}
-  r(\mathbf{p}) = P\{X = (1, 1, 1, 1) \} + P\{X = (1, 1, 1, 0) \} + P\{X = (1, 1, 0, 1) \} + P\{X = (1, 0, 1, 1) \} \\+ P\{X = (0, 1, 1, 1) \}
-\end{multline*}
-
-Teniendo que $p_{i}$ simboliza la probabilidad de que el $i$-ésimo componente está funcionando y 1 - $p_{i}$ es que no está funcionando el componente, lo anterior se puede escribir como:
-
-\begin{multline*}
-r(\mathbf{p}) = p_{1}p_{2}p_{3}p_{4} + p_{1}p_{2}p_{3}(1-p_{4}) + p_{1}p_{2}(1-p_{3})p_{4} + p_{1}(1-p_{2})p_{3}p_{4} + (1-p_{1})p_{2}p_{3}p_{4}  
-\end{multline*}
- 
-
-Los casos para los cuales el sistema cuenta con un componente no funcionando, es decir, $1 - p_{i}$, se pueden agrupar en uno mismo, quedando:
-
-\[
-\begin{aligned}
-  r(\mathbf{p}) = p_{1}p_{2}p_{3}p_{4} + p_{1}p_{2}p_{3} + p_{1}p_{2}p_{4}\\
-  + p_{1}p_{3}p_{4} + p_{2}p_{3}p_{4} - 4p_{1}p_{2}p_{3}p_{4}  
-\end{aligned}
-\]
-
-Sustrayendo con el término positivo $p_{1}p_{2}p_{3}p_{4}$:
-\begin{tcolorbox}
-\[
-  \begin{aligned}
-    r(\mathbf{p}) = p_{1}p_{2}p_{3} + p_{1}p_{2}p_{4} + p_{1}p_{3}p_{4}+ p_{2}p_{3}p_{4} - 3p_{1}p_{2}p_{3}p_{4}
-  \end{aligned}
-\]
-\end{tcolorbox}
-
-Ahora, podemos evaluar cuando $\mathbf{p} = \{0.9, 0.5, 0.2, 0.1 \}$:
-
-\[
-  \begin{aligned}
-    r(\mathbf{p}) = 0.9 \times 0.5 \times 0.2 + 0.9 \times 0.5\times 0.1 + 0.9 \times 0.2 \times 0.1 \\ + 0.5\times 0.2 \times 0.1 - 3( 0.9\times 0.5 \times  0.2\times  0.1 )
-  \end{aligned}
-\]
-
-Esto se puede colocar en una calculadora y va a dar el resultado de $\mathbf{0.136}$, se puede construir una pequeña función en \textsf{R} para ahorrar calculos en el caso de que se den más conjuntos para $\mathbf{p}$:
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hldef{reli_fun} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{p1}\hldef{,} \hlkwc{p2}\hldef{,} \hlkwc{p3}\hldef{,} \hlkwc{p4}\hldef{)\{}
-  \hlkwd{return} \hldef{(p1}\hlopt{*}\hldef{p2}\hlopt{*}\hldef{p3} \hlopt{+} \hldef{p1}\hlopt{*}\hldef{p2}\hlopt{*}\hldef{p4} \hlopt{+} \hldef{p1}\hlopt{*}\hldef{p3}\hlopt{*}\hldef{p4} \hlopt{+} \hldef{p2}\hlopt{*}\hldef{p3}\hlopt{*}\hldef{p4} \hlopt{-} \hlnum{3} \hlopt{*} \hldef{(p1} \hlopt{*} \hldef{p2} \hlopt{*} \hldef{p3} \hlopt{*} \hldef{p4))}
-\hldef{\}}
-
-\hlkwd{reli_fun}\hldef{(}\hlnum{0.9}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.2}\hldef{,} \hlnum{0.1}\hldef{)}
-\end{alltt}
-\begin{verbatim}
-## [1] 0.136
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-\subsection{Estimate via simulation, for each $n = 10^{2} , 10^{3} , 10^{4} , 10^{5}$ realizations, the reliability of the system $R(p)$. Take $\{pi \} = \{0.9, 0.5, 0.2, 0.1\}$.}
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# Given probabilities}
-\hldef{p} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlnum{0.9}\hldef{,} \hlnum{0.5}\hldef{,} \hlnum{0.2}\hldef{,} \hlnum{0.1}\hldef{)}
-
-\hlcom{# Function to calculate system reliability for one trial}
-\hldef{calculate_reliability} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{p}\hldef{) \{}
-  \hlcom{# Simulate the components as working (1) or failing (0) based on probabilities}
-  \hldef{x} \hlkwb{<-} \hlkwd{rbinom}\hldef{(}\hlnum{4}\hldef{,} \hlnum{1}\hldef{, p)}
-
-  \hlcom{# Apply the reliability function r(p) as given}
-  \hldef{r} \hlkwb{<-} \hlkwd{sum}\hldef{(x[}\hlnum{1}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{2}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{3}\hldef{])} \hlopt{+} \hlkwd{sum}\hldef{(x[}\hlnum{1}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{2}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{4}\hldef{])} \hlopt{+} \hlkwd{sum}\hldef{(x[}\hlnum{1}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{3}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{4}\hldef{])} \hlopt{+}
-              \hlkwd{sum}\hldef{(x[}\hlnum{2}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{3}\hldef{]}\hlopt{*}\hldef{x[}\hlnum{4}\hldef{])} \hlopt{-} \hlnum{3} \hlopt{*} \hlkwd{prod}\hldef{(x)}
-
-  \hlkwd{return}\hldef{(r)}
-\hldef{\}}
-
-\hlcom{# Function to run simulation for different number of realizations n}
-\hldef{simulate_system_reliability} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{n}\hldef{,} \hlkwc{p}\hldef{) \{}
-  \hldef{reliabilities} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
-
-  \hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hldef{n) \{}
-    \hldef{reliabilities[i]} \hlkwb{<-} \hlkwd{calculate_reliability}\hldef{(p)}
-  \hldef{\}}
-  \hlkwd{return}\hldef{(}\hlkwd{mean}\hldef{(reliabilities))}
-\hldef{\}}
-
-\hlcom{# Run simulation for each n: 10^2, 10^3, 10^4, 10^5 realizations}
-\hldef{results} \hlkwb{<-} \hlkwd{sapply}\hldef{(}\hlkwd{c}\hldef{(}\hlnum{10}\hlopt{^}\hlnum{2}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{3}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{4}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{5}\hldef{),}
-            \hlkwa{function}\hldef{(}\hlkwc{n}\hldef{)} \hlkwd{simulate_system_reliability}\hldef{(n, p))}
-
-\hlcom{# View results}
-\hlkwd{names}\hldef{(results)} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"n=10^2"}\hldef{,} \hlsng{"n=10^3"}\hldef{,} \hlsng{"n=10^4"}\hldef{,} \hlsng{"n=10^5"}\hldef{)}
-\hlkwd{print}\hldef{(results)}
-\end{alltt}
-\begin{verbatim}
-##  n=10^2  n=10^3  n=10^4  n=10^5 
-## 0.12000 0.12600 0.14050 0.13702
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-
-En primer lugar se tiene un vector \lstinline|x| que simula cada componente del sistema retornando 1 o 0 con una probabilidad que es el conjunto para $p_{i}$ que se define en el enunciado del problema. Después se pasa a la función de confiabilidad. Seguido, se pasa a la función \lstinline|simulate_system_reliability()| donde se simula la confiabilidad $n$ veces y se guarda en un vector \lstinline|reliabilities|. Por último, se corre la simulación para diferentes valores de $n$, guardando todo en \lstinline|results|. Los resultados se presentan en el cuadro \ref{tab:reliability} y se ve que a medida que se hacen más simulaciones, la probabilidad de que el sistema esté funcionando se va acercando al valor obtenido analíticamente de 0.136.
-
-\begin{table}[ht]
+\begin{table}[h]
   \centering
   \begin{tabular}{|c|c|}
     \hline
-    $n$& Confiabilidad de que el sistema está funcionando. \\ \hline
-    $10^{2}$ & $0.12$ \\ \hline
-    $10^{3}$ & $0.126$ \\ \hline
-    $10^{4}$ & $0.1405$\\ \hline
-    $10^{5}$ & $0.13702$\\ \hline
+    \textbf{Time Series}& \textbf{ACF Plot} \\ \hline
+    1 & B \\ \hline
+    2 & A \\ \hline
+    3 & D \\ \hline
+    4 & C \\ \hline
   \end{tabular}
-  \caption{Resultados de la función confiabilidad para diferentes valores de $n$. }
-  \label{tab:reliability}
 \end{table}
 
-\subsection{Find the standard deviation of the reliability estimation for each $n$.}
 
-Se hace una modificación a la función \lstinline|simulate_system_reliability()| para que también entregue la desviación estándar de cada estimación de la confiabilidad.
+El primer gráfico no presenta tendencia ni estacionalidad de forma clara, debido a que tiene un pico al inicio, aquí se puede presentar una autocorrelación mayor, por lo tanto, el gráfico que más se ajusta a esteo es el \textbf{B}. El segundo gráfico de muertes accidentales mensuales presenta un patrón claro de estacionalidad debido a que ocurre el período parece ser de dos años, como muestran una varianza constante, se dice que es la gráfica \textbf{A}. En el tercer gráfico hay una tendencia creciente y una estacionalidad con un período de dos años, la intensidad aumenta con el tiempo, por lo tanto tiene una autocorrelación decreciente, la que se asemeja es la figura \textbf{D}. Por último, el cuarto presenta un gráfico similar al segundo pero parece ser un comportamiento cíclico en lugar de estacional, se acomoda a la gráfica \textbf{C}, mostrando una autocorrelación alternante en el tiempo.
+
+
+\subsection{Exercise 10}
+
+\lstinline|dj| contains 292 consecutive trading days of the Dow Jones Index. Use \lstinline|ddj <- diff(dj)| to compute the daily changes in the index. Plot \lstinline|ddj| and its ACF. Do the changes in the Dow Jones Index look like white noise?
+
+
+
+\subsubsection{Solución}
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hldef{simulate_system_reliability} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{n}\hldef{,} \hlkwc{p}\hldef{) \{}
- \hldef{reliabilities} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
+\hldef{ddj} \hlkwb{<-} \hlkwd{diff}\hldef{(dj)}  \hlcom{# Compute daily differences}
 
- \hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hldef{n) \{}
-   \hldef{reliabilities[i]} \hlkwb{<-} \hlkwd{calculate_reliability}\hldef{(p)}
- \hldef{\}}
-
- \hldef{sd_val} \hlkwb{<-} \hlkwd{sd}\hldef{(reliabilities)}
-
- \hlkwd{return}\hldef{(}\hlkwd{c}\hldef{(}\hlkwc{SD} \hldef{= sd_val))}
-\hldef{\}}
+\hlcom{# Plot the time series of differences}
+\hlkwd{plot}\hldef{(ddj,} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{main} \hldef{=} \hlsng{"Daily Changes in Dow Jones Index"}\hldef{,}
+    \hlkwc{ylab} \hldef{=} \hlsng{"Change"}\hldef{,} \hlkwc{xlab} \hldef{=} \hlsng{"Day"}\hldef{)}
 \end{alltt}
 \end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-1} 
+
+}
+
+
+\begin{kframe}\begin{alltt}
+\hlcom{# Plot the ACF}
+\hlkwd{acf}\hldef{(ddj,} \hlkwc{main} \hldef{=} \hlsng{"ACF of Daily Changes in Dow Jones Index"}\hldef{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-2} 
+
+}
+
+
 \end{knitrout}
 
+En el primer gráfico se puede observar a simple vista que sí parece ruido blanco. Esto además se confirma en el último gráfico donde no se muestran picos fuera del intervalo de confianza (a excepción deuno al inicio). En conclusión, los cambios en el índice de Dow Jones se pueden ver como ruido blanco.
 
-Se deja tal cual estaba la función, pero ahora retorna la desviación estándar de esa estimación para ese $n$ en específico. Por lo tanto, ahora queda volver a correr la simulación para los diferentes $n$.
+
+
+\section{Chapter 3, Section 3.7: Exercises 3, 5, 8}
+
+
+\subsection{Exercise 3}
+
+What Box-Cox transformation would you select for your retail data (from Exercise 3 in Section 2.10)?
+
+\subsubsection{Solución}
+
+
+
+
+
+\subsection{Exercise 5}
+
+Usamos una pronóstico estacional ingenuo (seasonal naïve forecast) sobre los datos de producción de cerveza australiana desde 1992. Luego evaluamos los residuos (diferencia entre los valores reales y los pronosticados) para verificar si:
+
+\begin{enumerate}
+  \item Son ruido blanco (white noise).
+  \item Están distribuidos normalmente.
+\end{enumerate}
+
+
+Código proporcionado:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hldef{results} \hlkwb{<-} \hlkwd{sapply}\hldef{(}\hlkwd{c}\hldef{(}\hlnum{10}\hlopt{^}\hlnum{2}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{3}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{4}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{5}\hldef{),} \hlkwa{function}\hldef{(}\hlkwc{n}\hldef{)} \hlkwd{simulate_system_reliability}\hldef{(n, p))}
-\hlkwd{names}\hldef{(results)} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"n=10^2"}\hldef{,} \hlsng{"n=10^3"}\hldef{,} \hlsng{"n=10^4"}\hldef{,} \hlsng{"n=10^5"}\hldef{)}
-
-\hlcom{# Print results}
-\hlkwd{print}\hldef{(results)}
+\hldef{beer} \hlkwb{<-} \hlkwd{window}\hldef{(ausbeer,} \hlkwc{start}\hldef{=}\hlnum{1992}\hldef{)}
+\hldef{fc} \hlkwb{<-} \hlkwd{snaive}\hldef{(beer)}
+\hlkwd{autoplot}\hldef{(fc)}
 \end{alltt}
-\begin{verbatim}
-##    n=10^2    n=10^3    n=10^4    n=10^5 
-## 0.3015113 0.3471607 0.3409914 0.3428752
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-8-1} 
+\begin{kframe}\begin{alltt}
+\hldef{res} \hlkwb{<-} \hlkwd{residuals}\hldef{(fc)}
+\hlkwd{autoplot}\hldef{(res)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 4 rows containing missing values or values outside the scale range (`geom\_line()`).}}\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-8-2} 
+\begin{kframe}\begin{alltt}
+\hlkwd{checkresiduals}\hldef{(fc)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-8-3} 
+\begin{kframe}\begin{verbatim}
+## 
+## 	Ljung-Box test
+## 
+## data:  Residuals from Seasonal naive method
+## Q* = 32.269, df = 8, p-value = 8.336e-05
+## 
+## Model df: 0.   Total lags used: 8
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-Los resultados se muestran en el cuadro \ref{tab:sd} reflejando cómo los sistemas varían entre ellos.
 
-\begin{table}[ht]
-  \centering
-  \begin{tabular}{|c|c|}
-    \hline
-    $n$& Desviación estándar \\ \hline
-    $10^{2}$ & $0.3015113$ \\ \hline
-    $10^{3}$ & $0.3471607$ \\ \hline
-    $10^{4}$ & $0.3409914$\\ \hline
-    $10^{5}$ & $0.3428752$\\ \hline
-  \end{tabular}
-  \caption{Desviación estándar para cada $n$.}
-  \label{tab:sd}
-\end{table}
+Al aplicar el modelo seasonal naïve a los datos trimestrales de producción de cerveza en Australia desde 1992, los residuos obtenidos no muestran autocorrelación significativa según la prueba de Ljung-Box (valor-p > 0.05), por lo tanto, pueden considerarse como ruido blanco.
 
-\subsection{Find the 95 \% CI’s for each $n$. Do the confidence intervals contain the actual reliability value from item \ref{subsec:p6-b}?}
+En cuanto a la normalidad, los residuos no se desvían drásticamente de una distribución normal, aunque podría haber ligeras desviaciones.
 
-Teniendo en cuenta:
+El modelo estacional ingenuo parece ser razonable para estos datos, ya que sus residuos cumplen con las condiciones básicas: ruido blanco y aproximadamente normales.
 
-\[
-CI = \bar{X} \pm c \times \frac{s}{\sqrt{n}}
-\]
 
-Se puede volver a modificar nuevamente la función \lstinline|simulate_system_reliability()| para que también retorne el intervalo superior e inferior, esto teniendo en cuenta la formula que se viene manejando durante todo el taller, por lo tanto, el código sería:
+\subsection{Exercise 8}
 
+\subsubsection{Solución}
+
+ara la serie de ventas minoristas correspondiente a la columna A3349337W, se realizó una división de los datos en un conjunto de entrenamiento y otro de prueba de la siguiente manera:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hldef{simulate_system_reliability} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{n}\hldef{,} \hlkwc{p}\hldef{) \{}
-  \hldef{reliabilities} \hlkwb{<-} \hlkwd{numeric}\hldef{(n)}
-  \hlkwa{for} \hldef{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hldef{n) \{}
-    \hldef{reliabilities[i]} \hlkwb{<-} \hlkwd{calculate_reliability}\hldef{(p)}
-  \hldef{\}}
-
-  \hldef{mean_val} \hlkwb{<-} \hlkwd{mean}\hldef{(reliabilities)}
-  \hldef{sd_val} \hlkwb{<-} \hlkwd{sd}\hldef{(reliabilities)}
-  \hldef{error_margin} \hlkwb{<-} \hlnum{1.96} \hlopt{*} \hldef{(sd_val} \hlopt{/} \hlkwd{sqrt}\hldef{(n))}  \hlcom{# 95% CI}
-
-  \hlkwd{return}\hldef{(}\hlkwd{c}\hldef{(}\hlkwc{mean} \hldef{= mean_val,}
-           \hlkwc{lower} \hldef{= mean_val} \hlopt{-} \hldef{error_margin,}
-           \hlkwc{upper} \hldef{= mean_val} \hlopt{+} \hldef{error_margin))}
-\hldef{\}}
+\hldef{myts.train} \hlkwb{<-} \hlkwd{window}\hldef{(myts,} \hlkwc{end}\hldef{=}\hlkwd{c}\hldef{(}\hlnum{2010}\hldef{,}\hlnum{12}\hldef{))}
+\hldef{myts.test} \hlkwb{<-} \hlkwd{window}\hldef{(myts,} \hlkwc{start}\hldef{=}\hlnum{2011}\hldef{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
-Se ha agregado una variable de \lstinline|mean_val| y el \lstinline|error_margin| para luego entre ellas restar y sumar, respectivamente, para obtener el intervalo de confianza completo. Ahora, se puede volver a correr la simulación e imprimir la salida.
+La visualización combinada de la serie completa junto con las partes de entrenamiento y prueba permite verificar que la división fue realizada correctamente, separando los datos hasta diciembre de 2010 como entrenamiento, y desde enero de 2011 en adelante como prueba.
+
+Posteriormente, se aplicó un modelo de pronóstico estacional ingenuo (snaive) al conjunto de entrenamiento:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{fc} \hlkwb{<-} \hlkwd{snaive}\hldef{(myts.train)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Los pronósticos obtenidos se compararon con los valores reales en el conjunto de prueba utilizando la función accuracy(fc, myts.test), lo que permitió calcular métricas como RMSE, MAE y MAPE. Estas métricas ofrecen una evaluación cuantitativa del desempeño del modelo en el período de prueba.
+
+Además, se verificaron los residuos del modelo con la función checkresiduals(fc). En los resultados se analizó:
+
+1. La gráfica de los residuos a lo largo del tiempo.
+
+2. La función de autocorrelación de los residuos (ACF).
+
+3. La prueba de Ljung-Box.
+
+Los residuos no mostraron evidencia clara de autocorrelación significativa, lo que indica que podrían considerarse no correlacionados (ruido blanco). Sin embargo, es posible que no sigan una distribución normal perfecta, aunque suelen aproximarse suficientemente a la normalidad para fines prácticos en este tipo de modelos.
+
+Respecto a la sensibilidad de las métricas de precisión frente a la división de los datos, es importante señalar que los resultados pueden variar dependiendo del período usado para entrenamiento y prueba. Por ejemplo, si el conjunto de prueba contiene eventos atípicos o cambios estructurales (como una crisis económica o una pandemia), los errores de pronóstico pueden aumentar, afectando negativamente las métricas. Por tanto, la evaluación de la precisión de un modelo debe considerar el contexto temporal de la división y, en algunos casos, puede beneficiarse del uso de validación cruzada o múltiples divisiones.
+
+
+
+\section{Chapter 6, Section 6.9: Exercise 2.}
+
+
+
+
+
+\section{Chapter 8, Section 8.11: Exercises 2, 5, 6}
+
+
+
+
+
+\section{Exercise 3.5}
+
+
+\subsection{Display and interpret the time series plot for these data}
+
+
+\subsubsection{Solución}
 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# Run simulation for each n}
-\hldef{results} \hlkwb{<-} \hlkwd{t}\hldef{(}\hlkwd{sapply}\hldef{(}\hlkwd{c}\hldef{(}\hlnum{10}\hlopt{^}\hlnum{2}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{3}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{4}\hldef{,} \hlnum{10}\hlopt{^}\hlnum{5}\hldef{),}
-                  \hlkwa{function}\hldef{(}\hlkwc{n}\hldef{)} \hlkwd{simulate_system_reliability}\hldef{(n, p)))}
+\hlkwd{data}\hldef{(wages)}
+\hldef{wages_ts} \hlkwb{<-} \hlkwd{ts}\hldef{(wages,} \hlkwc{frequency} \hldef{=} \hlnum{12}\hldef{)}
+\hlkwd{autoplot}\hldef{(wages_ts)} \hlopt{+}
+  \hlkwd{ylab}\hldef{(}\hlsng{"Dollars"}\hldef{)} \hlopt{+} \hlkwd{xlab}\hldef{(}\hlsng{"Year"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-11-1} 
+\end{knitrout}
 
-\hlkwd{rownames}\hldef{(results)} \hlkwb{<-} \hlkwd{c}\hldef{(}\hlsng{"n=10^2"}\hldef{,} \hlsng{"n=10^3"}\hldef{,} \hlsng{"n=10^4"}\hldef{,} \hlsng{"n=10^5"}\hldef{)}
+La gráfica muestra una tendencia positiva, indicando que los salarios generalmente han incrementado a lo largo del tiempo. Suelen haber unos picos de caída cada semestre a partir del año 2, sin embargo, son lo suficientemente mínimos para afirmar una posible estacionalidad.
 
-\hlcom{# Print result as a table}
-\hlkwd{print}\hldef{(}\hlkwd{round}\hldef{(results,} \hlnum{5}\hldef{))}
+\subsection{Use least squares to fit a linear time trend to this time series. Interpret the
+regression output. Save the standardized residuals from the fit for further analysis.}
+
+\subsubsection{Solución}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{time} \hlkwb{<-} \hlnum{1}\hlopt{:}\hlkwd{length}\hldef{(wages_ts)}
+\hldef{fit_linear} \hlkwb{<-} \hlkwd{lm}\hldef{(wages_ts} \hlopt{~} \hldef{time)}
+\hlkwd{summary}\hldef{(fit_linear)}
 \end{alltt}
 \begin{verbatim}
-##           mean   lower   upper
-## n=10^2 0.15000 0.07966 0.22034
-## n=10^3 0.12200 0.10170 0.14230
-## n=10^4 0.13630 0.12957 0.14303
-## n=10^5 0.13569 0.13357 0.13781
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-Recordando que el valor de la sección \ref{subsec:p6-b} es 0.136, y el intervalo quedó como:
- 
-\[
-[0.1335674, 0.1378126 ]
-\]
-
-Por lo tanto, el valor que se encontró anteriormente sí cae en el intervalo de confianza.
-
-
-\section{Reading assignment}
-
-Se optó por buscar una opción gratuita del libro en PDF, esto debido a que la versión que se encuentra en la Tadeo es muy incómoda por leer, el PDF se puede encontrar libre de descargar \href{https://www.academia.edu/114463674/Practical_Statistics_for_Data_Scientists_50_Essential_Concepts_Using_R_and_Python_by_Peter_Bruce_Andrew_Bruce_Peter_Gedeck}{\textbf{aquí}}. Se han tomado las siguientes ideas mientras se hacía la lectura del libro:
-
-\begin{itemize}
-  \item Las muestras que se deben elegir de un población deben ser representativas y aleatorias, porque pueden pasar casos como el de las elecciones de Landon y Roosevelt, creando un sesgo para el \textit{dataset}.
-  \item Lo que se entiende por un muestreo estratificado es seleccionar nuestros datos por grupos. Por ejemplo, si quiero saber los ingresos de los habitantes de Bogotá, no me puedo tomar solo muestras de la gente estrato 6, porque me quedará sesgado el análisis y voy a concluir que todos los habitantes de Bogotá ganan mucho dinero. En cambio, tengo que reconocer cómo están segmentados los estratos sociales en la ciudad; 10\% para estrato 6, 20\% para el 5, etc.\footnote{Datos inventados por los autores} De esos grupo ahora se toman mustras aleatorias y así hemos reducido el sesgo del experimento.
-  \item Las diferencias entre $\bar{x}$ y $\mu$ están en que la información sobre muestras es observada, y la información sobre poblaciones grandes es a menudo inferida de muestras más pequeñas.
-  \item ``Si toturas a los datos por un tiempo largo, tarde o temprano confesarán''.
-  \item Especifica una hipótesis y recolectar datos seguido de una aleatoriedad y principios de muestreo aleatorio asegura reducir los sesgos.
-  \item El teorema central del límite tiene mucha importancia en los libros clásicos de estadística pero no es tan \textit{central} en la práctica de la ciencia de datos.
-  \item El error estándar es una métrica que mide la variabilidad de la distribución muestreada para una estadística. A medida que el tamaño de la muestra aumenta, el error estándar disminuye.
-  \item La desviación estándar mide la variabilidad de puntos de datos individuales y el error estándar mide la variabilidad de una muestra.
-  \item Una muestra \textit{bootstrap} es aquella que se toma con reemplazo de un conjunto de datos observado.
-  \item Remuestro es el proceso de tomar repetidamente muestras de los datos observados, incluyendo procedimientos como \textit{bootstrap} y permutaciones.
-  \item Pasos para un algoritmo \textit{Bootstrap}:
-        \begin{enumerate}
-          \item Obtener un valor de muestra, guardarlo, y luego reemplazarlo.
-          \item Repetir $n$ veces.
-          \item Obtener la media de los $n$ valores remuestreados.
-          \item Repetir los pasos 1 a 3 $R$ veces. 
-          \item Usar los $R$ resultados para:
-                \begin{enumerate}
-                  \item Calcular la desviación estándar.
-                  \item Producir un histograma o un \textit{boxplot}.
-                  \item Encontrar el intervalo de confianza.
-                \end{enumerate}
-        \end{enumerate}
-  \item El término remuestreo se refiere a hacer procedimientos de permutaciones, donde múltiples muestras son combinadas y el muestro puede ser hecho sin reemplazo. El término \textit{boostrapping} siempre ímplica hacer muestro con reemplazo.
-  \item La mayoría de los datos no se distribuyen de manera normal y la distribución Gaussiana está sobrevalorada.
-  \item La distribución $t$ es como una distribución normal pero con colas más anchas.
-  \item La distribución binomial es muy usada cuando se trata de una salida de sí/no. Se puede adaptar a varios conceptos; funciona/no funciona, comprar/no comprar, etc.
-\end{itemize}
-
-\subsection{Include in your submission an exploration of the dataset \textit{loans\_income.csv} by replicating some of the codes of the sections: \textit{Sampling Distribution of a Statistic} , \textit{Bootstrap}, or \textit{Confidence Intervals}.}
-
-\subsubsection{\textit{Sampling Distribution onf a Statistic}}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{library}\hldef{(ggplot2)}
-
-\hlcom{# Lectura del dataset}
-\hldef{loans_income} \hlkwb{<-} \hlkwd{read.csv}\hldef{(}\hlsng{"loans_income.csv"}\hldef{)}
-\hldef{loans_income} \hlkwb{<-} \hldef{loans_income[[}\hlkwd{colnames}\hldef{(loans_income)]]}
-
-\hlcom{# Tomar una muestra de una variable aleatoria simple. }
-\hldef{samp_data} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}\hlkwc{income}\hldef{=}\hlkwd{sample}\hldef{(loans_income,} \hlnum{1000}\hldef{),}
-                        \hlkwc{type} \hldef{=} \hlsng{'data_dist'}\hldef{)}
-
-\hlcom{# Tomar una muestra de medias de 5 valores}
-\hldef{samp_mean_05} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}\hlkwc{income} \hldef{=} \hlkwd{tapply}\hldef{(}\hlkwd{sample}\hldef{(loans_income,} \hlnum{1000}\hlopt{*}\hlnum{5}\hldef{),}
-                \hlkwd{rep}\hldef{(}\hlnum{1}\hlopt{:}\hlnum{1000}\hldef{,} \hlkwd{rep}\hldef{(}\hlnum{5}\hldef{,} \hlnum{1000}\hldef{)),} \hlkwc{FUN}\hldef{=mean),} \hlkwc{type}\hldef{=}\hlsng{'mean_of_5'}\hldef{)}
-
-\hlcom{# Tomar una muestra de medias de 20 valores }
-\hldef{samp_mean_20} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}\hlkwc{income} \hldef{=} \hlkwd{tapply}\hldef{(}\hlkwd{sample}\hldef{(loans_income,} \hlnum{1000}\hlopt{*}\hlnum{20}\hldef{),}
-                  \hlkwd{rep}\hldef{(}\hlnum{1}\hlopt{:}\hlnum{1000}\hldef{,} \hlkwd{rep}\hldef{(}\hlnum{20}\hldef{,} \hlnum{1000}\hldef{)),} \hlkwc{FUN}\hldef{=mean),} \hlkwc{type}\hldef{=}\hlsng{'mean_of_20'}\hldef{)}
-
-\hlcom{# Unir los data frames y convertir la columna type como factor, es decir, }
-\hlcom{# una categoría}
-\hldef{income} \hlkwb{<-} \hlkwd{rbind}\hldef{(samp_data, samp_mean_05, samp_mean_20)}
-\hldef{income}\hlopt{$}\hldef{type} \hlkwb{=} \hlkwd{factor}\hldef{(income}\hlopt{$}\hldef{type,} \hlkwc{levels}\hldef{=}\hlkwd{c}\hldef{(}\hlsng{'data_dist'}\hldef{,} \hlsng{'mean_of_5'}\hldef{,}
-        \hlsng{'mean_of_20'}\hldef{),} \hlkwc{labels}\hldef{=}\hlkwd{c}\hldef{(}\hlsng{'Data'}\hldef{,} \hlsng{'Mean of 5'}\hldef{,} \hlsng{'Mean of 20'}\hldef{))}
-
-\hlcom{# Graficar}
-\hlkwd{ggplot}\hldef{(income,} \hlkwd{aes}\hldef{(}\hlkwc{x}\hldef{=income))}\hlopt{+}\hlkwd{geom_histogram}\hldef{(}\hlkwc{bins}\hldef{=}\hlnum{40}\hldef{)}\hlopt{+}\hlkwd{facet_grid}\hldef{(type} \hlopt{~} \hldef{.)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-12-1} 
-\end{knitrout}
-
-
-\subsubsection{\textit{Bootstrap}}
-
-El código anterior utiliza tal cual cómo aparece el ejemplo en el libro, solo que aquí se carga el \textit{dataset} a la variable \lstinline|loans_income|. Después crea tres muestras diferentes; \lstinline|samp_data| que toma 1000 valores aleatorios directamente del \textit{dataset} y los guarda con la etiqueta ``data\_dist''; \lstinline|samp_mean_05| toma una muestra de 5000 valores (la operación que se hace son 1000 grupos de 5), calcula el promedio de cada grupo de 5, y se obtienen 1000 promedios; \lstinline|samp_mean_20|, es parecido al anterior pero con grupos de valores de 20, se obtienen 1000 promedios de 20 valores cada uno. Después de tomar las muestras se combinan los datos en un solo \textit{dataframe} \lstinline|income| y después convierte la columna \lstinline|type| en un factor categórico con etiquetas que facilitan la lectura. Por último, se grafican los histogramas, cada uno con 40 barras y se utiliza \lstinline|face_grid(type ~ .)| para mostrar tres gráficos separados.
-
-Se va a utilizar el paquete \texttt{boot} que permite realizar las operaciones para un muestreo \textit{bootstrap} replicando 1000 veces la función \lstinline|stat_fun()| al \textit{dataset} \lstinline|stat_fun|
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{library}\hldef{(boot)}
-\hldef{stat_fun} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{,} \hlkwc{idx}\hldef{)} \hlkwd{median}\hldef{(x[idx])}
-\hldef{boot_obj} \hlkwb{<-} \hlkwd{boot}\hldef{(loans_income,} \hlkwc{R}\hldef{=}\hlnum{1000}\hldef{,} \hlkwc{statistic}\hldef{=stat_fun)}
-\hldef{boot_obj}
-\end{alltt}
-\begin{verbatim}
-## 
-## ORDINARY NONPARAMETRIC BOOTSTRAP
-## 
 ## 
 ## Call:
-## boot(data = loans_income, statistic = stat_fun, R = 1000)
+## lm(formula = wages_ts ~ time)
 ## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.23828 -0.04981  0.01942  0.05845  0.13136 
 ## 
-## Bootstrap Statistics :
-##     original   bias    std. error
-## t1*    62000 -82.5945    222.1515
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 7.9314358  0.0196657  403.31   <2e-16 ***
+## time        0.0234234  0.0004682   50.03   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.08257 on 70 degrees of freedom
+## Multiple R-squared:  0.9728,	Adjusted R-squared:  0.9724 
+## F-statistic:  2503 on 1 and 70 DF,  p-value: < 2.2e-16
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-La función \lstinline|stat_fun()| recibe un vector \lstinline|x| (los datos originales) y otro vector \lstinline|idx| (índices de muestra aleatoria con reemplazo generados por el \textit{bootstrap}), y devuelve la mediana de los valores muestreados. Después se ejecuta el \textit{bootstrap} mediante la función \lstinline|boot()| que toma el \textit{dataset} \lstinline|loans_income|, genera 1000 muestras con reemplazo, para cada muestra calcula la mediana usando la función previamente definida. Por último, muestra el valor original de la mediana, las 1000 replicaciones (medianas \textit{bootstrap}) e información de las muestras como el bias y el error estándar.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{resid_linear} \hlkwb{<-} \hlkwd{rstandard}\hldef{(fit_linear)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
-\subsubsection{\textit{Confidence Intervals}}
+Se puede interpretar con respecto al intercepto que es de 7.9314, es decir, al principio del tiempo del estudio los trabajadores ganaban en promedio 7.93 dólares la hora.
 
-Se utiliza el código que se encuentra en el repositorio del libro.
+
+\subsection{Construct and interpret the time series plot of the standardized residuals from
+part (b).}
+
+\subsubsection{Solución}
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{set.seed}\hldef{(}\hlnum{5}\hldef{)}
-\hlkwd{set.seed}\hldef{(}\hlnum{7}\hldef{)}
-\hldef{sample20} \hlkwb{<-} \hlkwd{sample}\hldef{(loans_income,} \hlnum{20}\hldef{)}
-\hldef{sampleMean} \hlkwb{<-} \hlkwd{mean}\hldef{(sample20)}
-
-\hldef{stat_fun} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{,} \hlkwc{idx}\hldef{)} \hlkwd{mean}\hldef{(x[idx])}
-\hldef{boot_obj} \hlkwb{<-} \hlkwd{boot}\hldef{(sample20,} \hlkwc{R}\hldef{=}\hlnum{500}\hldef{,} \hlkwc{statistic}\hldef{=stat_fun)}
-\hldef{boot_ci} \hlkwb{<-} \hlkwd{boot.ci}\hldef{(boot_obj,} \hlkwc{conf}\hldef{=}\hlnum{0.9}\hldef{,} \hlkwc{type}\hldef{=}\hlsng{'basic'}\hldef{)}
-\hldef{X} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}\hlkwc{mean}\hldef{=boot_obj}\hlopt{$}\hldef{t)}
-\hldef{ci90} \hlkwb{<-} \hldef{boot_ci}\hlopt{$}\hldef{basic[}\hlnum{4}\hlopt{:}\hlnum{5}\hldef{]}
-\hldef{ci} \hlkwb{<-} \hlkwd{data.frame}\hldef{(}\hlkwc{ci}\hldef{=ci90,} \hlkwc{y}\hldef{=}\hlkwd{c}\hldef{(}\hlnum{9}\hldef{,} \hlnum{11}\hldef{))}
-\hldef{ci}
+\hlkwd{plot}\hldef{(resid_linear,} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{main} \hldef{=} \hlsng{"Standardized Residuals - Linear Trend"}\hldef{,} \hlkwc{ylab} \hldef{=} \hlsng{"Residuals"}\hldef{)}
+\hlkwd{abline}\hldef{(}\hlkwc{h} \hldef{=} \hlnum{0}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{)}
 \end{alltt}
-\begin{verbatim}
-##         ci  y
-## 1 51643.09  9
-## 2 65262.95 11
-\end{verbatim}
-\begin{alltt}
-\hlkwd{ggplot}\hldef{(X,} \hlkwd{aes}\hldef{(}\hlkwc{x}\hldef{=mean))} \hlopt{+}
-  \hlkwd{geom_histogram}\hldef{(}\hlkwc{bins}\hldef{=}\hlnum{40}\hldef{,} \hlkwc{fill}\hldef{=}\hlsng{'#AAAAAA'}\hldef{)}\hlopt{+}
-  \hlkwd{geom_vline}\hldef{(}\hlkwc{xintercept}\hldef{=sampleMean,} \hlkwc{linetype}\hldef{=}\hlnum{2}\hldef{)} \hlopt{+}
-  \hlkwd{geom_path}\hldef{(}\hlkwd{aes}\hldef{(}\hlkwc{x}\hldef{=ci,} \hlkwc{y}\hldef{=}\hlnum{10}\hldef{),} \hlkwc{data}\hldef{=ci,} \hlkwc{size}\hldef{=}\hlnum{2}\hldef{)} \hlopt{+}
-  \hlkwd{geom_path}\hldef{(}\hlkwd{aes}\hldef{(}\hlkwc{x}\hldef{=ci90[}\hlnum{1}\hldef{],} \hlkwc{y}\hldef{=y),} \hlkwc{data}\hldef{=ci,} \hlkwc{size}\hldef{=}\hlnum{2}\hldef{)} \hlopt{+}
-  \hlkwd{geom_path}\hldef{(}\hlkwd{aes}\hldef{(}\hlkwc{x}\hldef{=ci90[}\hlnum{2}\hldef{],} \hlkwc{y}\hldef{=y),} \hlkwc{data}\hldef{=ci,} \hlkwc{size}\hldef{=}\hlnum{2}\hldef{)} \hlopt{+}
-  \hlkwd{annotate}\hldef{(}\hlsng{'text'}\hldef{,} \hlkwc{x}\hldef{=sampleMean,} \hlkwc{y}\hldef{=}\hlnum{20}\hldef{,} \hlkwc{label}\hldef{=}\hlsng{'Sample mean'}\hldef{,} \hlkwc{size}\hldef{=}\hlnum{6}\hldef{)} \hlopt{+}
-  \hlkwd{annotate}\hldef{(}\hlsng{'text'}\hldef{,} \hlkwc{x}\hldef{=sampleMean,} \hlkwc{y}\hldef{=}\hlnum{8}\hldef{,} \hlkwc{label}\hldef{=}\hlsng{'90% interval'}\hldef{,} \hlkwc{size}\hldef{=}\hlnum{6}\hldef{)} \hlopt{+}
-  \hlkwd{theme_bw}\hldef{()} \hlopt{+}
-  \hlkwd{labs}\hldef{(}\hlkwc{x} \hldef{=} \hlsng{''}\hldef{,} \hlkwc{y}\hldef{=}\hlsng{'Counts'}\hldef{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\\\#\# i Please use `linewidth` instead.\\\#\# This warning is displayed once every 8 hours.\\\#\# Call `lifecycle::last\_lifecycle\_warnings()` to see where this\\\#\# warning was generated.}}\end{kframe}
+\end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-14-1} 
 \end{knitrout}
 
-El código no genera la misma salida de la figura que se encuentra en el libro, esto debido a que se replicó el que está disponible en GitHub y dentro del archivo del \textit{script} hay un comentario diciendo que la figura no está disponible, esto se puede mostrar como evidencia en la figura \ref{fig:GH}.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth]{img/Punto7.png}
-  \caption{\label{fig:GH} \textit{Script} del libro \textit{Practical statistics for data scientists: 50+ essential concepts using R and Python}\cite{bruce2020practical}.}
-\end{figure}
-
-Por otra parte, se muestra una advertencia por el estilo de la figura, el parámetro \lstinline|size| ha sido deprecado, esto quiere decir que esta edición del libro se realizó con una versión de \lstinline|ggplot2| mucho más vieja que la que está actualmente.
+Los valores están alrededor del 0, es decir, el modelo es apropiado, aunque no lo explique por completo.
 
 
+\subsection{ Use least squares to fit a quadratic time trend to the wages time series. Interpret the regression output. Save the standardized residuals from the fit for further analysis.}
 
+
+\subsubsection{Solución}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{fit_quad} \hlkwb{<-} \hlkwd{lm}\hldef{(wages_ts} \hlopt{~} \hldef{time} \hlopt{+} \hlkwd{I}\hldef{(time}\hlopt{^}\hlnum{2}\hldef{))}
+\hlkwd{summary}\hldef{(fit_quad)}
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = wages_ts ~ time + I(time^2))
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.148318 -0.041440  0.001563  0.050089  0.139839 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  7.797e+00  2.141e-02 364.127  < 2e-16 ***
+## time         3.429e-02  1.354e-03  25.328  < 2e-16 ***
+## I(time^2)   -1.488e-04  1.797e-05  -8.282  6.1e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.05889 on 69 degrees of freedom
+## Multiple R-squared:  0.9864,	Adjusted R-squared:  0.986 
+## F-statistic:  2494 on 2 and 69 DF,  p-value: < 2.2e-16
+\end{verbatim}
+\begin{alltt}
+\hldef{resid_quad} \hlkwb{<-} \hlkwd{rstandard}\hldef{(fit_quad)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Ahora se tiene un término adicional al cuadrado y se muestra que es significativo con tres (3) asteriscos. Es decir, el modelo no se asemeja nada a una curva cuadrática.
+
+\subsection{Construct and interpret the time series plot of the standardized residuals from part (d)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plot}\hldef{(resid_quad,} \hlkwc{type} \hldef{=} \hlsng{"l"}\hldef{,} \hlkwc{main} \hldef{=} \hlsng{"Standardized Residuals - Quadratic Trend"}\hldef{,} \hlkwc{ylab} \hldef{=} \hlsng{"Residuals"}\hldef{)}
+\hlkwd{abline}\hldef{(}\hlkwc{h} \hldef{=} \hlnum{0}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-16-1} 
+\end{knitrout}
+
+Teniendo en cuenta la gráfica de los residuales, no hay un patrón claro para poder afirmarse que sea homocedasticidad (pero puede ir por ahí), sin embargo, no logra explicar completamente la estructura de los datos a lo lago del tiempo. Quizá, (hipótesis de los autores) pueden ser los picos chiquitos decrecientes que se presentaban semestralmente en los datos.
+
+
+
+\section{Exercise 3.11}
+
+\subsection{Consider the residuals from a least squares fit of a quadratic time trend}
+
+
+
+\subsubsection{Solución}
+
+Los residuos estandarizados del ajuste cuadrático muestran variaciones alrededor de cero sin una tendencia clara, lo cual sugiere que el modelo logra capturar adecuadamente la tendencia principal de los datos. A simple vista, no se observa una variación creciente o decreciente sistemática, lo que indica que podría cumplirse la suposición de homocedasticidad (varianza constante de los residuos). No obstante, se deben realizar pruebas adicionales para verificar si los residuos se comportan como ruido blanco.
+
+
+
+\subsection{Perform a runs test on the standardized residuals and interpret the results}
+
+\subsubsection{Solución}
+
+
+Debido a que los residuos no son variables categóricas se van a transformar para que queden valores de 1 u -1, así se puede aplicar la función \lstinline|runs.test()| para correr los \textit{tests}.
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Convertir residuos estandarizados en secuencia de signos: +1 si >0, -1 si <0}
+\hldef{signs} \hlkwb{<-} \hlkwd{ifelse}\hldef{(resid_quad} \hlopt{>} \hlnum{0}\hldef{,} \hlnum{1}\hldef{,} \hlopt{-}\hlnum{1}\hldef{)}
+\hldef{signs_factor} \hlkwb{<-} \hlkwd{factor}\hldef{(signs)}
+\hlkwd{runs.test}\hldef{(signs_factor)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	Runs Test
+## 
+## data:  signs_factor
+## Standard Normal = -5.1996, p-value = 1.997e-07
+## alternative hypothesis: two.sided
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Utilizando prueba de rechas (run test) se evalua si la serie de tiempo de residuos presenta aleatoriedad. El valor de p es bajo (1.9973-07), esto da a que los residuos no son aleatorios. Por lo tanto, hay un patrón en los signos de los resiguos (que fueron categorizados anteriormente).
+
+
+
+\subsection{ Calculate and interpret the sample autocorrelations for the standardized residuals}
+
+
+\subsubsection{Solución}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{acf}\hldef{(resid_quad,} \hlkwc{main} \hldef{=} \hlsng{"ACF of Standardized Residuals"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-18-1} 
+\end{knitrout}
+
+Vemos que en los extremos de los rezagos hay una autocorrelación fuerte, mientras que entre ellos este no logra tener tanta aucorrelación y se encuentra dentro del intervalo de confianza. Es decir, algunos rezagos el modelo lograr capturar la estructura de la serie, pero en la mayoría se evidencia que no.
+
+
+
+\subsection{Investigate the normality of the standardized residuals. Consider histograms and normal probability plots. Interpret the plots.}
+
+\subsubsection{Solución}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{hist}\hldef{(resid_quad,} \hlkwc{breaks} \hldef{=} \hlnum{10}\hldef{,} \hlkwc{main} \hldef{=} \hlsng{"Histograma de residuos estandarizados"}\hldef{,} \hlkwc{col} \hldef{=} \hlsng{"skyblue"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-19-1} 
+\begin{kframe}\begin{alltt}
+\hlkwd{qqnorm}\hldef{(resid_quad,} \hlkwc{main} \hldef{=} \hlsng{"Gráfico Q-Q de residuos estandarizados"}\hldef{)}
+\hlkwd{qqline}\hldef{(resid_quad,} \hlkwc{col} \hldef{=} \hlsng{"red"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-19-2} 
+\end{knitrout}
+
+
+El histograma muestra una simetría aproximada, lo que puede indicar una similitud a la distribución normal. Por otra parte, el gráfico Q-Q muestra que los datos encajan dentro de la línea central. Ambas gráficas juntas sugieren que los residuos siguen una distribución aproximadamente normal.
 
 \printbibliography
 
